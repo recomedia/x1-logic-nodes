@@ -1,0 +1,496 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Visu- &amp; Web-Logikbausteine - Hilfe - XML/JSON-Parser</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Visu- &amp; Web-Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1>
+        <img src="../icons/XmlJsonParserNode.png" alt="" />&nbsp;
+        XML/JSON-Parser
+      </h1>
+      <h2>Beschreibung</h2>
+      <img src="XmlJsonParser.png" class="description" />
+      <p>
+        Dieser Baustein extrahiert aus einem XML- oder JSON-Datensatz am
+        Eingang anhand einer oder mehrerer
+        <a href="https://wiki.selfhtml.org/wiki/XML/XSL/XPath">XPath</a>-Abfragen
+        entsprechende Ausgabedaten. So lassen sich Daten aus Webservices für die
+        Visualisierung oder Weiterverarbeitung nutzen.
+      </p>
+      <p>
+        Folgende Arten von Ausgabedaten können extrahiert werden:
+      </p>
+      <ul>
+        <li>
+          Einzelne Textelemente oder Verkettungen mehrerer Textelemente
+        </li>
+        <li>
+          Einzelne Zahlen oder Aufsummierungen mehrerer Zahlen
+        </li>
+      </ul>
+      <h2 id="eingaenge">Eingänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="120" />
+          <col width="180" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>XML oder JSON</p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>
+              Die Beschriftung des Eingangs und das erwartete Format des Eingabetexts
+              hängt von der Einstellung des <a href="#parameter">Parameters</a>
+              "Eingangskodierung" ab.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="120" />
+          <col width="180" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang 1<br />..<br />Ausgang <i>n</i></p>
+          </td>
+          <td>
+            <p>Any</p>
+          </td>
+          <td>
+            <p>
+              Die Anzahl der Ausgänge hängt von der Einstellung des <a href="#parameter">Parameters</a> "Anzahl der Pfade und Ausgänge" ab.
+            </p>
+            <p>
+              Ausgabewerte konvertieren bei Weitergabe an nachfolgende Eingänge automatisch
+              je nach deren Typ, ohne dass dazu ein Typkonverter nötig wäre. Welche
+              Konvertierungen möglich sind, findet man in der Gira-Hilfe unter "Übersicht
+              der möglichen Porttyp-Konvertierungen".
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Laufzeitfehler</p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>
+              Fehler in den Pfad-Parametern oder bei der Weiterverarbeitung der Daten
+              werden an diesem Ausgang als Texte gemeldet. Im Fall  solcher Fehler
+              bleibt der entsprechende Datenausgang unverändert.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="parameter">Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="120" />
+          <col width=" 70" />
+          <col width="110" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Eingangskodierung</p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter legt fest, ob am Eingang XML- oder JSON-formatierte
+              Daten erwartet werden.
+            </p>
+            <p>
+              Stehen wahlweise XML- oder JSON-Daten zur Verfügung, so bevorzugt man
+              das XML-Format, weil es das native Format dieses Logikbausteins ist.
+              Für Besonderheiten bei der Behandlung von JSON-Daten siehe auch bei
+              den Pfad-Parametern.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Anzahl der Pfade und Ausgänge</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter legt die Anzahl der Ausgänge des Bausteins im Bereich
+              1..50 fest. Da jeder Ausgang seinen eigenen XPath-Pfad hat, legt dies
+              auch die Anzahl der Pfad-Parameter fest.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Pfad 1<br />..<br />Pfad <i>n</i></p>
+          </td>
+          <td>
+            <p>String</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Diese Parameter legen fest, welche Elemente des Eingabetexts für
+              die weitere Verarbeitung jeweils ausgewählt werden. Die verwendete
+              Syntax folgt dem weit verbreiteten Standard
+              <a href="https://wiki.selfhtml.org/wiki/XML/XSL/XPath">XPath</a>.
+              Anders als bei vielen Logikbausteinen und Programmiersprachen
+              beginnt die Zählung der Listeneinträge beim Index 1.
+            </p>
+            <p>
+              Im Fall von JSON-Eingabetext sind folgende weitere Besonderheiten
+              zu beachten:
+            </p>
+            <ul>
+              <li>
+                Die Auswahl beginnt immer bei <b>/root</b>.
+              </li>
+              <li>
+                Die Indizierung von Listeneinträgen erfolgt nicht beim Element selbst,
+                sondern über eine darin enthaltene <b>item</b>-Liste.
+              </li>
+              <li>
+                Werden im JSON-Text Schlüssel verwendet, die keine gültigen XML-Namen
+                sind, so kommt es zu Laufzeitfehlern. Diese treten nur auf dem X1
+                oder L1 auf, nicht in der GPA-Simulation.
+              </li>
+            </ul>
+            <p>
+              <b>Beispiel:</b> Aus der <a href="https://openweathermap.org/forecast5#JSON">JSON-OpenWeatherMap-Vorhersage</a> sollen die Temperaturen der nächsten
+              12 Stunden (die stehen in den ersten vier <b>list</b>-Einträgen) ausgewählt
+              werden. Der folgende Pfad wählt die entsprechenden Einträge aus:
+              <span class="box-noscroll"> /root/list/item[position()&lt;5]/main/temp </span>
+              <br />Leider führt der JSON-Text von OpenWeatherMap aber auf dem L1/X1 zu
+              einem Laufzeitfehler, weil er den Schlüssel "3h" verwendet, der als XML-Name
+              nicht zulässig ist.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Art der Pfad-<br />auswahl 1<br />..<br />Art der Pfad-<br />auswahl <i>n</i></p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Diese Parameter legen fest, wie viele Elemente der jeweilige XPath-Pfad
+              auswählt und wie die ausgewählten Daten interpretiert und weiter verarbeitet
+              werden. Möglich sind die folgenden Arten:
+            </p>
+            <ul>
+              <li>
+                <b>Erster Treffer als Text</b>: Der erste ausgewählte Eintrag wird als
+                Text ausgegeben
+              </li>
+              <li>
+                <b>Erster Treffer als Zahl</b>: Der erste ausgewählte Eintrag wird als
+                XML-Zahl interpretiert und als Fließkommazahl ausgegeben
+              </li>
+              <li>
+                <b>Alle Treffer als verketteter Text</b>: Alle ausgewählten Einträge werden
+                verkettet und als Text ausgegeben
+              </li>
+              <li>
+                <b>Alle Treffer als summierte Zahl</b>: Alle ausgewählten Einträge werden
+                XML-Zahlen interpretiert, aufsummiert und die Summe als Fließkommazahl
+                ausgegeben
+              </li>
+            </ul>
+            <p>
+              Finden sich mit der Pfad-Angabe im Eingabetext keine Einträge, so wird dies:
+            </p>
+            <ul>
+              <li>
+                bei den Arten "Erster Treffer ..." als Fehler behandelt, d. h. der Ausgang
+                "Laufzeitfehler" wird entsprechend gesetzt, während der Datenausgang
+                unverändert bleibt,
+              </li>
+              <li>
+                bei den Arten "Alle Treffer ..." als zulässiger Fall angesehen und der
+                Datenausgange auf einen leeren Text bzw. die Summe 0 gesetzt.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Skalierungs-<br />faktor 1<br />..<br />Skalierungs-<br />faktor <i>n</i></p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter steht zur Verfügung, wenn der entsprechende Parameter
+              "Art der Pfadauswahl" einen numerischen Ausgabewert festgelegt hat.
+              Er legt fest, mit welchem Faktor der numerische Datenwert multipliziert
+              wird, um den endgültigen Ausgabewert zu erhalten. Wenn das Feld leer
+              bleibt oder den Wert 1 enthält, wird nicht skaliert, also der Datenwert
+              unverändert ausgegeben.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Textvorsatz 1<br />..<br />Textvorsatz <i>n</i></p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter steht zur Verfügung, wenn der entsprechende Parameter
+              "Art der Pfadauswahl" auf "Erster Treffer als Text" eingestellt ist.
+              Er legt fest, welcher Text vor dem ausgewählten Datentext ausgegeben
+              wird. Wenn das Feld leer bleibt, wird nichts vor dem Datentext
+              ausgegeben.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Text-Trenner 1<br />..<br />Text-Trenner <i>n</i></p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter steht zur Verfügung, wenn der entsprechende Parameter
+              "Art der Pfadauswahl" auf "Alle Treffer als verketteter Text" eingestellt
+              ist. Er legt fest, welcher Text zwischen mehreren ausgewählten Datentexten
+              eingefügt wird. Wenn das Feld leer bleibt, wird nichts zwischen den
+              verketteten Datentexten eingefügt.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="beispiel">Beispiele</h2>
+      <h3>Vorausschauende Witterungsaufschaltung</h3>
+      <p>
+        Eine Bewässerungsanlage soll Wasser sparen, indem das Bewässerungsvolumen
+        um die zu erwartenden Niederschläge der nächsten 12 Stunden reduziert wird.
+        Zudem soll auch der Temperaturverlauf über den selben Zeitraum visualisiert
+        werden. Die Vorhersagedaten werden vom Online-Wetterdienst
+        <a href="openweathermap.org">OpenWeathermap.org</a> als XML-Daten bezogen
+        (gezeigt sind beispielhafte Simulationsdaten):
+      </p>
+      <p>
+        <img src="XmlJsonParserExample1.png" alt="" class="example" />
+      </p>
+      <p>
+        Hinweis: Der zur Anforderung der Wettervorhersagedaten verwendete Baustein
+        "HTTP Web Request" stammt von Daniel Albuschat und steht
+        <a href="https://github.com/daniel-kun/Albuschat.LogicNodes/releases">
+        auf seiner github-Präsenz zum Download</a> bereit.
+      </p>
+      <p>
+        Die als Parameter verwendete URL ist:<br />
+        <span class="box-noscroll"> http://api.openweathermap.org/data/2.5/forecast?appid=<i>Id</i>&units=metric&mode=xml&q=<i>Ort</i> </span><br />
+        Darin sind <i>Id</i> und <i>Ort</i> gemäß der
+        <a href="https://openweathermap.org/api">OpenWeatherMap-API-Anleitung
+        (englisch)</a> durch eigene Angaben zu ersetzen.
+      </p>
+      <p>
+        Der XML-Parser verwendet zur Auswertung der XML-Daten zwei XPath-Pfade mit
+        den folgenden Einstellungen:
+      </p>
+      <ul>
+        <li>
+          Pfad 1: <span class="box-noscroll"> /weatherdata/forecast/time[position()&lt;5]/precipitation/@value </span>
+        </li>
+        <li>
+          Pfad 2: <span class="box-noscroll"> /weatherdata/forecast/time[position()&lt;5]/temperature/@value </span>
+        </li>
+        <li>
+          Art der Pfadauswahl 1: <span class="box-noscroll"> Alle Treffer als summierte Zahl &nbsp;</span>
+        </li>
+        <li>
+          Art der Pfadauswahl 2: <span class="box-noscroll"> Alle Treffer als verketteter Text </span>
+        </li>
+        <li>
+          Skalierungsfaktor 1: leer oder <span class="box-noscroll"> 1 </span>
+        </li>
+        <li>
+          Text-Trenner 2: <span class="box-noscroll">&nbsp; | &nbsp;</span>
+        </li>
+      </ul>
+      <p>
+        Wie man am Temperaturverlauf erkennt, liefert OpenWeatherMap die Vorhersagedaten
+        mit zwei Nachkommastellen. Natürlich ist die wirkliche Genauigkeit viel geringer.
+        Deshalb wird die Regenmenge auf eine Ganzzahl gerundet, indem der Ausgang auf
+        einen INTEGER-Datenpunkt verbunden ist. Der so gewonnene Wert kann auf dem KNX-Bus
+        als DPT 7.011 weiter verarbeitet werden.
+      </p>
+      <h3>Einbindung von FRITZ!Box Smart-Home-Geräten</h3>
+      <p>
+        In einem Bestandsbau haben nicht alle Räume KNX-Anbindung. Dennoch soll auch
+        in diesen Räumen der Fensterstatus erfasst und einige Stromverbraucher über
+        KNX geschaltet und visualisiert werden. Für Benutzer einer entsprechend
+        ausgestatteten FRITZ!Box bieten sich dazu Funksteckdosen und Fensterkontakte
+        nach dem DECT-HAN-FUN-Standard an. Diese können über
+        <a href="https://avm.de/fileadmin/user_upload/Global/Service/Schnittstellen/AHA-HTTP-Interface.pdf">ein XML-Web-Interface</a>
+        abgefragt werden (gezeigt sind wieder beispielhafte Simulationsdaten):
+      </p>
+      <p>
+        <img src="XmlJsonParserExample2.png" alt="" class="example" />
+      </p>
+      <p>
+        Hinweis: Der zur Anforderung der XML-Daten verwendete Baustein "FRITZ!Box
+        Home Automation Status" stammt von Fabian Fischer und steht im
+        <a href="https://service.knx-user-forum.de/?comm=download">
+        Download-Bereich des KNX-User-Forums</a> unter der
+        <a href="http://service.knx-user-forum.de/?comm=download&id=20000064">
+        ID 20000064 zum Download</a> bereit. Andere Bausteine desselben Autors
+        erlauben neben der hier gezeigten Statusabfrage das Schalten von
+        Verbrauchern an den DECT-Funksteckdosen.
+      </p>
+      <p>
+        Der Parser verwendet zur Verarbeitung der XML-Daten von der FRITZ!Box
+        drei XPath-Pfade mit den  folgenden Einstellungen (bei den Pfaden können
+        je nach FRITZ!OS-Version und verwendeten DECT-Geräten Änderungen nötig
+        sein):
+      </p>
+      <ul>
+        <li>
+          Pfad 1: <span class="box-noscroll"> /devicelist/device[./alert/state="1"]/name </span>
+        </li>
+        <li>
+          Pfad 2: <span class="box-noscroll"> /devicelist/device[./name="Steckdose 1"]/switch/state </span>
+        </li>
+        <li>
+          Pfad 3: <span class="box-noscroll"> /devicelist/device[./name="Steckdose 1"]/powermeter/power </span>
+        </li>
+        <li>
+          Art der Pfadauswahl 1: <span class="box-noscroll"> Alle Treffer als verketteter Text &nbsp;</span>
+        </li>
+        <li>
+          Art der Pfadauswahl 2: <span class="box-noscroll"> Erster Treffer als Text </span>
+        </li>
+        <li>
+          Art der Pfadauswahl 3: <span class="box-noscroll"> Erster Treffer als Zahl </span>
+        </li>
+        <li>
+          Text-Trenner 1: <span class="box-noscroll">&nbsp;, &nbsp;</span>
+        </li>
+        <li>
+          Textvorsatz 2: leer
+        </li>
+        <li>
+          Skalierungsfaktor 3: <span class="box-noscroll"> 0,001 </span>
+        </li>
+      </ul>
+      <p>
+        Aus dem Text am Ausgang 2 entsteht durch Verknüpfung mit einem BINARY-Datenpunkt
+        der Schaltstatus (KNX-DPT 1.x). Aus dem Leistungselement, das die FRITZ!Box als
+        Ganzzahl in Milliwatt liefert, entsteht durch die Skalierung ein FLOAT-Datenpunkt
+        in der Einheit Watt (KNX-DPT 14.056). In ähnlicher Weise könnte auch die
+        aufsummierte elektrische Arbeit oder die Temperatur ausgegeben werden.
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Visu- &amp; Web-Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <a href="ExpressionCalculator.html"><img src="../icons/ExpressionCalculatorNode.png" alt="" /></a>
+      &nbsp;<a href="ExpressionCalculator.html">Formelberechnung</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="StringFormatter.html"><img src="../icons/StringFormatterNode.png" alt="" /></a>
+      &nbsp;<a href="StringFormatter.html">Textformatierer</a>
+      <span style="float: right;">Weitere Logikbausteine sind in Planung.</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="../icons/XmlJsonParserNode.png" alt="" />
+      <span style="color: #a0a0a0;">&nbsp;XML/JSON-Parser</span>
+    </div>
+  </footer>
+</body>
+</html>

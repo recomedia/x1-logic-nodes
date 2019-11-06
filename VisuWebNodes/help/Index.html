@@ -1,0 +1,129 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Visu- &amp; Web-Logikbausteine - Hilfe - Paketinhalt</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Visu- &amp; Web-Logikbausteine</span> <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <h1>Paketinhalt</h1>
+      <h2>ACHTUNG &mdash; Neue Versionen des Textformatierers sind inkompatibel zu Versionen vor 0.9.x</h2>
+      <p>
+        Benutzer, die bisher den Textformatierer aus einer Version vor 0.9.x verwendet
+        haben, müssen unbedingt die <a href="update.html">Update-Anleitung</a>
+        beachten! Ansonsten kann es zu Fehlern im GPA kommen, die sich nur durch
+        Löschen ganzer Logikblätter &ndash; oder im schlimmsten Fall Neuanlegen des
+        Projekts &ndash; beheben lassen.
+      </p>
+      <h2>Übersicht</h2>
+      <p>
+        Die Logikbausteine in diesem Paket unterstützen Berechnungen und
+        einfache Visualisierungen mit den Bordmitteln des Gira X1:
+      </p>
+      <ul>
+        <li>
+          Der Baustein <a href="ExpressionCalculator.html">Formelberechnung</a>
+          errechnet Werte aus Funktionen, die von einem oder mehreren
+          Dateneingängen abhängen können.<br />
+          <span style="color: #a0a0a0;">
+            Obwohl dieser Baustein thematisch besser ins
+            Paket "Generische Logikbausteine" passen würde, muss er aus technischen
+            Gründen &ndash;&nbsp;er&nbsp;nutzt dieselbe Platzhalter-Implementierung
+            &ndash; in diesem Paket ausgeliefert werden.
+          </span>
+        </li>
+        <li>
+          Der Baustein <a href="StringFormatter.html">Textformatierer</a>
+          setzt aus aus Formatvorlagen und Dateneingängen einen oder mehrere
+          Ausgabetexte zusammen. Damit lassen sich z. B. im X1 kompakte
+          Visualisierungen auf Kacheln des Typs "Statusanzeige Text"
+          realisieren.
+        </li>
+        <li>
+          Der Baustein <a href="XmlJsonParser.html">XML/JSON-Parser</a> extrahiert
+          Einträge anhand von <a href="https://wiki.selfhtml.org/wiki/XML/XSL/XPath">XPath</a>-Abfragen aus XML- oder JSON-Eingabetext. Der Eingabetext wird
+          üblicherweise aus einer lokalen oder internetbasierten Netzwerkanfrage
+          stammen, z. B. aus folgenden Logikbausteinen anderer Entwickler:
+          <ul>
+            <li>HTTP WebRequest</li>
+            <li>FRITZ!Box Home Automation Status</li>
+          </ul>
+        </li>
+      </ul>
+      <h2>Detaillierte Beschreibungen</h2>
+      <p>
+        Die folgenden Links führen zu den ausführlichen Beschreibungen der
+        einzelnen Bausteine:
+      </p>
+      <div style="column-count: 3">
+        <p style="margin-top: 0">
+          <a href="ExpressionCalculator.html"><img src="../icons/ExpressionCalculatorNode.png" alt="" /></a>
+          &nbsp;<a href="ExpressionCalculator.html">Formelberechnung</a>
+        </p>
+        <p>
+          <a href="StringFormatter.html"><img src="../icons/StringFormatterNode.png" alt="" /></a>
+          &nbsp;<a href="StringFormatter.html">Textformatierer</a>
+        </p>
+        <p>
+          <a href="XmlJsonParser.html"><img src="../icons/XmlJsonParserNode.png" alt="" /></a>
+          &nbsp;<a href="XmlJsonParser.html">XML/JSON-Parser</a>
+        </p>
+      </div>
+      <h2>Nutzungsbedingungen</h2>
+      <p>
+        Die Logikbausteine, Dokumentation und Grafiken ("Software") in diesem Paket
+        steht unter der
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">
+          Creative-Commons-Lizenz CC BY-NC-SA 4.0 (Namensnennung - Nicht-kommerziell
+          - Weitergabe unter gleichen Bedingungen)
+        </a>. Anwender dürfen die Software
+        im Rahmen dieser Lizenz kostenfrei nutzen. Für zukünftige Versionen bleibt
+        eine Änderung der Lizenzbedingungen vorbehalten.
+      </p>
+      <p>
+        Die Software wurde sorgfältig entwickelt und umfangreich getestet. Dennoch
+        können Fehler nicht ausgeschlossen werden. Anwender verzichten, soweit dies
+        gesetzlich zulässig ist, auf Ansprüche aus Sachmängel- und Produkthaftung.
+        Die Verwendung der Software als Teil einer Einrichtung, die zur Erfüllung
+        gesetzlicher Sicherheitsbestimmungen dient, ist nicht zulässig.
+      </p>
+      <h2>Versionsgeschichte</h2>
+      <h3>1.0.0</h3>
+      <p>
+        Erste öffentliche Version nach Abschluss des Betatests.
+      </p>
+      <h3>1.0.1</h3>
+      <p>
+        Fehlerbehebungen im Baustein Formelberechnung:
+        <ul>
+          <li>
+            Text-Eingänge wurden in früheren Versionen ignoriert, was zu Laufzeitfehlern
+            ("<tt>The name '...' does not exist ...</tt>") führte. Sie werden ab dieser
+            Version richtig verarbeitet.
+          </li>
+          <li>
+            Initialwerte statischer Eingänge wurden in früheren Versionen ignoriert,
+            was zu falschen Ausgabewerten führte. Auch sie werden ab dieser Version
+            richtig verarbeitet.
+          </li>
+        </ul>
+      <p>
+        Bei mehreren Bausteinen die Dokumentation geringfügig reformatiert und ergänzt,
+        insbes. bzgl. Textvariablen und -operationen bei der Formelberechnung.
+      </p>
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Web- &amp; Visu-Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+  </footer>
+</body>
+</html>

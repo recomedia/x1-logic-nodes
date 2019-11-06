@@ -1,0 +1,231 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Generische Logikbausteine - Hilfe - Eingangswahlschalter+</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Generische Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1>Eingangswahlschalter+</h1>
+      <h2>Beschreibung</h2>
+      <img src="InputSelector.png" class="description" />
+      <p>
+        Der Eingangswahlschalter+ leitet ankommende Telegramme von einem ausgewählten Eingang
+        unverändert auf den Ausgang weiter. Der Eingang, von dem das eingehende Telegramm
+        weitergeleitet wird, wird über den Index-Eingang "Ausgewählter Eingang" bestimmt.
+        Die Anzahl der Eingänge ist zwischen 2 und 50 wählbar.
+      </p>
+      <p>
+        Wenn sich der ausgewählte Eingang ändert, kann wahlweise sofort der zuletzt auf dem
+        neu gewählten Eingang empfangene Wert an den Ausgang weiter gegeben werden oder der
+        Ausgang bis zum Eintreffen eines neuen Werts auf diesem Eingang unverändert bleiben.
+      </p>
+      <h2>Eingänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Eingang 1<br />..<br />Eingang <i>n</i></p>
+          </td>
+          <td>
+            <p>Any</p>
+          </td>
+          <td>
+            <p>
+              Hier empfangene Telegrammwerte werden von dem Eingang, dessen Index am Eingang
+              "Ausgewählter Eingang" anliegt, an den Ausgang weitergeleitet.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                In vielen Fällen ist es sinnvoll dass diese Eingänge keine
+                Startwerte haben. Für die Weiterleitung genügt es, dass am
+                Eingang "Ausgewählter Eingang" und am dadurch ausgewählten
+                Eingang Werte anliegen.
+              </li>
+              <li>
+                Wenn nicht ausgewählte Eingänge Werte empfangen, werden diese
+                abhängig von der <a href="#parameter">Parametereinstellung
+                "Beim Auswählen senden"</a> verworfen oder der jeweils letzte
+                Wert für späteres Senden gespeichert.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgewählter Eingang</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>
+              Bestimmt den Eingang, von dem Werte weitergeleitet werden. Der Wertebereich
+              reicht von 0 (Eingang 1) bis <i>n</i>-1 (Eingang <i>n</i>).
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang</p>
+          </td>
+          <td>
+            <p>Any</p>
+          </td>
+          <td>
+            <p>Gibt die vom ausgewählten Eingang weitergeleiteten Telegramme aus.</p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="parameter">Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width=" 85" />
+          <col width="115" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Anzahl der Eingänge</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Legt die Anzahl der Eingänge des Bausteins im Bereich 2..50 fest.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Beim Auswählen senden</p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Legt fest, ob beim Auswählen eines Eingangs ein Wert an den Ausgang
+              gesendet werden soll:
+            </p>
+            <ul>
+              <li>
+                Aktuellen Wert - Der Ausgang erhält sofort den zuletzt am gewählten
+                Eingang empfangenen Wert.
+              </li>
+              <li>
+                Nichts - Der Ausgang behält seinen Wert, bis der gewählte Eingang
+                einen neuen Wert empfängt.
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <h2>Beispiel</h2>
+      <p>
+        In einer Heizungsregelung soll die Stellgröße für die Heizkreisregelung nur dann
+        berücksichtigt werden, wenn kein Bedarf zur Warmwassererwärmung anliegt. Der
+        Eingangswahlschalter ist dazu mit einem Eingang für die Stellgröße und einem
+        weiteren Festwert-Eingang konfiguriert. Der Festwert ist so gewählt, dass er die
+        nachfolgende Minimumermittlung nicht beeinflusst. Durch die Einstellung
+        "Beim Auswählen senden: Aktuellen Wert" führt jede Änderung am Bedarf zur
+        Warmwassererwärmung sofort zu einem neuen Ausgabewert.
+      </p>
+      <p>
+        <img src="InputSelectorExample.png" alt="" class="example" />
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Generische Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <a href="SendByDifference.html"><img src="../icons/SendByDifferenceNode.png" alt="" /></a>
+      <a href="SendByDifference.html">Send-By-Difference</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="OutputSelector.html"><img src="../icons/OutputSelectorNode.png" alt="" /></a>
+      <a href="OutputSelector.html">Ausgangswahlschalter+</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="../icons/InputSelectorNode.png" alt="" />
+      <span style="color: #a0a0a0">Eingangswahlschalter+</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="Statistics.html"><img src="../icons/StatisticsNode.png" alt="" /></a>
+      <a href="Statistics.html">Statistikfunktionen</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="TimedStatistics.html"><img src="../icons/TimedStatisticsNode.png" alt="" /></a>
+      <a href="TimedStatistics.html">Statistik für Zeitreihen</a>
+    </div>
+  </footer>
+</body>
+</html>

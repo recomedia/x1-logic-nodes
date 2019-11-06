@@ -1,0 +1,535 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Visu- &amp; Web-Logikbausteine - Hilfe - Textformatierer</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Visu- &amp; Web-Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1><img src="../icons/StringFormatterNode.png" alt="" />&nbsp;
+      Textformatierer</h1>
+      <h2>ACHTUNG &mdash; Neue Versionen sind inkompatibel zu Versionen vor 0.9.x</h2>
+      <p>
+        Benutzer, die bisher eine Version vor 0.9.x verwendet haben, müssen
+        unbedingt die <a href="update.html">Update-Anleitung</a> beachten!
+        Ansonsten kann es zu Fehlern im GPA kommen, die sich nur durch Löschen
+        ganzer Logikblätter &ndash; oder im schlimmsten Fall Neuanlegen des
+        Projekts &ndash; beheben lassen.
+      </p>
+      <h2>Beschreibung</h2>
+      <img src="StringFormatter.png" class="description" />
+      <p>
+        Dieser Baustein setzt einen oder mehrere Ausgabetexte aus Formatvorlagen
+        und den darin referenzierten Eingangswerten zusammen. Formatvorlagen
+        bestehen aus festen Textbestandteilen und Platzhaltern für die
+        Eingangswerte. Die Platzhalter bestimmen Anzahl, Namen und Porttypen
+        der Eingänge. Ihre Parameter steuern auch, wie die Eingangswerte im
+        Ausgabetext dargestellt werden.
+      </p>
+      <p>
+        Folgende Arten von Eingangswerten können verarbeitet werden:
+      </p>
+      <ul>
+        <li>
+          Wahrheitswerte (Bool) werden als einzelne Zeichen, Wörter oder längere
+          Texte ausgegeben
+        </li>
+        <li>
+          Ganzzahlwerte (Integer)
+        </li>
+        <li>
+          Fließkommazahlen (Number) können mit unterschiedlichen Formatierungen
+          und einstellbarer Genauigkeit &ndash; wahlweise auch als Prozentwert
+          &ndash; ausgegeben werden
+        </li>
+        <li>Texte (String) werden unverändert ausgegeben</li>
+      </ul>
+      <p>
+        Bei allen Zahlenwerten lassen sich Werte oder Wertebereiche definieren,
+        die als Textbausteine anstelle der Zahldarstellung ausgegeben werden
+        sollen.
+      </p>
+      <h2 id="eingaenge">Eingänge</h2>
+      <p>
+        Die Reihenfolge der Eingänge ergibt sich für jeden Porttyp aus der
+        Reihenfolge der entsprechenden Platzhalter in den Formatvorlagen. In 
+        der Tabelle sind die automatisch vergebenen Eingangsnamen genannt. Diese
+        werden nur verwendet, wenn die Platzhalter keine benutzerdefinierten
+        Namen enthalten.
+      </p>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Binär 1<br />..<br />Binär n</p>
+          </td>
+          <td>
+            <p>Bool</p>
+          </td>
+          <td>
+            <p>
+              Werte für Wahrheitswert-Platzhalter.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Ganzzahl 1<br />..<br />Ganzzahl n</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>
+              Werte für Ganzzahl-Platzhalter.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Zahl 1<br />..<br />Zahl n</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>
+              Werte für Fließkommazahl-Platzhalter (auch Prozentwerte).
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Text 1<br />..<br />Text n</p>
+          </td>
+          <td>
+            <p>String</p>
+          </td>
+          <td>
+            <p>
+              Werte für Text-Platzhalter.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang 1<br />..<br />Ausgang <i>n</i></p>
+          </td>
+          <td>
+            <p>String</p>
+          </td>
+          <td>
+            <p>
+              Alle Ausgänge geben formatierte Texte aus, sobald der erste
+              Eingangswert empfangen wurde. Dies gilt auch für solche
+              Ausgangstexte, die den empfangenen Wert gar nicht verwenden.
+              Nicht empfangene Eingangswerte werden als ? dargestellt.
+            </p>
+            <p>
+              Hinweis:<br />
+              KNX-Datenpunkte vom Typ DPT 16 können maximal 14
+              8-Bit-ASCII-Zeichen enthalten. Text-Datenpunkte
+              innerhalb des L1/X1 können auch Unicode-Zeichen
+              verwenden und mehrere Kilobytes groß sein.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width=" 85" />
+          <col width="115" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Anzahl der Ausgänge und Formatvorlagen</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter legt die Anzahl der Ausgänge des Bausteins im
+              Bereich 1..10 fest. Da jeder Ausgang seine eigene Formatvorlage
+              hat, legt dies auch die Anzahl der Formatvorlagen fest.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Formatvorlage 1<br />..<br />Formatvorlage n</p>
+          </td>
+          <td>
+            <p>String</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Diese Parameter legen fest, aus welchen Bestandteilen die
+              entsprechenden Ausgangstexte jeweils bestehen. Darin wechseln
+              sich fixe Textteile und Platzhalter für Eingangswerte ab. Im
+              nächsten Kapitel sind die möglichen Platzhalter detailliert
+              beschrieben.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="platzhalter">Platzhalter in der Formatvorlage</h2>
+      <p>
+        Platzhalter in der Formatvorlage dienen dazu, Eingangswerte
+        formatiert in den Ausgabetext einzusetzen.
+        Textbestandteile zwischen den Platzhaltern werden unverändert in
+        den Ausgabetext übernommen. Sie dürfen auch leer sein. Platzhalter
+        dürfen also ganz am Anfang oder ganz am Ende der Formatvorlage
+        stehen oder direkt aufeinander folgen.
+      </p>
+      <p>
+        Es gibt zwei grundlegende Arten von Platzhaltern:
+      </p>
+      <ul>
+        <li>
+          <b>Definition</b> &ndash; definiert erstmals einen Eingang
+          mit Namen und Typ und hat die folgende Form:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<tt>{</tt>[<i>Eingangsname</i>]<tt>:</tt><i>T</i>[<i>Format</i>]<tt>}</tt>
+        </li>
+        <li>
+          <b>Referenz</b> &ndash; bezieht sich auf einen vorher definierten
+          Eingang, dessen Typ bereits festgelegt ist:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<tt>{</tt><i>Eingangsname</i>[<tt>:</tt><i>T</i>[<i>Format</i>]]<tt>}</tt>
+        </li>
+      </ul>
+      <p>
+        Syntaxelemente in  [...] können auch weg gelassen werden.
+      </p>
+      <p>
+        <i>Eingangsname</i> wird als Bezeichnung des Baustein-Eingangs
+        verwendet. Definitionen legen Eingänge an und formatieren deren
+        Werte als Teil des Ausgabetexts. Referenzen verwenden den Wert
+        eines vorher definierten Eingangs erneut. Sie dürfen sich auch
+        auf Namen beziehen, die in einer anderen Formatvorlage mit einer
+        niedrigeren Nummer definiert worden sind. Dabei können abweichende
+        Formatierungsparameter, aber kein abweichender Datentyp
+        festgelegt werden. Wird bei einer Definition kein Name
+        angegeben, so wird automatisch einer erzeugt (siehe
+        <a href="#eingaenge">Tabelle "Eingänge" oben</a>).
+      </p>
+      <p>
+        <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter
+        kann er auch Ziffern, Leer- und Interpunktionszeichen enthalten,
+        mit Ausnahme von <tt>:</tt>, <tt>{</tt> und <tt>}</tt> (weil
+        diese als Syntaxelemente für Platzhalter verwendet werden).
+        Leerzeichen am Anfang oder am Ende werden nicht in den Namen
+        übernommen.
+      </p>
+      <h3>Datentyp und Formatierung</h3>
+      <p>
+        <i>T</i> ist ein Buchstabe, der den <b>Datentyp</b> des Eingangs und
+        die grundlegende Art der Darstellung im Ausgabetext festlegt.<br />
+        Danach kann <i>Format</i> je nach Datentyp noch weitere Anweisungen
+        für die Darstellung bestimmter Werte oder Wertebereiche geben.<br />
+        Folgende Buchstaben &ndash; Groß- und Kleinbuchstaben haben gleiche
+        Bedeutung &ndash; und <i>Format</i>parameter sind möglich:
+      </p>
+      <ul>
+        <li>
+          <tt>B</tt> &ndash; Wahrheitswert (Bool)
+          <ul>
+            <li>
+              Ohne <i>Format</i>parameter wird <tt>false</tt>
+              als 0, <tt>true</tt> als 1 dargestellt.
+            </li>
+            <li>
+              Mit zwei ASCII- oder
+              <a href="https://unicode-suche.de/">Unicode-Zeichen</a>
+              als <i>Format</i>parameter (z. B. <tt>B</tt>&#9729;&#9728;)
+              wird <tt>false</tt> als das erste (im Beispiel &#9729;),
+              <tt>true</tt> als das zweite Zeichen (im Beispiel &#9728;)
+              dargestellt. (Manche Unicode-Zeichen führen zu Fehlern; man
+              kann sie &ndash; wie im nächsten Punkt beschrieben &ndash;
+              als Text-Parameter meist dennoch verwenden.)
+            </li>
+            <li>
+              Mit zwei Unicode-Texten als <i>Format</i>parameter (z. B.
+              <tt>B|Aus|Ein</tt>) wird <tt>false</tt> als der erste
+              (im Beispiel "Aus"), <tt>true</tt> als der zweite Text
+              (im Beispiel "Ein") dargestellt. Die Texte dürfen alle
+              Sonderzeichen mit Ausnahme von '<tt>{</tt>', '<tt>}</tt>',
+              '<tt>:</tt>', '<tt>=</tt>' und '<tt>|</tt>' enthalten,
+              also auch Leerzeichen.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <tt>I</tt> &ndash; Ganzzahl (Integer). Zu möglichen
+          <i>Format</i>parametern siehe im
+          <a href="#textzuweisungen">Abschnitt "Textdarstellungen
+          numerischer Werte" weiter unten</a>.
+        </li>
+        <li>
+          <tt>F</tt> &ndash; Fließkommazahl (Number), <em>ohne</em>
+          Tausendertrennzeichen formatiert
+          <ul>
+            <li>
+              Ohne <i>Format</i>parameter wird die Zahl gerundet
+              auf zwei Nachkommastellen dargestellt.
+            </li>
+            <li>
+              Mit einer Ziffer als <i>Format</i>parameter (z. B.
+              F1) wird die Zahl gerundet auf die angegebene Zahl
+              von Nachkommastellen dargestellt (im Beispiel mit
+              einer Nachkommastelle).
+            </li>
+            <li>
+              Zu möglichen weiteren <i>Format</i>parametern siehe den
+              <a href="#textzuweisungen">
+                Abschnitt "Textdarstellungen
+                numerischer Werte" weiter unten
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <tt>N</tt> &ndash; Fließkommazahl (Number), <em>mit</em>
+          Tausendertrennzeichen formatiert. Ansonsten wie <tt>F</tt>.
+        </li>
+        <li>
+          <tt>G</tt> &ndash; Fließkommazahl, formatiert ähnlich wie
+          <tt>F</tt>, jedoch mit zwei Abweichungen:
+          <ul>
+            <li>
+              Die <i>Format</i>-Ziffer gibt nicht die Zahl der
+              Nachkommastellen, sondern die Zahl der geltenden
+              Ziffern an.
+            </li>
+            <li>
+              Exponentialschreibweise (wissenschaftliche Notation)
+              wird benutzt, wenn dies zu einer kompakteren
+              Darstellung führt.
+            </li>
+          </ul>
+          Beispiel: Die Zahl 12.345.678,9 wird mit G4 als 1,235E+07
+          dargestellt.
+        </li>
+        <li>
+          <tt>P</tt> &ndash; Fließkommazahl, als Prozentwert formatiert:
+          1,0 wird z. B. als "100,00 %" dargestellt.
+          <ul>
+            <li>
+              Ohne <i>Format</i>-Ziffer wird der Prozentwert gerundet
+              auf zwei Nachkommastellen dargestellt.
+            </li>
+            <li>
+              Mit einer <i>Format</i>-Ziffer wird der Prozentwert gerundet
+              auf die angegebene Zahl von Nachkommastellen dargestellt.
+            </li>
+            <li>
+              Zu möglichen weiteren <i>Format</i>parametern siehe den
+              <a href="#textzuweisungen">
+                Abschnitt "Textdarstellungen
+                numerischer Werte" weiter unten
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <tt>S</tt> - Variabler Text. Es sind keine
+          <i>Format</i>parameter möglich. Der Text
+          wird immer unverändert eingesetzt.
+        </li>
+      </ul>
+      <h3 id="textzuweisungen">Textdarstellungen numerischer Werte</h3>
+      <p>
+        Das <i>Format</i> für numerische Werte kann zusätzlich
+        eine oder mehrere &ndash; durch '|' getrennte &ndash;
+        <b>Textzuweisungen</b> enthalten. Diese bilden Zahlenwerte
+        am Eingang auf Unicode-Textbausteine im Ausgabetext ab.
+      </p>
+      <p>
+        Soll ein <b>einzelner Zahlenwert</b> auf einen Text
+        abgebildet werden so folgt die Zuweisung dieser Form:<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;[<i>Wert</i><tt>=</tt>][<i>Text</i>]<br />
+        Darin ist <i>Wert</i> eine Dezimalzahl, bei der ggf. als
+        Dezimaltrennzeichen ein Komma vor den Nachkommastellen
+        steht. Gruppentrennzeichen (Tausendertrennzeichen) dürfen
+        nicht verwendet werden. Bei Ganzzahlen kann der <i>Wert</i>
+        bei allen Zuweisungen eines Platzhalters entfallen. Werte
+        werden dann automatisch von Null aufsteigend vergeben.
+      </p>
+      <p>
+        Um einen <b>Wertebereich</b> (Intervall) auf einen Text
+        abzubilden, folgt die Zuweisung dieser Form:<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;[[<tt>&gt;</tt>]<i>Wert</i>]<tt>..</tt>[[<tt>&lt;</tt>]<i>Wert</i>]<tt>=</tt>[<i>Text</i>]<br />
+        Dabei ist der erste Wert der untere Grenzwert des Intervalls,
+        der zweite der obere.
+      </p>
+      <p>
+        Die optionalen Zeichen '<tt>&gt;</tt>' bzw. '<tt>&lt;</tt>'
+        geben an, dass der Grenzwert selbst ausgeschlossen ist (also
+        ein offenes Intervall festgelegt werden soll). Ohne sie ist
+        der Grenzwert jeweils enthalten (geschlossenes Intervall).
+        Um den unteren Grenzwert auf den kleinstmöglichen Wert des
+        Datentyps (oder den oberen Grenzwert auf den größtmöglichen
+        Wert) zu setzen, lässt man den entsprechenden Wert einfach
+        weg.
+      </p>
+      <p>
+        Wenn sich die Bereiche oder Werte mehrerer Zuweisungen
+        überschneiden, so greift die erste passende Zuweisung.
+        Passt für einen Eingangswert keine der Zuweisungen, so
+        wird der Wert numerisch &ndash; wie im vorigen Abschnitt
+        beschrieben &ndash; ausgegeben.
+      </p>
+      <p>
+        <i>Text</i> darf &mdash; wie schon bei Wahrheitswerten
+        &mdash; alle Sonderzeichen mit Ausnahme von '<tt>{</tt>',
+        '<tt>}</tt>', '<tt>:</tt>', '<tt>=</tt>' und '<tt>|</tt>'
+        enthalten, also auch Leerzeichen. Wenn ein Wert oder
+        Bereich angegeben ist, darf der Text auch leer sein, um
+        die Ausgabe zu unterdrücken.
+      </p>
+      <h4>Beispiele</h4>
+      <ul>
+        <li>
+          Den HVAC-Modus eines Raumtemperaturreglers (1 Byte, DPT
+          20.102) als Text ausgeben:<br />
+          <div class="box-noscroll"> <tt>{HVAC-Modus:I|Auto|Komfort|Bereitschaft|Eco|Gebäudeschutz} </tt></div>
+        </li>
+        <li>
+          Die ganzzahlig in Grad gegebene meteorologische Windrichtung als
+          Pfeilrichtung in 45°-Schritten ausgeben (0 Grad entspricht Nord, Werte
+          steigen im Uhrzeigersinn, -1 bedeutet "unbestimmt, wechselnd"):<br />
+          <div class="box-noscroll"> <tt>{Windrichtung(Grad):I|-1=↻|0..22=↓|23..67=↙|68..112=←|113..157=↖|158..202=↑|203..247=↗|248..292=→|293..337=↘|338..360=↓} </tt></div>
+        </li>
+        <li>
+          Eine in m/s als Fließkommazahl gegebene Windgeschwindigkeit umgerechnet nach Beaufort ausgeben:<br />
+          <div class="box-scroll-x"> <tt>{Windgeschwindigkeit(m/s):F|..&lt;0,3=0|0,3..&lt;1,54=1|1,54..&lt;3,3=2|3,3..&lt;5,47=3|5,47..&lt;8=4|8..&lt;10,8=5|10,8..&lt;13,86=6|13,86..&lt;17,17=7|17,17..&lt;20,72=8|20,72..&lt;24,48=9|24,48..&lt;28,44=10|28,44..&lt;32,6=11|32,6..=12} </tt></div>
+        </li>
+        <li>
+          <a href="https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2">OpenWeather-Wettercode</a> als Unicode-Piktogramm ausgeben:<br />
+          <div class="box-scroll-x"> <tt>{Wettercode:I|210..211=🌩|200..299=⛈|500..504=🌦|300..599=🌧|600..699=🌨|771..781=🌪|700..799=🌫|800=☼|801=🌤|802=⛅|803=🌥|804=☁} </tt></div>
+          Die Bereichsüberschneidungen sind beabsichtigt: Kleinere Bereiche
+          für spezielle Piktogramme stehen vor größeren Bereichen mit
+          allgemeineren Piktogrammen. Die Spezialfälle haben dadurch Vorrang,
+          ohne den allgemeineren Bereich zerstückeln zu müssen.
+        </li>
+      </ul>
+      <h2>Anwendungsbeispiel</h2>
+      <p>
+        In der der Visualisierung einer Heizungsanlage sollen die Daten eines
+        Heizkreises möglichst kompakt gezeigt werden. Dazu werden Unicode-
+        Piktogramme und gerundete Werte verwendet. Sprechende Namen für alle
+        Eingänge machen das Logikblatt leicht verständlich:
+      </p>
+      <p>
+        <img src="StringFormatterExample.png" alt="" class="example" />
+      </p>
+      <p>
+        Die verwendete Formatvorlage ist:
+        <div class="box-noscroll" style="width: 716px"> <tt>{Bedarf:B|⚪|🔴} ({BedarfSeit:S}) | {Pumpe:B⋅✇} | ▲{TvsIst:N0}/{TvsSoll:N0}°C | ▽{TrsIst:N0}°C </tt></div>
+      </p>
+      <p>
+        Sechs Eingangsgrößen verschiedener Typen und (sehr wenig) Festtext
+        setzen den Ausgabetext zusammen. Dieser zeigt &ndash; durch senkrechte
+        Striche getrennt &ndash; die folgenden Daten:
+      </p>
+      <ul>
+        <li>Ob Heizwärmebedarf vorliegt (🔴) oder nicht (⚪) und seit welcher Uhrzeit dieser Zustand unverändert andauert</li>
+        <li>Ob die Pumpe läuft (✇) oder nicht (⋅). (Dies kann wegen Warmwasservorrang oder Pumpennachlauf vom Bedarf abweichen.)</li>
+        <li>Ist-/Sollwert der Vorlauftemperatur (▲)</li>
+        <li>Istwert der Rücklauftemperatur (▽)</li>
+      </ul>
+      <p>
+        Der fertig formatierte Ausgabetext sieht dann z. B. so aus:
+        <div class="box-noscroll" style="width: 230px">  🔴 (6:35) | ✇ | ▲42/43°C | ▽38°C</div>
+      </p>
+      <p>
+        Eine Kachel (Statusanzeige Text) der X1-Visualisierung kann so kompakt
+        und übersichtlich alle Kenngrößen des Heizkreises anzeigen.
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Visu- &amp; Web-Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <a href="ExpressionCalculator.html"><img src="../icons/ExpressionCalculatorNode.png" alt="" /></a>
+      &nbsp;<a href="ExpressionCalculator.html">Formelberechnung</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="../icons/StringFormatterNode.png" alt="" />
+      <span style="color: #a0a0a0;">&nbsp;Textformatierer</span>
+      <span style="float: right;">Weitere Logikbausteine sind in Planung.</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="XmlJsonParser.html"><img src="../icons/XmlJsonParserNode.png" alt="" /></a>
+      &nbsp;<a href="XmlJsonParser.html">XML/JSON-Parser</a>
+    </div>
+  </footer>
+</body>
+</html>

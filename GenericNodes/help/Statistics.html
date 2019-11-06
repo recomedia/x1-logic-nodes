@@ -1,0 +1,285 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Generische Logikbausteine - Hilfe - Statistikfunktionen</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Generische Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1>Statistikfunktionen</h1>
+      <h2>Beschreibung</h2>
+      <p><img src="Statistics.png" alt="" class="description" /></p>
+      <p>
+        Dieser Baustein berechnet aus mehreren Eingangswerten eine oder zwei
+        der folgenden mathematischen und statistischen Größen:
+      </p>
+      <ul>
+        <li>Summe</li>
+        <li>Mittelwert</li>
+        <li>Standardabweichung</li>
+        <li>Minimum oder Maximum</li>
+        <li>Index des Minimal- oder Maximalwerts</li>
+      </ul>
+      <p>
+        Die Berechnung der Standardabweichung betrachtet die Eingangswerte
+        als Grundgesamtheit. (Bei Betrachtung als Stichprobe ergäbe sich
+        ein anderer Wert.)
+      </p>
+      <p>
+        Die Anzahl der Eingänge ist zwischen 2 und 50 wählbar.
+      </p>
+      <h2>Eingänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Eingang 1<br />..<br />Eingang <i>n</i></p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>
+              Die hier empfangenen Werte bilden die Grundgesamtheit,
+              deren Kenngrößen der Baustein berechnet.
+            </p>
+            <p>
+              Hinweis:<br />
+              Die Felder für die Startwerte sollten unausgefüllt bleiben,
+              um nur gültige <span class="manhyphens">Eingabe&shy;werte</span>
+              in die Berechnungen einfließen zu lassen. Eingänge, die noch
+              keine Werte empfangen haben, bleiben dann bei den Berechnungen
+              unberücksichtigt.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang 1<br />Ausgang 2</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>
+              Je nach den ausgewählten Funktionen &ndash; siehe Parameter
+              "Funktion für Ausgang 1" bzw. "Funktion für Ausgang 2" &ndash;
+              tragen diese Ausgänge entsprechende Beschriftungen und geben
+              die berechneten Werte aus.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="85" />
+          <col width="115" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Anzahl der Eingänge</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Legt die Anzahl der Eingänge des Bausteins im Bereich 2..50 fest.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Funktion für<br />Ausgang 1</p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Mit diesem Parameter wird eine der folgenden Funktionen
+              für den Ausgang 1 gewählt:
+            </p>
+            <ul>
+              <li>Minimum &ndash; gibt den kleinsten Wert aller Eingänge aus</li>
+              <li>Maximum &ndash; gibt den größten Wert aller Eingänge aus</li>
+              <li>Summe &ndash; gibt die Summe aller Eingänge aus</li>
+              <li>Mittelwert &ndash; gibt den arithmetischen Mittelwert aller Eingänge aus</li>
+              <li>Standardabweichung &ndash; gibt die Standardabweichung der Grundgesamtheit aller Eingänge aus</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Funktion für<br />Ausgang 2</p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Mit diesem Parameter wird &ndash; falls gewünscht &ndash;
+              die Funktion für den Ausgang 2 gewählt. Neben der bereits
+              für Ausgang 1 beschriebenen Auswahl stehen hier zusätzlich
+              zur Verfügung:
+            </p>
+            <ul>
+              <li>&lt;keine&gt; &ndash; gibt keinen Wert aus; Ausgang 2 verschwindet</li>
+              <li>
+                Index des Minimalwerts &ndash; gibt den Index [0 .. n-1]
+                des Eingangs mit dem kleinsten Wert aus
+              </li>
+              <li>
+                Index des Maximalwerts &ndash; gibt den Index [0 .. n-1]
+                des Eingangs mit dem größten Wert aus
+              </li>
+            </ul>
+            <p>
+              Hinweis:<br />
+              Die Index-Ausgabewerte folgen dem gleichen Prinzip, wie beim
+              Gira-Baustein "Eingangswahlschalter" und dem Baustein
+              <a href="InputSelector.html">Eingangswahlschalter+</a>
+              aus diesem Paket:<br />
+              Der Wert 0 meint Eingang 1, der Wert 1 ist Eingang 2 usw.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="beispiel">Beispiel</h2>
+      <p>
+        Für eine bedarfsgeführte Heizungssteuerung soll die bereitgestellte
+        Wärmeleistung nicht nur von der Außentemperatur, sondern auch vom
+        tatsächlichen Wärmebedarf im Gebäude abhängen. Die dafür wichtigen
+        Räume sind mit Raumtemperaturreglern ausgestattet, die stetig auf
+        Ventilantriebe wirken. Der bestimmende Raum für den Wärmebedarf ist
+        der mit der größten Stellgröße; er wird Führungsraum genannt.
+      </p>
+      <p>
+        <img src="StatisticsExample.png" alt="" class="example" />
+      </p>
+      <p>
+        Dazu erhält der Statistik-Baustein an seinen Eingängen die
+        Stellgrößen von (jederzeit erweiterbaren) zwei Räumen. Er
+        identifiziert den mit der größten Stellgröße als Führungsraum
+        (Ausgang "Index des Maximalwerts"). Dessen Stellventil wird voll
+        geöffnet. Der Ausgang "Maximum" des Statistik-Bausteins regelt im
+        Gegenzug den Wärmeerzeuger so ab, dass der Führungsraum dennoch
+        nur die vom Raumtemperaturregler angeforderte Wärmeleistung erhält.
+        Der <a href="SendByDifference.html">Send-By-Difference-Baustein</a>
+        verhindert, dass der Wärmeerzeuger zu oft eine neue Stellgröße erhält.
+      </p>
+      <p>
+        Nehmen wir an, das Bad im OG habe die Stellgröße 83% und das Wohnzimmer
+        im EG die Stellgröße 59%. Dann erhält der Ausgang "Index des Maximalwerts"
+        den Wert 0 und der Ausgang "Maximum" den Wert 83%. Der nachfolgende
+        <a href="OutputSelector.html">Ausgangswahlschalter+</a> sendet
+      </p>
+      <ul>
+        <li>
+          an den Ausgang 1 "OG Bad/WC ist Führungsraum" den Wert "1"
+          vom Eingang, worauf der Stellantrieb in die Zwangsposition
+          100% fährt
+        </li>
+        <li>
+          an den Ausgang 2 "EG Wohn-Esszi. ist Führungsraum" den
+          Ruhewert "0", worauf der Stellantrieb die Zwangsposition
+          verlässt und wieder regulär von seinem Raumtemperaturregler
+          gesteuert wird.
+        </li>
+      </ul>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Generische Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <a href="SendByDifference.html"><img src="../icons/SendByDifferenceNode.png" alt="" /></a>
+      <a href="SendByDifference.html">Send-By-Difference</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="OutputSelector.html"><img src="../icons/OutputSelectorNode.png" alt="" /></a>
+      <a href="OutputSelector.html">Ausgangswahlschalter+</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="InputSelector.html"><img src="../icons/InputSelectorNode.png" alt="" /></a>
+      <a href="InputSelector.html">Eingangswahlschalter+</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="../icons/StatisticsNode.png" alt="" />
+      <span style="color: #a0a0a0">Statistikfunktionen</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="TimedStatistics.html"><img src="../icons/TimedStatisticsNode.png" alt="" /></a>
+      <a href="TimedStatistics.html">Statistik für Zeitreihen</a>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿{
+  "PackageFormatVersion": "1.0",
+  "Assembly": "Recomedia_de.Logic.Generic.dll",
+  "DependentFiles": [
+    "LogicModule.Nodes.Helpers.dll"
+  ],
+  "Version": "1.0.0",
+  "Author": "Horst Lehner / Recomedia GbR",
+  "Copyright": "Copyright ©2018-2019 Recomedia GbR. Distributed under Creative-Commons-License CC-BY-NC-SA.",
+  "DeveloperId": "recomedia_de",
+  "PackageId": "688D5884-1FE8-4946-8218-F71E0F606D89",
+  "Nodes": [
+    {
+      "Type": "Recomedia_de.Logic.Generic.SendByDifference",
+      "Name": {
+        "en": "Send-By-Difference",
+        "de": "Send-by-Difference"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/SendByDifferenceNode.png",
+      "HelpTooltip": {
+        "en": "Forwards the input to the output, if the new input value differs at least by a given difference from the previous",
+        "de": "Leitet den Eingang an den Ausgang weiter, wenn der neue Eingangswert sich vom vorigen um mindestens einen gegebenen Betrag unterscheidet."
+      },
+      "HelpFileReference": "$help/SendByDifference.html"
+    },
+    {
+      "Type": "Recomedia_de.Logic.Generic.Statistics",
+      "Name": {
+        "en": "Statistical functions",
+        "de": "Statistikfunktionen"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/StatisticsNode.png",
+      "HelpTooltip": {
+        "en": "Calculates the sum and other statistical functions from multiple inputs.",
+        "de": "Errechnet die Summe und andere statistische Funktionen aus mehreren Eingängen."
+      },
+      "HelpFileReference": "$help/Statistics.html"
+    },
+    {
+      "Type": "Recomedia_de.Logic.Generic.TimedStatistics",
+      "Name": {
+        "en": "Timed Statistics",
+        "de": "Statistik für Zeitreihen"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/TimedStatisticsNode.png",
+      "HelpTooltip": {
+        "en": "Calculates statistical functions of a time-variable input value over a given timespan.",
+        "de": "Berechnet statistische Funktionen eines zeitlich veränderlichen Eingabewerts über einen gegebenen Betrachtungszeitraum."
+      },
+      "HelpFileReference": "$help/TimedStatistics.html"
+    },
+    {
+      "Type": "Recomedia_de.Logic.Generic.InputSelector",
+      "Name": {
+        "en": "Input Selector +",
+        "de": "Eingangswahlschalter+"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/InputSelectorNode.png",
+      "HelpTooltip": {
+        "en": "Passes one out of multiple input values to the output, optionally re-sending when switching to a different input.",
+        "de": "Gibt einen von mehreren Eingabewerten an den Ausgang weiter. Wenn ein anderer Eingang gewählt wird, kann dessen Wert erneut gesendet werden."
+      },
+      "HelpFileReference": "$help/InputSelector.html"
+    },
+    {
+      "Type": "Recomedia_de.Logic.Generic.OutputSelector",
+      "Name": {
+        "en": "Output Selector +",
+        "de": "Ausgangswahlschalter+"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/OutputSelectorNode.png",
+      "HelpTooltip": {
+        "en": "Passes values from one input to one out of multiple outputs, optionally sending an \"idle\" value to deselected outputs.",
+        "de": "Gibt Werte von einem Eingang an einen von mehreren Ausgängen weiter. An die nicht gewählten Ausgänge kann ein Ruhewert gesendet werden."
+      },
+      "HelpFileReference": "$help/OutputSelector.html"
+    }
+  ]
+}

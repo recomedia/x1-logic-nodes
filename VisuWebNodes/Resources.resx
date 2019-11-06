@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BinaryInput" xml:space="preserve">
+    <value>Binary</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="EmptyPlaceholder" xml:space="preserve">
+    <value> is empty. Placeholders must at least specify a (previously defined) {&lt;name&gt;} or a valid type letter prefixed with a colon {:&lt;T&gt;} .  </value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="EmptyTemplate" xml:space="preserve">
+    <value>The format template is empty. Enter at least one placeholder enclosed in {}.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="ExplicitMappingInvalidRange" xml:space="preserve">
+    <value> contains a misformed range for a text representation. Ranges consist of optional numbers with .. in between. Numbers must use comma as the decimal separator, and cannot contain group (thousands) separators. Prefix range boundaries with &gt; (for lower boundaries), or &lt; (upper boundaries), to indicate that the respective value itself should be treated as out of the range.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="ExplicitMappingInvalidValue" xml:space="preserve">
+    <value> contains a misformed number for a text representation. Numbers use comma as the decimal separator (if needed), and cannot contain group (thousands) separators.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="ExplicitMappingInvRngVal" xml:space="preserve">
+    <value> contains a misformed range boundary (number) for a text representation. Numbers must use comma as the decimal separator, and cannot contain group (thousands) separators. Prefix range boundaries with &gt; (for lower boundaries), or &lt; (upper boundaries), to indicate that the respective value itself should be treated as out of the range.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="IntegerInput" xml:space="preserve">
+    <value>Integer</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingNoExplicitValues" xml:space="preserve">
+    <value> contains a mix of implicit and explicit values for text representations. This generally not allowable. Integer text representations can either exclusively use implicit values or value ranges, or exclusively use explicit values or value ranges. Floating point numer representations can only  use explicit values or value ranges.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingNoImplicitValues" xml:space="preserve">
+    <value> uses implicit values for text representations. Floating point number representations generally can't use implicit values. Integer representations don't support mixing implicit and explicit values.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingWrongAssignment" xml:space="preserve">
+    <value> contains an invalid assignment for a text representation. Valid assignments contain exactly one = between value or range (left hand side) and the text (right hand side). </value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="NoPlaceholder" xml:space="preserve">
+    <value>The format template contains no placeholders. Enclose placeholders in {}.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="NumberInput" xml:space="preserve">
+    <value>Number</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="Output" xml:space="preserve">
+    <value>Output</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderBinLengthInvalid" xml:space="preserve">
+    <value> is misformed. Binary (boolean) placeholders take either no parameters ({:B}), two character parameters ({:Bxy}), or a list of two string parameters ({B|false|true}).</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderIntLengthInvalid" xml:space="preserve">
+    <value> is misformed. Integer placeholders ({:I}) support no precision parameter. Optionally, values or value ranges can be specified with text representations (like in [:I|0=null|..&lt;0=negative|&gt;0..=positive}).</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderMultipleColon" xml:space="preserve">
+    <value> is misformed. A placeholder can contain no more than one ':', which separates the input name (left hand side) from type and formatting information (right hand side).</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderNameNotFound" xml:space="preserve">
+    <value> is an invalid reference. The input name has not been defined before. A type must be given with the input name upon first use. Type characters must be specified with a prefixed colon.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderNumFormatInvalid" xml:space="preserve">
+    <value> is misformed. Number placeholders take either no parameters ({:N}), or a one-digit precision parameter ({N1}) after their type letter. Values or value ranges can optionally be specified with text representations (like in {:N|..&lt;0=underflow|&gt;1000..=overflow}).</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderReuseWrongType" xml:space="preserve">
+    <value> refers to a previously defined input name, but specifies a different type. A reference can only redefine the formatting, but not the type, of the used input.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderStrLengthInvalid" xml:space="preserve">
+    <value> is misformed. The string ({:S}) placeholder does not support any parameters.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderTypeInvalid" xml:space="preserve">
+    <value> is an unknown placeholder type.  Only the following type characters can be used (as upper or lower case): B → Binary (boolean); I → Integer; F, N, G, P → Floating point number (double) specifying different formats; S → Text (string).</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="StringInput" xml:space="preserve">
+    <value>Text</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Format Template</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="TooManyBinPlaceholders" xml:space="preserve">
+    <value>The format template contains too many binary ({:B}) placeholders.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="TooManyIntPlaceholders" xml:space="preserve">
+    <value>The format template contains too many integer ({:I}) placeholders.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="TooManyNumPlaceholders" xml:space="preserve">
+    <value>The format template contains too many floating point number (({:F}, {:N}, {:G} and/or {:P}) placeholders.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="TooManyPlaceholders" xml:space="preserve">
+    <value>The format template contains too many placeholders.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="TooManyStrPlaceholders" xml:space="preserve">
+    <value>The format template contains too many string ({:S}) placeholders.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderNameInvalid" xml:space="preserve">
+    <value> contains an invalid input name. Valid names start with a letter and optionally continue with letters, digits, blanks (not at the end) or punctuation. The characters :, {, und } cannot be used, because these would be ambiguous with surrounding syntax elements.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="ExplicitMappingInvertedRange" xml:space="preserve">
+    <value> contains a text representation with a value range where the upper bound is no larger than the lower bound.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderBinInvalidAssign" xml:space="preserve">
+    <value> contains a text representation with an explicit value assignment. This is generally not supported for binary values. Use implicit values for text representations in {:B} placeholders.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="PlaceholderBinSameText" xml:space="preserve">
+    <value> has the same text representation for false and true values. Text representations must be different (and only one of them can be empty).</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingEmptyImplicitValue" xml:space="preserve">
+    <value> contains an empty text representation. This is only allowed when a value is explicitly given, but not for implicit values. </value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="HasDefaultName" xml:space="preserve">
+    <value> uses a default name, which is not allowable in this context. Specify an explicit name before the :.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="HasFormatOrMappings" xml:space="preserve">
+    <value> contains a format specification or text mappings, which is not allowable in this context. Specify only a valid type letter.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="HasUnusableName" xml:space="preserve">
+    <value> has a name that uses special characters, which is not allowable in this context. Specify a name starting with a letter and using only letters, digits, and _.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="Expression" xml:space="preserve">
+    <value>Expression</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="ExpressionCount" xml:space="preserve">
+    <value>Number of Outputs and Expressions</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="OutType" xml:space="preserve">
+    <value>Output Type</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="RuntimeError" xml:space="preserve">
+    <value>Runtime Error</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="TemplateCount" xml:space="preserve">
+    <value>Nu,mber of Outputs and Templates</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="HasOutOfRangeRef" xml:space="preserve">
+    <value> contains a reference to an output that either doesn't exist or cannot be used here. Only outputs with numbers from 1 to n-1 can be used, where n is the number of the referencing expression.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="HasAssignment" xml:space="preserve">
+    <value> contains an assignment. This is generally not allowable in expressions.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value> was not found in input text.</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="OutputCount" xml:space="preserve">
+    <value>Number of Paths and  Outputs</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="FirstAsNumber" xml:space="preserve">
+    <value>First matching item as number</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="FirstAsNumberParam" xml:space="preserve">
+    <value>Scaling factor</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="FirstAsText" xml:space="preserve">
+    <value>First matching item as text</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="FirstAsTextParam" xml:space="preserve">
+    <value>Text prefix</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="InvalidScaling" xml:space="preserve">
+    <value>is not a valid scaling factor. Scaling factors must use . or , as the decimal separator and cannot use group (thousands) separators.</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiAddNumbers" xml:space="preserve">
+    <value>Sum of matching items as numbers</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiAddNumbersParam" xml:space="preserve">
+    <value>Scaling factor</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiConcatTexts" xml:space="preserve">
+    <value>Concatenate matching items as text</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiConcatTextsParam" xml:space="preserve">
+    <value>Text separator</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="NoXmlDouble" xml:space="preserve">
+    <value>cannot converted to a number.</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="SelectOperation" xml:space="preserve">
+    <value>Type of selection</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="SelectCode" xml:space="preserve">
+    <value>Input coding</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+</root>

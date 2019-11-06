@@ -1,0 +1,319 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Generische Logikbausteine - Hilfe - Ausgangswahlschalter+</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Generische Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1>Ausgangswahlschalter+</h1>
+      <h2>Beschreibung</h2>
+      <img src="OutputSelector.png" class="description" />
+      <p>
+        Der Ausgangswahlschalter+ leitet ankommende Telegramme vom Eingang
+        unverändert auf den ausgewählten Ausgang weiter. Der Ausgang, an
+        den das eingehende Telegramm weitergeleitet wird, wird über den
+        Index-Eingang "Ausgewählter Ausgang" bestimmt. Die Anzahl der
+        Ausgänge ist zwischen 1 und 50 wählbar.
+      </p>
+      <p>
+        Wenn sich der ausgewählte Ausgang ändert, kann wahlweise
+        <ul>
+          <li>
+            <em>sofort</em> ein früher empfangener Eingangswert an den
+            neu gewählten Ausgang weiter gegeben werden, oder
+          </li>
+          <li>
+            erst der <em>nächste</em> neue Eingangswert an den Ausgang
+            weiter gegeben werden (d.h. der Ausgang bleibt bis dahin
+            unverändert).
+          </li>
+        </ul>
+      </p>
+      <p>
+        Abgewählte Ausgänge können wahlweise auf einen Ruhewert gesetzt
+        werden oder unverändert bleiben.
+      </p>
+      <h2>Eingänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Eingang</p>
+          </td>
+          <td>
+            <p>Any</p>
+          </td>
+          <td>
+            <p>
+              Hier empfangene Telegrammwerte werden an den Ausgang  weitergeleitet,
+              dessen Index am Eingang "Ausgewählter Ausgang" anliegt.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgewählter Ausgang</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>
+              Bestimmt den Ausgang, an den Werte weitergeleitet werden. Der
+              Wertebereich für den normalen Betrieb reicht von 0 (Ausgang 1) bis
+              <i>n</i>-1 (Ausgang <i>n</i>). Zusätzlich können die Werte -1 oder
+              <i>n</i> verwendet werden, um <em>keinen</em> Ausgang zu auszuwählen,
+              <span class="manhyphens">also</span> <em>alle</em> Eingangstelegramme
+              zu verwerfen.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang 1<br />..<br />Ausgang <i>n</i></p>
+          </td>
+          <td>
+            <p>Any</p>
+          </td>
+          <td>
+            <p>
+              Der ausgewählte Ausgang unter diesen gibt die vom Eingang
+              weitergeleiteten Telegramme aus. Alle anderen Ausgänge erhalten
+              den Ruhewert oder behalten ihren Wert, wenn kein Ruhewert
+              gesetzt ist.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="parameter">Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width=" 85" />
+          <col width="115" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Anzahl der Ausgänge</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter legt die Anzahl der Ausgänge des Bausteins
+              im Bereich 1..50 fest.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Beim Auswählen senden</p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Legt fest, was beim <em>Aus</em>wählen eines Ausgangs
+              an diesen gesendet werden soll:
+            </p>
+            <ul>
+              <li>
+                <b>Aktuellen Wert</b> - Der neu gewählte Ausgang erhält
+                sofort den zuletzt am Eingang empfangenen Wert.
+              </li>
+              <li>
+                <b>Letzten Wert</b> - Der neu gewählte Ausgang erhält
+                sofort den zuletzt <em>vor dem Abwählen</em> am Eingang
+                empfangenen Wert.
+              </li>
+              <li>
+                <b>Nichts</b> - Der neu gewählte Ausgang behält seinen
+                Wert, bis der Eingang einen neuen Wert empfängt.
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Typ des Ruhewerts</p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Legt die Art des Ruhewerts fest, der an <em>ab</em>gewählte
+              Ausgänge gesendet werden soll. Ist <b>&lt;keiner&gt;</b>
+              gewählt, so verschwindet das Eingabefeld für den Ruhewert.
+              Abgewählte Ausgänge behalten dann die Werte, die sie vor
+              dem Abwählen zuletzt hatten.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Ruhewert</p>
+          </td>
+          <td>
+            <p>Je nach Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Legt den Wert fest, der an  <em>ab</em>gewählte Ausgänge
+              gesendet werden soll.
+          </td>
+        </tr>
+      </table>
+      <h2>Beispiele</h2>
+      <h3>Sperre+</h3>
+      <p>
+        Manchmal ist es nützlich, dass eine Sperre nicht nur unerwünschte
+        Telegramme unterdrückt, sondern nach Aufheben der Sperre sofort
+        einen Wert an den Ausgang sendet. Dies erlaubt der
+        Ausgangswahlschalter+ mit den folgenden Einstellungen:
+      </p>
+      <ul>
+        <li>Anzahl der Ausgänge: 1</li>
+        <li>Beim Auswählen senden: Aktuellen Wert oder Letzten Wert</li>
+        <li>Typ des Ruhewerts: &lt;keiner&gt;</li>
+      </ul>
+      <p>
+        Der Eingang "Ausgewähler Ausgang" verhält sich damit so wie vom
+        Eingang "Aktiv" der Sperre gewohnt:
+      </p>
+      <ul>
+        <li>0: Sperre inaktiv; alle Eingangstelegramme werden weiter gegeben</li>
+        <li>1: Sperre aktiv; es werden keine Telegramme weiter gegeben.</li>
+      </ul>
+      <p>
+        Um einen Binärwert für den Eingang verwenden zu können, braucht man
+        zusätzlich einen Typumwandler.
+      </p>
+      <p>
+        Im gesperrten Zustand wird der jeweils letzte am Eingang empfangene Wert
+        intern zwischengespeichert. Beim Entsperren (Übergang des Eingangs "Aktiv"
+        von 1 &rarr; 0) wird der zuletzt gespeicherte Wert dann sofort gesendet.
+      </p>
+      <h3>Nachtlicht</h3>
+      <p>
+        Dieses Beispiel hat auch Gira für seinen Ausgangswahlschalter
+        verwendet. Die Beleuchtung in einem Flur wird durch einen
+        Bewegungsmelder angesteuert. Bei erkannter Bewegung soll tagsüber
+        die Deckenleuchte und nachts das Orientierungslicht eingeschaltet
+        werden.
+      </p>
+      <p>
+        Mit dem Ausgangswahlschalter+ lässt sich dieses Beispiel erweitern.
+        Wenn zur Umschaltzeit der Zeitschaltuhr das Licht eingeschaltet
+        ist, wird das nicht mehr benötigte Licht sofort aus ("Ruhewert: 0")
+        und das ab jetzt aktive Licht eingeschaltet ("Beim Auswählen
+        senden: Aktuellen Wert").
+      </p>
+      <p>
+        <img src="OutputSelectorExample.png" alt="" class="example" />
+      </p>
+      <h3>Bedarfsgeführte Heizungsregelung</h3>
+      <p>
+        Dieses Beispiel findet sich <a href="Statistics.html#beispiel">
+          bei der
+          Beschreibung des Statistik-Bausteins
+        </a>.
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Generische Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <a href="SendByDifference.html"><img src="../icons/SendByDifferenceNode.png" alt="" /></a>
+      <a href="SendByDifference.html">Send-By-Difference</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <img src="../icons/OutputSelectorNode.png" alt="" />
+      <span style="color: #a0a0a0">Ausgangswahlschalter+</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="InputSelector.html"><img src="../icons/InputSelectorNode.png" alt="" /></a>
+      <a href="InputSelector.html">Eingangswahlschalter+</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="Statistics.html"><img src="../icons/StatisticsNode.png" alt="" /></a>
+      <a href="Statistics.html">Statistikfunktionen</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="TimedStatistics.html"><img src="../icons/TimedStatisticsNode.png" alt="" /></a>
+      <a href="TimedStatistics.html">Statistik für Zeitreihen</a>
+    </div>
+  </footer>
+</body>
+</html>

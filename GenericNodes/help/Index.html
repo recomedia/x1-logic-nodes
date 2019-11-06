@@ -1,0 +1,135 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Generische Logikbausteine - Hilfe - Paketinhalt</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Generische Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <h1>Paketinhalt</h1>
+      <h2>Übersicht</h2>
+      <p>
+        Die Logikbausteine in diesem Paket stellen zum einen ein paar
+        Verbesserungen und Ergänzungen vorhandener Bausteine dar:
+      </p>
+      <ul>
+        <li>
+          Der Baustein <a href="SendByDifference.html">Send-By-Difference</a>
+          funktioniert ähnlich wie Gira's "Send-By-Change", erlaubt aber die
+          Filterung <i>ähnlicher</i> (nicht nur genau gleicher) Werte.
+        </li>
+        <li>
+          Der Baustein <a href="InputSelector.html">Eingangswahlschalter+</a>
+          funktioniert wie Gira's "Eingangswahlschalter". Zusätzlich kann beim
+          Auswählen eines Eingangs der zuletzt auf diesem Eingang empfangene
+          Wert gesendet werden. In manchen Fällen erspart das zusätzliche
+          Logik mit Wertgeneratoren.
+        </li>
+        <li>
+          Der Baustein <a href="OutputSelector.html">Ausgangswahlschalter+</a>
+          ist die logische Umkehrung des Eingangswahlschalter+. Wie dieser
+          kann er beim Auswählen eines Ausgangs sofort einen wählbaren
+          Eingangswert senden. Zusätzlich kann er beim Abwählen eines Ausgangs
+          einen Ruhewert senden. Er kann auch &ndash; mit nur einem Ausgang
+          &ndash; als erweiterte "Sperre" eingesetzt werden, wenn beim Sperren
+          ein Ruhewert und/oder beim Aufheben der Sperre der Eingangswert
+          gesendet werden soll.
+        </li>
+        <li>
+          Der Baustein <a href="Statistics.html">Statistikfunktionen</a>
+          ermöglicht nebenbei auch die Addition <i>vieler</i> Werte,
+          während der Gira-Baustein "Grundrechenart" nur zwei Werte
+          erlaubt.
+        </li>
+      </ul>
+      <p>
+        Der zweite Schwerpunkt sind einfache statistische Berechnungen,
+        u. a. Durchschnitt, Minimum und Maximum:
+      </p>
+      <ul>
+        <li>
+          Die
+          <a href="Statistics.html">Statistikfunktionen</a> errechnen
+          diese für mehrere Eingänge, die in der Regel mit verschiedenen
+          Datenpunktem verbunden sind.
+        </li>
+        <li>
+          <a href="TimedStatistics.html">Statistik für Zeitreihen</a>
+          arbeitet mit einer Zeitreihe von Werten eines Datenpunkts,
+          die nacheinander auf dem gleichen Eingang eintreffen.
+        </li>
+      </ul>
+      <p>
+        Anders als üblich berechnen dabei alle Bausteine mit mehreren gleichartigen
+        Eingängen ihre Ausgangswerte schon dann, wenn <i>ein</i> Eingang einen Wert
+        erhält (und nicht erst dann, wenn <i>alle</i> Werte gültig sind). Dadurch ist
+        eine Vorbelegung der Eingänge &ndash; die in vielen Fällen ohnehin nicht die
+        gewünschte Wirkung hätte &ndash; meist verzichtbar.
+      </p>
+      <p>
+        <b>Hinweis</b>: Der Logikbaustein "Formelberechnung" würde thematisch gut
+        in dieses Paket passen. Aus technischen Gründen &ndash; er verwendet die
+        gleiche Platzhalterimplementierung wie der "Textformatierer" &ndash; findet
+        er sich jedoch im Paket "Visu- &amp; Web-Logikbausteine".
+      </p>
+      <h2>Detaillierte Beschreibungen</h2>
+      <p>
+        Die folgenden Links führen zu den ausführlichen Beschreibungen der
+        einzelnen Bausteine:
+      </p>
+      <div style="column-count: 3">
+        <p style="margin-top: 0">
+          <a href="Statistics.html"><img src="../icons/StatisticsNode.png" alt="" /></a>
+          &nbsp;<a href="Statistics.html">Statistikfunktionen</a>
+        </p>
+        <p>
+          <a href="TimedStatistics.html"><img src="../icons/TimedStatisticsNode.png" alt="" /></a>
+          &nbsp;<a href="TimedStatistics.html">Statistik für Zeitreihen</a>
+        </p>
+        <p>
+          <a href="OutputSelector.html"><img src="../icons/OutputSelectorNode.png" alt="" /></a>
+          &nbsp;<a href="OutputSelector.html">Ausgangswahlschalter+</a>
+        </p>
+        <p>
+          <a href="InputSelector.html"><img src="../icons/InputSelectorNode.png" alt="" /></a>
+          &nbsp;<a href="InputSelector.html">Eingangswahlschalter+</a>
+        </p>
+        <p>
+          <a href="SendByDifference.html"><img src="../icons/SendByDifferenceNode.png" alt="" /></a>
+          &nbsp;<a href="SendByDifference.html">Send-By-Difference</a>
+        </p>
+      </div>
+      <h2>Nutzungsbedingungen</h2>
+      <p>
+        Die Logikbausteine, Dokumentation und Grafiken ("Software") in diesem Paket
+        steht unter der
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">
+          Creative-Commons-Lizenz CC BY-NC-SA 4.0 (Namensnennung - Nicht-kommerziell
+          - Weitergabe unter gleichen Bedingungen)
+        </a>. Anwender dürfen die Software
+        im Rahmen dieser Lizenz kostenfrei nutzen. Für zukünftige Versionen bleibt
+        eine Änderung der Lizenzbedingungen vorbehalten.
+      </p>
+      <p>
+        Die Software wurde sorgfältig entwickelt und umfangreich getestet. Dennoch
+        können Fehler nicht ausgeschlossen werden. Anwender verzichten, soweit dies
+        gesetzlich zulässig ist, auf Ansprüche aus Sachmängel- und Produkthaftung.
+        Die Verwendung der Software als Teil einer Einrichtung, die zur Erfüllung
+        gesetzlicher Sicherheitsbestimmungen dient, ist nicht zulässig.
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Generische Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+  </footer>
+</body>
+</html>

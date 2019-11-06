@@ -1,0 +1,1343 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Visu- &amp; Web-Logikbausteine - Hilfe - Formelberechnung</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Visu- &amp; Web-Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1>
+        <img src="../icons/ExpressionCalculatorNode.png" alt="" />&nbsp;
+        Formelberechnung
+      </h1>
+      <h2>Beschreibung</h2>
+      <img src="ExpressionCalculator.png" class="description" />
+      <p>
+        Dieser Baustein errechnet aus einer oder mehreren mathematischen Formeln
+        entsprechende Ausgabewerte. Die Formeln sind als Textparameter frei
+        konfigurierbar. Sie bestehen aus Rechenoperationen, Konstanten und
+        Platzhaltern für variable Eingangswerte. Die Platzhalter bestimmen
+        Anzahl, Namen und Porttypen der Eingänge.
+      </p>
+      <p>
+        Folgende Arten von Eingangswerten können verarbeitet werden:
+      </p>
+      <ul>
+        <li>
+          Wahrheitswerte (<tt>bool</tt>)
+        </li>
+        <li>
+          Numerische Werte (Ganzzahlen <tt>byte</tt>, <tt>int</tt>, <tt>long</tt> und Fließkommazahlen <tt>double</tt>)
+        </li>
+        <li>
+          Zeichenketten (<tt>string</tt>)
+        </li>
+      </ul>
+      <h3>Implementierung und Lizenzen</h3>
+      <p>
+        Dieser Baustein würde eigentlich thematisch besser ins Paket "Generische
+        Logikbausteine" passen. Aus technischen Gründen &ndash; er nutzt dieselbe
+        Platzhalter-Implementierung wie der <a href="StringFormatter.html">Textformatierer</a>
+        &ndash; muss er aber in diesem Paket ausgeliefert werden.
+      </p>
+      <p>
+        Die Implementierung verwendet den
+        <a href="http://docs.go-mono.com/?link=M%3aMono.CSharp.Evaluator.Evaluate(System.String)">Mono.CSharp.Evaluator</a>-Service (Version 3.6.1). Dieser steht
+        <a href="https://www.mono-project.com/docs/faq/licensing/">unter der MIT-Lizenz</a>
+        kostenlos
+        <a href="https://github.com/mono/mono/blob/master/mcs/mcs/eval.cs">mit Quelltext</a>
+        zur Verfügung.
+      </p>
+      <h2 id="eingaenge">Eingänge</h2>
+      <p>
+        Die Reihenfolge der Eingänge ergibt sich für jeden Porttyp aus der Reihenfolge
+        der entsprechenden <a href="#platzhalter">Platzhalter</a> in den Formatvorlagen.
+      </p>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="115" />
+          <col width="180" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p><i>aus Platzhalter</i></p>
+          </td>
+          <td>
+            <p>Bool</p>
+          </td>
+          <td>
+            <p>
+              Werte für Wahrheitswert-Platzhalter
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>aus Platzhalter</i></p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>
+              Werte für Ganzzahl-Platzhalter
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>aus Platzhalter</i></p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>
+              Werte für Fließkommazahl-Platzhalter (auch Prozentwerte)
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><i>aus Platzhalter</i></p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>
+              Werte für Zeichenketten-Platzhalter
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="115" />
+          <col width="180" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang 1<br />..<br />Ausgang <i>n</i></p>
+          </td>
+          <td>
+            <p>je nach entsprechen-<br />dem Parameter<br /><a href="#parameter">Typ des Ausgangs</a></p>
+          </td>
+          <td>
+            <p>
+              Alle Ausgänge geben erst dann Werte aus, wenn <i>alle</i> Eingangswerte
+              vorliegen. Wenn mehrere Formeln und Ausgänge verwendet werden, gilt dies
+              auch für Formeln, in denen die fehlenden Werte gar nicht vorkommen.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                Eingangswerte, die weder abgefragt werden können noch zyklisch senden,
+                sollten deshalb einen Vorgabewert haben.
+              </li>
+              <li>
+                Werden unbenutzte Ausgänge nicht versteckt, so steht jeder Ausgang
+                direkt neben dem <a href="#parameter">Formelparameter</a>, der ihn
+                berechnet.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Laufzeitfehler</p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>
+              Einige Fehler, die in den Formeln auftreten können, werden bereits
+              bei der Validierung festgestellt und im GPA ausgegeben.
+            </p>
+            <p>
+              Viele Fehler lassen sich aber erst beim Berechnen der Ausgangswerte
+              &ndash; also zur Laufzeit des Bausteins in der GPA-Simulation oder
+              nach der Inbetriebnahme auf dem Zielgerät &ndash; feststellen. Solche
+              Fehler werden an diesem Ausgang als Texte gemeldet.
+            </p>
+            <p>
+              Beispiel: Der Fehler<br />
+              <tt>&nbsp;&nbsp;&nbsp;...: error CS1026: Unexpected symbol ',', expecting ')'</tt><br />
+              weist sehr wahrscheinlich darauf hin, dass in einer Fließkommazahl
+              '<b>,</b>' statt '<b>.</b>' vor den Nach&shy;komma&shy;stellen steht.
+              Anstelle von <tt>...</tt> steht, wo der Fehler zu suchen ist: In
+              welcher Formel und in welcher Zeile (meist 1) und Zeichenposition.
+            </p>
+            <p>
+              Hinweis: Die meisten Laufzeit-Fehlermeldungen werden &mdash; wie
+              im Beispiel &mdash; in englischer Sprache ausgegeben.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="parameter">Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="115" />
+          <col width=" 70" />
+          <col width="110" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Anzahl der Ausgänge und Formeln</p>
+          </td>
+          <td>
+            <p>Integer</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter legt die Anzahl der Ausgänge des Bausteins im
+              Bereich 1..10 fest. Da jeder Ausgang seine eigene Formel hat,
+              legt dies auch die Anzahl der Formelparameter fest.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Typ des Ausgangs 1<br />..<br />Typ des Ausgangs <i>n</i></p>
+          </td>
+          <td>
+            <p>Auswahl</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Diese Parameter legen fest, welchen Porttyp der entsprechende Ausgangswert
+              jeweils haben soll. Möglich sind die folgenden Typen:
+              <ul>
+                <li>NUMBER: Fließkommazahl (<tt>double</tt>)</li>
+                <li>INT64: 64-Bit-Ganzzahl mit Vorzeichen (<tt>long</tt>)</li>
+                <li>INTEGER: 32-Bit-Ganzzahl mit Vorzeichen (<tt>int</tt>)</li>
+                <li>BYTE: 8-Bit-Ganzzahl ohne Vorzeichen (<tt>byte</tt>)</li>
+                <li>BOOL: Wahrheitswert (<tt>bool</tt>)</li>
+                <li>STRING: Zeichenkette (<tt>string</tt>)</li>
+              </ul>
+            </p>
+            <p>
+              In Klammern ist jeweils der C#-Typ angegeben, wie er in
+              <a href="#operatoren">Typumwandlungsoperatoren</a>
+              verwendet werden kann. Das Ergebnis der Formelauswertung muss
+              sich in diesen Typ umwandeln lassen, sonst kann der Ausgang
+              nicht gesetzt werden und es kommt zu einem Laufzeitfehler.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Formel 1<br />..<br />Formel <i>n</i></p>
+          </td>
+          <td>
+            <p>Text</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Diese Parameter legen fest, wie die jeweiligen Ausgangswerte
+              zu berechnen sind. Darin können <a href="#operatoren">Operatoren</a>,
+              mathematische <a href="#funktionen">Funktionen</a>,
+              <a href="#konstanten">Konstanten</a> und <a href="#variablen">Variablen</a>
+              vorkommen. In den nächsten Kapiteln sind alle diese detailliert
+              beschrieben.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="variablen">Ausgangswerte als Variablen</h2>
+      <p>
+        Wenn mehrere Formeln und Ausgänge verwendet werden, können die Ausgabewerte
+        von Ausgängen mit niedrigeren Nummern in den Formeln mit höheren Nummern als
+        Variablen verwendet werden. Diese Variablen haben die Namen <tt>_out1_</tt>
+        .. <tt>_out9_</tt>. Sie dürfen überall stehen, wo auch eine Konstante des
+        gleichen Typs stehen dürfte.
+      </p>
+      <p>
+        Große Formeln (oder solche, in denen Zwischenergebnisse mehrfach
+        verwendet werden) lassen sich so in übersichtliche Teile zerlegen.
+        Wird ein Zwischenergebniss außerhalb der weiteren Formeln nicht
+        benötigt, so kann sein Ausgang unbelegt bleiben.
+      </p>
+      <p>
+        Das <a href="#heizbeispiel">Anwendungsbeispiel "Heizungsregelung"</a> benutzt
+        einen Formelsatz, der dies mehrfach anwendet.
+      </p>
+      <h2 id="platzhalter">Platzhalter für Variablen</h2>
+      <p>
+        Platzhalter in den Formeln dienen dazu, variable Eingangswerte in den
+        Berechnungen zu verwenden. Sie dürfen überall stehen, wo auch eine
+        Konstante des gleichen Typs stehen dürfte.
+      </p>
+      <p>
+        Es gibt zwei grundlegende Arten von Platzhaltern:
+      </p>
+      <ul>
+        <li>
+          <b>Definition</b> &ndash; definiert erstmals einen Eingang
+          mit Namen und Typ und hat die folgende Form:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;<tt>{</tt><i>Eingangsname</i><tt>:</tt><i>T</i><tt>}</tt>
+        </li>
+        <li>
+          <b>Referenz</b> &ndash; bezieht sich auf einen vorher definierten
+          Eingang. Sie folgen der gleichen Form, wobei <tt>:</tt><i>T</i>
+          weg gelassen werden darf.
+        </li>
+      </ul>
+      <p>
+        <i>Eingangsname</i> wird als <b>Bezeichnung des Baustein-Eingangs</b>
+        verwendet. Definitionen legen Eingänge an und setzen deren Werte
+        in die Formel ein. Referenzen beziehen sich auf einen vorher
+        definierten Namen und verwenden den Wert des entsprechenden Eingangs
+        erneut. Sie dürfen sich auch auf Namen beziehen, die in einer anderen
+        Formel mit einer niedrigeren Nummer definiert worden sind. Referenzen
+        dürfen keinen von der Definition abweichenden Datentyp festlegen.
+      </p>
+      <p>
+        <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter
+        kann er auch Ziffern und '<tt>_</tt>' enthalten. Leerzeichen und
+        andere Sonderzeichen sind nicht zulässig. Leerzeichen am Anfang
+        oder am Ende sind erlaubt, werden aber nicht in den Namen
+        übernommen.
+      </p>
+      <p>
+        <i>T</i> ist ein Buchstabe, der den <b>Datentyp</b> des Eingangs
+        festlegt.<br />
+        Folgende Buchstaben &ndash; Groß- und Kleinbuchstaben haben gleiche
+        Bedeutung &ndash; sind möglich:
+      </p>
+      <ul>
+        <li>
+          <tt>B</tt> &ndash; Wahrheitswert (<tt>bool</tt>)
+          &ndash; Mögliche Werte: <tt>true</tt>, <tt>false</tt>
+        </li>
+        <li>
+          <tt>I</tt> &ndash; Ganzzahl (<tt>int</tt>)
+          &ndash; Wertebereich -2,147,483,648 .. 2,147,483,647
+        </li>
+        <li>
+          <tt>F</tt>, <tt>N</tt>, <tt>G</tt> oder <tt>P</tt> &ndash; Fließkommazahl
+          (<tt>double</tt>) &ndash; Wertebereich etwa -1,7 × 10<sup>308</sup> ..
+          1,7 × 10<sup>308</sup>&nbsp;mit einer Genauigkeit von mindestens 15
+          geltenden Ziffern
+        </li>
+        <li>
+          <tt>S</tt> &ndash; Zeichenkette (<tt>string</tt>)
+          &ndash; ASCII- oder Unicode-Zeichenkette
+        </li>
+      </ul>
+      <p>
+        <b>Hinweis:</b><br />
+        Bei numerischen Berechnungen sind die angegebenen Wertebereiche zu beachten.
+        Werden sie in irgend einem Teil der Formel überschritten, kommt es zu
+        falschen Ergebnissen.
+      </p>
+      <h2 id="konstanten">Literale Konstanten in Formeln</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="100" />
+          <col width="100" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Konstante</h3>
+          </th>
+          <th>
+            <h3>Datentyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p><i>Zahl</i></p>
+          </td>
+          <td>
+            <p><tt>double</tt><br /><tt>integer</tt></p>
+          </td>
+          <td>
+            <p>
+              Zahlen, die ohne Dezimaltrennzeichen angegeben werden, also nur aus
+              Ziffern bestehen, sind Ganzzahlen (<tt>int</tt>). Dies ist insbesondere
+              beim Dividieren zu beachten (siehe Divisions-Operator).
+            </p>
+            <p>
+              Ganzzahlen können auch in hexadezimaler Schreibweise angegeben werden,
+              indem man ihnen <tt>0x</tt>... voran stellt.
+            </p>
+            <p>
+              Fließkommazahlen (<tt>double</tt>) können auch in Exponentialschreibweise
+              angegeben werden. Z. B. bedeutet <tt>1.2E6</tt> dasselbe wie
+              <tt>1200000.0</tt> und <tt>-3.45E-3</tt> dasselbe wie <tt>-0.00345</tt>.
+              Als Dezimaltrenzeichen für Fließkomazahlen ist in Formeln &mdash;
+              anders als in sonstigen Eingabefeldern &mdash; immer '<tt>.</tt>'
+              zu verwenden. Gruppentrennzeichen (Tausendertrennzeichen) sind nicht
+              zulässig.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>true<br />false</tt></p>
+          </td>
+          <td>
+            <p><tt>bool</tt></p>
+          </td>
+          <td>
+            <p>Logische Wahrheitswerte.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Math.PI</tt></p>
+          </td>
+          <td>
+            <p><tt>double</tt></p>
+          </td>
+          <td>
+            <p>
+              Die Kreiszahl
+              (<font style="font-family: 'Times New Roman', Times, serif; font-size:larger;">&pi;</font>
+              = 3.141...)
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Math.E</tt></p>
+          </td>
+          <td>
+            <p><tt>double</tt></p>
+          </td>
+          <td>
+            <p>
+              Die Eulersche Zahl
+              (<font style="font-family: 'Times New Roman', Times, serif; font-size:larger;">e</font>
+              = 2.718...)
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>DateTime.<br />&nbsp;&nbsp;Today<br />&nbsp;&nbsp;Now</tt></p>
+          </td>
+          <td>
+            <p><tt>DateTime</tt></p>
+          </td>
+          <td>
+            <p>
+              Nicht wirklich eine Konstante, da der Wert vom Zeitpunkt des Abrufs abhängt:<br />
+              Aktuelles Datum (<tt>Today</tt> mit Uhrzeit 0:00 Uhr; <tt>Now</tt> mit aktueller
+              Uhrzeit)
+            </p>
+            <p>
+              Hinweis: Objekte vom Typ <tt>DateTime</tt> sind nicht als Ausgabewerte verwendbar.
+              Nützlich sind sie für Berechnungen mit Daten und Uhrzeiten, die anders nicht ohne
+              Weiteres möglich wären. Sie lassen sich auch in gültige Ausgabetypen (Zahlen oder
+              Zeichenketten) umwandeln. Siehe dazu die
+              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0">Dokumentation der<tt>DateTime</tt>-Klasse</a> und das <a href="#feiertagbeispiel">Anwendungsbeispiel "Feiertag"</a>.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>"</tt><i>Text</i><tt>"</tt></p>
+          </td>
+          <td>
+            <p><tt>string</tt></p>
+          </td>
+          <td>
+            <p>
+              Literale ASCII- oder Unicode-Zeichenketten-Konstante
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2 id="operatoren">Operatoren</h2>
+      Alle <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/">C#-Operatoren</a>, die sich auf verfügbare Datentypen anwenden lassen, sind zulässig.
+      Die wichtigsten davon sind:
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="60" />
+          <col width="90" />
+          <col width="115" />
+          <col width="115" />
+          <col width="100" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Rang-folge</h3>
+          </th>
+          <th>
+            <h3>Assozia-tivität</h3>
+          </th>
+          <th>
+            <h3>Operator</h3>
+          </th>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Datentypen</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td rowspan="2">
+            <p style="margin-top:42px;">&nbsp;&nbsp;1</p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:34px;">Von rechts nach links </p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>+ &nbsp; -</tt></p>
+          </td>
+          <td>
+            <p style="margin-top:16px;">Vorzeichen</p>
+          </td>
+          <td>
+            <p><i>alle<br />Zahltypen</i></p>
+          </td>
+          <td>
+            <p>
+              Kein Vorzeichen oder <tt>+</tt> wertet den nachfolgenden Ausdruck<br />
+              positiv, <tt>-</tt> negativ.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="margin-top:16px;"><tt>!</tt></p>
+          </td>
+          <td>
+            <p style="margin-top:16px;">NICHT</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>bool</tt></p>
+          </td>
+          <td>
+            <p>
+              Invertiert den nachfolgenden booleschen Ausdruck<br />(<tt>true</tt>
+              &rarr; <tt>false</tt>; <tt>false</tt> &rarr; <tt>true</tt>).
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="margin-top:16px;">&nbsp;&nbsp;2</p>
+          </td>
+          <td>
+            <p>Von rechts nach links</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>(</tt><i>T</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p>Typumwand-lung (Cast)</p>
+          </td>
+          <td>
+            <p><i>alle</i> &rarr; <i>T</i></p>
+          </td>
+          <td>
+            <p>
+              Erzwingt eine Typumwandlung des nachfolgenden Ausdrucks<br />auf
+              <i>T</i>. Für <i>T</i> können &ndash; über die an Ein- und Ausgängen
+              möglichen Typen hinaus &ndash; auch viele andere
+              <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/keywords/value-types-table">Werttypen von C#</a> stehen.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="2">
+            <p style="margin-top:130px;">&nbsp;&nbsp;3</p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:122px;">Von links nach rechts</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>* &nbsp; /</tt></p>
+          </td>
+          <td>
+            <p>Punkt-Grund-rechenarten</p>
+          </td>
+          <td>
+            <p><i>alle<br />Zahltypen</i></p>
+          </td>
+          <td>
+            <p>
+              Hinweise:
+            </p>
+            <p>
+              Bei der Division von Ganzzahlen wird das Ergebnis nicht
+              gerundet, sondern eventuelle Nachkommastellen einfach
+              abgeschnitten. Man vergleiche die folgenden Beispiele:
+            </p>
+            <ul>
+              <li><tt>-3 / 2</tt> &nbsp; &rarr; &nbsp; <tt>-1</tt></li>
+              <li><tt>-3.0 / 2</tt> &nbsp; &rarr; &nbsp; <tt>-1.5</tt></li>
+              <li>
+                <tt>Math.Round(((double)-3) / 2)</tt> &nbsp; &rarr;
+                &nbsp; <tt>-2.0</tt>
+              </li>
+            </ul>
+            <p>
+              Um Fließkommazahlen auf Ganzzahlen zu runden, braucht man
+              übrigens keine Formelberechnung, das kann schon der
+              Typkonverter von Gira.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="margin-top:16px;"><tt>%</tt></p>
+          </td>
+          <td>
+            <p style="margin-top:16px;">Divisionsrest</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>int</tt></p>
+          </td>
+          <td>
+            <p>
+              Ergibt den Divisionsrest einer ganzzahlingen Division.<br />
+              Beispiel: <tt>5 % 3</tt> &rarr; <tt>2</tt>.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="margin-top:16px;">&nbsp;&nbsp;4</p>
+          </td>
+          <td>
+            <p>Von links nach rechts</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>+ &nbsp; -</tt></p>
+          </td>
+          <td>
+            <p>Strich-Grund-rechenarten</p>
+          </td>
+          <td>
+            <p><i>alle<br />Zahltypen</i></p>
+          </td>
+          <td>
+            <p style="margin-top:16px;">
+              <tt>+</tt> dient auch zur Verkettung von Zeichenketten (<tt>string</tt>).
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>&nbsp;&nbsp;5</p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:18px;">Von links nach rechts</p>
+          </td>
+          <td>
+            <p><tt>< &nbsp;> &nbsp;<= &nbsp;>=</tt></p>
+          </td>
+          <td>
+            <p>Relational</p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:18px;">
+              <i>alle<br />Zahltypen</i><br />&rarr; <tt>bool</tt>
+            </p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:25px;">
+              Vergleicht zwei Werte und ergibt <tt>true</tt>, wenn der
+              Vergleichsoperator zutrifft, sonst <tt>false</tt>.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="margin-top:16px;">&nbsp;&nbsp;6</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>== &nbsp; !=</tt></p>
+          </td>
+          <td>
+            <p>Gleichheit, Ungleichheit</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>&nbsp;&nbsp;7</p>
+          </td>
+          <td rowspan="3">
+            <p style="margin-top:36px;">
+              Von links nach rechts
+            </p>
+          </td>
+          <td>
+            <p><tt>&amp;</tt></p>
+          </td>
+          <td>
+            <p>UND</p>
+          </td>
+          <td rowspan="3">
+            <p style="margin-top:44px;"><tt>bool</tt></p>
+          </td>
+          <td rowspan="3">
+            <p style="margin-top:11px;">
+              Logische Operatoren mit vollständiger Auswertung.
+            </p>
+            <p>
+              Hinweis:<br />
+              Der sonst übliche Operator <tt>x^y</tt> (x<sup>y</sup>) für
+              Zahlen steht nicht zur Verfügung. Man verwendet dazu die
+              <a href="#funktionen">Funktion</a> <tt>Math.Pow</tt>.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>&nbsp;&nbsp;8</p>
+          </td>
+          <td>
+            <p><tt>^</tt></p>
+          </td>
+          <td>
+            <p>Exklusiv-ODER</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>&nbsp;&nbsp;9</p>
+          </td>
+          <td>
+            <p><tt>|</tt></p>
+          </td>
+          <td>
+            <p>ODER</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>10</p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:18px;">
+              Von links nach rechts
+            </p>
+          </td>
+          <td>
+            <p><tt>&amp;&amp;</tt></p>
+          </td>
+          <td>
+            <p>UND</p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:26px;"><tt>bool</tt></p>
+          </td>
+          <td rowspan="2">
+            <p style="margin-top:18px;">
+              Logische Operatoren mit bedingter Auswertung, d. h. die Auswertung erfolgt nur
+              so weit, bis das Ergebnis feststeht.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>11</p>
+          </td>
+          <td>
+            <p><tt>||</tt></p>
+          </td>
+          <td>
+            <p>ODER</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p style="margin-top:16px;">12</p>
+          </td>
+          <td>
+            <p>Von rechts nach links</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><i>b</i><tt> ? </tt><i>x</i><tt> : </tt><i>y</i></p>
+          </td>
+          <td>
+            <p style="margin-top:16px;">Bedingung</p>
+          </td>
+          <td>
+            <p style="margin-top:16px;"><tt>bool</tt> &rarr; <i>alle</i></p>
+          </td>
+          <td>
+            <p style="margin-top:16px;">Gibt <i>x</i> zurück, wenn <i>b</i> <tt>true</tt> ist, sonst <i>y</i>.</p>
+          </td>
+        </tr>
+      </table>
+      <p>
+        Die ersten beiden Spalten der Tabelle geben an, wie nicht geklammerte Ausdrücke
+        ausgewertet werden. Darin ist z. B. auch die bekannte Regel "Punkt vor Strich"
+        enthalten: <tt>*</tt> und <tt>/</tt> werden vor <tt>+</tt> und <tt>-</tt>
+        ausgewertet. Geklammerte Ausdrücke <tt>(</tt>...<tt>)</tt> werden "von innen
+        nach außen" berechnet. Weitere Angaben dazu finden sich
+        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/programming-guide/statements-expressions-operators/operators#operators-evaluation-and-operator-precedence">
+          im C#-Programmierhandbuch
+        </a>.
+      </p>
+      <h2 id="funktionen">Mathematische Funktionen</h2>
+      <h3>Math-Bibliothek und Winkelfunktionen</h3>
+      <p>
+        Soweit ihre Parameter- und Rückgabetypen sinnvoll verwendbar sind, können alle
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.math?view=netframework-4.0#methoden"><b>Math</b>-Methoden des .NET-4.0-Standards</a>
+        in den Formeln verwendet werden.
+      </p>
+      <p>
+        Beispiel: <tt>Math.Pow({x:N}, {y:N})</tt> berechnet aus den beiden Eingangswerten
+        x und y deren Potenz x<sup>y</sup>.
+      </p>
+      <p>
+        Die trigonometrischen Funktionen der <tt>Math</tt>-Bibliothek verwenden
+        und liefern Winkelangaben immer im Bogenmaß. Zur Umrechnung zwischen
+        Grad- und Bogenmaß stehen die folgenden beiden Funktionen zur
+        Verfügung:
+      </p>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="175" />
+          <col width="125" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h4>Funktion</h4>
+          </th>
+          <th>
+            <h4>Datentyp</h4>
+          </th>
+          <th>
+            <h4>Beschreibung</h4>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Angle.Deg(</tt><i>rad</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>double</tt></p>
+          </td>
+          <td>
+            <p>Rechnet den im Bogenmaß gegebenen Winkel <i>rad</i> ins Gradmaß um.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Angle.Rad(</tt><i>deg</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>double</tt></p>
+          </td>
+          <td>
+            <p>Rechnet den im Gradmaß gegebenen Winkel <i>deg</i> ins Bogenmaß um.</p>
+          </td>
+        </tr>
+      </table>
+      <p>
+        Mit den <tt>Math</tt>- und <tt>Angle</tt>-Funktionen sind trigonometrische,
+        logarithmische und andere gebräuchliche mathematische Anwendungen abgedeckt.
+      </p>
+      <h3>Funktionen zur Beleuchtungssteuerung</h3>
+      <p>
+        Die Funktionen der <tt>Light</tt>-Klasse rechnen gängige Größen der
+        Beleuchtungstechnik um:
+      </p>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="175" />
+          <col width="125" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h4>Funktion</h4>
+          </th>
+          <th>
+            <h4>Datentyp</h4>
+          </th>
+          <th>
+            <h4>Beschreibung</h4>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Light.HSV(</tt><i>h</i><tt>, </tt><i>s</i><tt>, </tt><i>v</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>byte</tt> &rarr; <tt>int</tt></p>
+          </td>
+          <td>
+            <p>
+              Rechnet die als einzelne 8-Bit-Werte (DPT 5.x) gegebenen Farbgrößen für
+              Farbwert (<i>h</i>ue), Farbsättigung (<i>s</i>aturation) und Hellwert
+              (<i>v</i>alue) in eine kombinierte HSV-Größe (3 Bytes, ähnlich zu DPT
+              232.600) um.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                Da Byte-Eingänge nicht vorgesehen sind, muss der Typumwandlungsoperator
+                verwendet werden, um Integer-Eingänge als byte-Parameter verwenden zu
+                können:
+                <div class="box-noscroll" style="width: 565px;"> <tt>Light.HSV((byte){h:I}, (byte){s:I}, (byte){v:I})</tt></div>
+              </li>
+              <li>
+                Für Integer-Werte außerhalb des Wertebereichs 0..255 führt dies zu
+                unerwünschtem Verhalten. Es ist also sicher zu stellen, dass die
+                Integer-Werte im gültigen Wertebereich bleiben. Dies ist z. B. der
+                Fall, wenn sie aus DPT-5.x-Eingängen &ndash; oder ganz allgemein aus
+                Bausteinen mit Byte-Ausgängen &ndash; stammen.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <tt>Light.HSVToH(</tt><i>hsv</i><tt>)</tt>
+              <tt>Light.HSVToS(</tt><i>hsv</i><tt>)</tt>
+              <tt>Light.HSVToV(</tt><i>hsv</i><tt>)</tt>
+            </p>
+          </td>
+          <td>
+            <p><tt>int</tt> &rarr; <tt>byte</tt></p>
+          </td>
+          <td>
+            <p>
+              Extrahiert aus der gegebenen kombinierten HSV-Größe <i>hsv</i> (3 Bytes,
+              ähnlich zu DPT 232.600) die einzelnen 8-Bit-Farbgrößen (DPT 5.x) für
+              Farbwert (<b>H</b>ue), Farbsättigung (<b>S</b>aturation) oder Hellwert
+              (<b>V</b>alue).
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Light.RGB(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>byte</tt> &rarr; <tt>int</tt></p>
+          </td>
+          <td>
+            <p>
+              Rechnet die als einzelne 8-Bit-Werte (DPT 5.x) gegebenen Farbintensitäten
+              für <i>r</i>ot, <i>g</i>rün und <i>b</i>lau in eine kombinierte RGB-Größe
+              (3 Bytes, DPT 232.600) um.
+            </p>
+            <p>
+              Die bereits oben zu <tt>byte</tt>-Parametern gegebenen Hinweise gelten
+              entsprechend.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <tt>Light.RGBToR(</tt><i>rgb</i><tt>)</tt>
+              <tt>Light.RGBToG(</tt><i>rgb</i><tt>)</tt>
+              <tt>Light.RGBToB(</tt><i>rgb</i><tt>)</tt>
+            </p>
+          </td>
+          <td>
+            <p><tt>int</tt> &rarr; <tt>byte</tt></p>
+          </td>
+          <td>
+            <p>
+              Extrahiert aus der gegebenen kombinierten RGB-Größe <i>rgb</i> (3 Bytes,
+              DPT 232.600) die einzelnen 8-Bit-Farbintensitäten (DPT 5.x) für
+              <b>R</b>ot, <b>G</b>rün oder <b>B</b>lau.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <tt>Light.RGBW(</tt><i>rgb</i><tt>)</tt>
+              <tt>Light.RGBW(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>)</tt>
+            </p>
+          </td>
+          <td>
+            <p><tt>int</tt> &rarr; <tt>long</tt><br /><tt>byte</tt> &rarr; <tt>long</tt></p>
+          </td>
+          <td>
+            <p>
+              Rechnet die gegebene RGB-Größe &ndash; wahlweise einzelne 8-Bit-Werte (DPT 5.x)
+              oder 3 Bytes kombiniert (DPT 232.600) &ndash; in eine kombinierte RGBW-Größe
+              (6 bytes, DPT 251.600) um. Die Umrechnung extrahiert die gemeinsame Helligkeit
+              aller Farben in einen entsprechenden Wert für <i>w</i>eiß. Die Farbintensitäten
+              für <i>r</i>ot, <i>g</i>rün und <i>b</i>lau werden so weit reduziert, dass
+              mindestens eine dieser Farben ganz weg fällt.
+            </p>
+            <p>
+              Alle vier Werte im erzeugten DPT 251.600 sind gültig (und auch so markiert).
+              Die bereits oben zu <tt>byte</tt>-Parametern gegebenen Hinweise gelten
+              entsprechend.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Light.RGBW(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>, </tt><i>w</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>int</tt> &rarr; <tt>long</tt></p>
+          </td>
+          <td>
+            <p>
+              Rechnet die gegebenen Farbintensitäten für <i>r</i>ot, <i>g</i>rün, <i>b</i>lau
+              und <i>w</i>eiß in eine kombinierte RGBW-Größe (6 bytes, DPT 251.600) um. Gültige
+              Intensitäten liegen im Wertebereich 0..255. Werte außerhalb dieses Bereichs werden
+              als 0 übernommen und ungültig markiert.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <tt>Light.RGBWToR(</tt><i>rgbw</i><tt>)</tt>
+              <tt>Light.RGBWToG(</tt><i>rgbw</i><tt>)</tt>
+              <tt>Light.RGBWToB(</tt><i>rgbw</i><tt>)</tt>
+              <tt>Light.RGBWToW(</tt><i>rgbw</i><tt>)</tt>
+            </p>
+          </td>
+          <td>
+            <p><tt>long</tt> &rarr; <tt>int</tt></p>
+          </td>
+          <td>
+            <p>
+              Extrahiert aus der kombinierten RGBW-Größe <i>rgbw</i> (6 bytes, DPT 251.600)
+              gültige Intensitäten für <b>R</b>ot, <b>G</b>rün, <b>B</b>lau oder <B>W</B>eiß
+              im 8-Bit-Wertebereich 0..255. Als ungültig markierte Intensitäten werden mit
+              dem Wert -1 zurück gegeben.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                DPT 251.600 hat 6 Bytes, von denen 36 Bits verwendet werden. Da
+                Ganzzahl-Eingänge mit dem benötigten Wertebereich nicht zur
+                Verfügung stehen, muss ein Fließkommazahl-Eingang und ein
+                Typumwandlungsoperator verwendet werden; z. B.:
+                <div class="box-noscroll" style="width: 565px;"> <tt>RGBWToB((long){r:N})</tt></div>
+              </li>
+              <li>
+                Wenn im Eingabewert Intensitäten als ungültig markiert sein können, dann
+                dürfen die Ausgabewerte nicht ohne Weiteres einem 8-Bit-Objekt (DPT 5.x)
+                zugewiesen werden. Vielmehr ist der Ausgabewert -1 gesondert zu behandeln.
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <tt>Light.RGBToHSV(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>)</tt>
+              <tt>Light.RGBToHSV(</tt><i>rgb</i><tt>)</tt>
+              <tt>Light.HSVToRGB(</tt><i>h</i><tt>, </tt><i>s</i><tt>, </tt><i>v</i><tt>)</tt>
+              <tt>Light.HSVToRGB(</tt><i>hsv</i><tt>)</tt>
+            </p>
+          </td>
+          <td>
+            <p>
+              <tt>byte</tt> &rarr; <tt>int<br />int</tt> &rarr; <tt>int</tt><br />
+              <tt>byte</tt> &rarr; <tt>int<br />int</tt> &rarr; <tt>int</tt>
+            </p>
+          </td>
+          <td>
+            <p>
+              Rechnet Farbangaben zwischen dem RGB-Farbraum und dem HSV-Farbraum um.
+            </p>
+            <p>
+              Die bereits oben zu <tt>byte</tt>-Parametern und DPT 232.600 gegebenen
+              Hinweise gelten <span class="manhyphens">entsprechend</span>.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <p>
+        Mit diesen Funktionen lässt sich z. B. aus einem HSV-Controller eine
+        RGBW-LED-Leiste ansteuern.
+      </p>
+      <h3>Funktionen für die Heizungs-, Lüftungs- und Klimatechnik (HLK)</h3>
+      <p>
+        Viele Außen- und Raumsensoren können Temperatur (in °C) und relative Luftfeuchtigkeit
+        (in %) messen. Die folgenden Funktionen errechnen daraus andere in der Lüftungs- und
+        Klimatechnik wichtige Größen:
+      </p>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="175" />
+          <col width="125" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h4>Funktion</h4>
+          </th>
+          <th>
+            <h4>Datentyp</h4>
+          </th>
+          <th>
+            <h4>Beschreibung</h4>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Hlk.AbsHumidity(</tt><i>T</i><tt>, </tt><i>rf</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>double</tt></p>
+          </td>
+          <td>
+            <p>
+              Errechnet aus der Temperatur <i>T</i> in °C und der relativen
+              Luftfeuchtigkeit <i>rf</i> in % die absolute Luftfeuchtiggkeit
+              (in g/m<sup>3</sup>). Dieser Wert gibt an, wie viel Wasserdampf
+              in einem Kubikmeter Luft enthalten ist.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><tt>Hlk.DewPoint(</tt><i>T</i><tt>, </tt><i>rf</i><tt>)</tt></p>
+          </td>
+          <td>
+            <p><tt>double</tt></p>
+          </td>
+          <td>
+            <p>
+              Errechnet aus der Temperatur <i>T</i> in °C und der relativen
+              Luftfeuchtigkeit <i>rf</i> in % die Taupunkt-Temperatur (in °C).
+              Dieser Wert gibt an, bei welcher Temperatur die relative
+              Luftfeuchtigkeit 100% wäre, der Wasserdampf also gerade noch
+              nicht kondensieren würde.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <p>
+        Da exakte Berechnungsverfahren nicht existieren, liefern beide Funktionen
+        gute Näherungswerte auf der Grundlage der
+        <a href="http://www.wetterochs.de/wetter/feuchte.html">Magnusformel</a>.
+      </p>
+      <p>
+        Sie können beispielsweise dazu dienen, eine Lüftungsanlage (von der  wir
+        annehmen wollen, dass sie keinen Luftentfeuchter hat) bedarfsgerecht (also
+        nicht unnötig) und zielorientiert (also nicht kontraproduktiv) zu steuern.
+        So hat es z. B. keinen Sinn, einem Raum absolut feuchtere Außenluft zuzuführen,
+        wenn Luftfeuchtigkeit und Taupunkt-Temperatur ohnehin schon höher sind als
+        gewünscht.
+      </p>
+      <h3>Stringfunktionen</h3>
+      <p>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.double.tostring?view=netframework-4.0">ToString</a>
+        mit seinen verschiedenen Varianten für alle numerischen Typen erlaubt die
+        sehr flexible Formatierung von Zahlen als Texte. Auch können fast alle
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.string?view=netframework-4.0#methoden"><b>String</b>-Methoden des .NET-4.0-Standards</a>
+        verwendet werden.
+      </p>
+      <h2>Beispiele</h2>
+      <h3 id="heizbeispiel">Heizungsregelung</h3>
+      <p>
+        In einem nicht energetisch modernisierten Bestandsbau aus den 80er Jahren
+        soll die Heizung wie folgt bedarfsgeführt geregelt werden:
+      </p>
+      <ol>
+        <li>
+          Die Obergrenze der Vorlauftemperatur folgt einer traditionellen Heizkurve.
+        </li>
+        <li>
+          Bei tatsächlich geringerem Wärmebedarf soll die Vorlauftemperatur abgesenkt
+          werden.
+        </li>
+      </ol>
+      <p><b>Heizkurve</b></p>
+      <p>
+        Aus der zeitlich (im Beispiel über 6 Stunden) gemittelten Außentemperatur Ta
+        ist die Obergrenze für die Vorlauftemperatur der Heizung zu
+        <span class="manhyphens">ermitteln</span>. Die Formel dazu soll:
+      </p>
+      <ul>
+        <li>
+          oberhalb der Heizgrenze (im Beispiel 20°C) &rarr; den Wert 0 zurück geben
+          (es soll nicht geheizt werden),
+        </li>
+        <li>
+          für sehr niedrige Außentemperaturen (im Beispiel unter -10°C) &rarr; die
+          Auslegungstemperatur der Heizanlage (im Beispiel 70°C) zurück
+          <span class="manhyphens">geben</span>,
+        </li>
+        <li>
+          im Temperaturbereich dazwischen &rarr; den für Heizkurven typischen
+          nichtlinearen Verlauf (im Beispiel mit einer mittleren Steigung von
+          ca.&nbsp;1.6) durch zwei lineare Abschnitte annähern.
+        </li>
+      </ul>
+      <p style="margin: 0 0 4px 0; padding: 0 0 0 0;">
+        Um diese Kennlinie zu realisieren, verwenden wir drei verschachtelte
+        Bedingungsoperatoren. Damit die übersichtlich bleiben, sind sie auf
+        drei&nbsp;Formeln aufgeteilt. Die ersten zwei davon liefern nur
+        Zwischenergebnisse; ihre Ausgänge bleiben unbelegt:<br />
+        Formel 1: <span class="box-noscroll"> <tt>({T:f} > -10.0) ? (40.0 + (11.0-{T}) * 30.0/21.0) : 70.0</tt> </span>
+      </p>
+      <p style="margin: 0 0 4px 0; padding: 0 0 0 0;">
+        Formel 2: <span class="box-noscroll"> <tt>({T} > 11.0) ? (21.0 + (20.0 -{T}) * 19.0/9.0) : _out1_ </tt></span>
+      </p>
+      <p>
+        Erst die dritte Formel errechnet daraus den gewünschten Endwert für die maximale
+        Vorlauftemperatur:<br />
+        Formel 3: <span class="box-noscroll"> <tt>({T} > 20.0) ? 0.0 : _out2_ </tt></span>
+      </p>
+      <p>
+        Dieses Zwischenergebnis von Ausgang 3 wird nur für die Visualisierung verwendet.
+      </p>
+      <p><b>Bedarfsführung</b></p>
+      <p style="margin: 0 0 4px 0; padding: 0 0 0 0;">
+        Der tatsächliche Wärmebedarf ist als prozentualer <b>Bedarf</b> gegeben. Er senkt die
+        Vorlauftemperatur aus Formel 3 wie folgt ab:<br />
+        Formel 4: <span class="box-noscroll"> <tt>({Bedarf:f} / 100) * (_out3_ - 21.0) + 21.0</tt> </span>
+      </p>
+      <p>
+        Ergibt sich daraus eine Soll-Vorlauftemperatur unter 23°C, so geben die
+        Heizkörper fast keine Wärme mehr ab. Daher wird die<br />
+        Heizung in diesem Fall mit einem letzten Bedingungsoperator abgeschaltet:<br />
+        Formel 5: <span class="box-noscroll"> <tt>(_out4_ < 23.0) ? 0.0 : _out4_ </tt></span>
+      </p>
+      <p>
+        Erst dieses Endergebnis von Ausgang 5 wird als Soll-Vorlauftemperatur an
+        den Heizungsregler weiter gegeben.
+      </p>
+      <p><b>Logikblatt</b></p>
+      <p>
+        Gezeigt sind beispielhafte Simulationswerte:
+        <img src="ExpressionCalculatorExample.png" alt="" class="example" />
+      </p>
+      <p>
+        <b>Hinweis:</b><br />Der Baustein "Statistik für Zeitreihen" ist im Paket
+        "Recomedia Generische Bausteine" enthalten.
+      </p>
+      <h3 id="feiertagbeispiel">Feiertage</h3>
+      <p>
+        An Feiertagen und ihren Vortagen sollen bestimmte Automatisierungsfunktionen
+        anders ablaufen als an normalen Werktagen. Die folgende Formel berechnet dazu
+        zunächst das morgige Datum:<br />
+        <span class="box-noscroll"> <tt>DateTime.Today.AddDays(1).ToString("d")</tt> </span><br />
+      </p>
+      <p>
+        Dieses dient als Parameter für eine Web-Anfrage mittels des Logikbausteins
+        <a href="https://knx-user-forum.de/forum/supportforen/gira-logik-sdk/1313464-open-source-logic-nodes-wake-on-lan-dimmen-per-bin%C3%A4reingang-http-web-requests">HTTP Web Request von Daniel Albuschat</a> mit folgender URL:<br />
+        <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW&datum={Morgen}</tt> </span><br />
+        Ein zweiter Web-Request-Baustein verwendet fast die gleiche URL, aber ohne
+        den Datumsparameter (was implizit "heute" bedeutet):
+        <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW</tt> </span><br />
+        In beiden steht <tt>BW</tt> für das Bundesland Baden-Württemberg; die Kürzel
+        für andere Bundesländer entnimmt man der <a href="http://ipty.de/feiertag/">Online-Dokumentation</a> des Webservices.
+      </p>
+      <p>
+        Das komplette Logikblatt sieht so aus &mdash; wieder mit beispielhaften Simulationsdaten:
+        <img src="ExpressionCalculatorExample2.png" alt="" class="example" />
+      </p>
+      <p>
+        Der Triggereingang löst eine neue Formelauswertung aus. Er wird an die
+        Web-Request-Bausteine nur durch gereicht. Er sollte täglich kurz nach
+        Mitternacht eine 1 erhalten. Wir nutzen, dass die Formelberechnung
+        <i>alle</i> Formeln neu rechnet, sobald sich <i>ein</i> Eingangswert
+        ändert: Die Datumsberechnung hat <i>gar keinen</i> Eingangswert, wird
+        aber dennoch angestoßen, sobald ein Trigger-Telegramm eintrifft.
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Visu- &amp; Web-Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <img src="../icons/ExpressionCalculatorNode.png" alt="" />
+      <span style="color: #a0a0a0;">&nbsp;Formelberechnung</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="StringFormatter.html"><img src="../icons/StringFormatterNode.png" alt="" /></a>
+      &nbsp;<a href="StringFormatter.html">Textformatierer</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="XmlParser.html"><img src="../icons/XmlJsonParserNode.png" alt="" /></a>
+      &nbsp;<a href="XmlParser.html">XML/JSON-Parser</a>
+      <span style="float: right;">Weitere Logikbausteine sind in Planung.</span>
+    </div>
+  </footer>
+</body>
+</html>

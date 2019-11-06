@@ -1,0 +1,185 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Generische Logikbausteine - Hilfe - Send-by-Difference</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Generische Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+      </div>
+      <h1>Send-by-Difference</h1>
+      <h2>Beschreibung</h2>
+      <p><img src="SendByDifference.png" alt="" class="description" /></p>
+      <p>
+        Dieser Baustein leitet das am Eingang empfangene numerische Telegramm
+        genau dann an den Ausgang weiter, wenn der Telegrammwert am Eingang sich
+        vom zuletzt weitergeleiteten mindestens um eine einstellbare Differenz
+        unterscheidet.
+      </p>
+      <p>
+        Er eignet sich daher zur Filterung instabiler Messwerte oder um häufige
+        kleine Änderungen von Ausgabewerten zu vermeiden.
+      </p>
+      <h2>Eingänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Eingang</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>
+              Wenn der hier empfangene Telegrammwert sich von dem vorherigen
+              Telegrammwert hinreichend unterscheidet, wird das empfangene
+              Telegramm zum Ausgang durchgeleitet.
+            </p>
+            <p>
+              Hinweis:<br />
+              Bei Logikbausteinen mit nur einem Eingang hat die Vorbelegung
+              eines Startwertes keine Auswirkung auf die Funktion. Sie
+              können an diesem Baustein das Feld einfach unausgefüllt
+              lassen.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Ausgänge</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="200" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Ausgang</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>Gibt die vom Eingang weitergeleiteten Telegramme aus.</p>
+          </td>
+        </tr>
+      </table>
+      <h2>Parameter</h2>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="150" />
+          <col width="85" />
+          <col width="115" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h3>Bezeichnung</h3>
+          </th>
+          <th>
+            <h3>Porttyp</h3>
+          </th>
+          <th>
+            <h3>Als Eingang zuschaltbar?</h3>
+          </th>
+          <th>
+            <h3>Beschreibung</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Minimale Differenz</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Damit ein Eingangstelegramm an den Ausgang weitergeleitet
+              wird, muss es sich vom letzten weitergeleiteten Telegramm
+              um mindestens diesen Betrag unterscheiden.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <h2>Beispiel</h2>
+      <p>
+        Das Beispiel zeigt die Anwendung des Bausteins zur Ansteuerung eines
+        Motor-Stellventils. Häufige, kleine Verstellbewegungen sind zu vermeiden,
+        da sie den Motor schneller verschleißen. Am Eingang des Bausteins liegt
+        die Stellgröße (0..100%) vom Regler an. Die Einstellung "5" als minimale
+        Differenz gibt die Stellgröße nur dann an den Ausgang zum Aktor weiter,
+        wenn sie sich vom zuletzt gesendeten Wert um mindestens 5% unterscheidet.
+      </p>
+      <p>
+        <img src="SendByDifferenceExample.png" alt="" class="example" />
+      </p>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Generische Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+    <div id="footerNav">
+      <img src="../icons/SendByDifferenceNode.png" alt="" />
+      <span style="color: #a0a0a0;">Send-By-Difference</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="OutputSelector.html"><img src="../icons/OutputSelectorNode.png" alt="" /></a>
+      <a href="OutputSelector.html">Ausgangswahlschalter+</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="InputSelector.html"><img src="../icons/InputSelectorNode.png" alt="" /></a>
+      <a href="InputSelector.html">Eingangswahlschalter+</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="Statistics.html">
+        <img src="../icons/StatisticsNode.png" alt="" />
+        Statistikfunktionen
+      </a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="TimedStatistics.html">
+        <img src="../icons/TimedStatisticsNode.png" alt="" />
+        Statistik für Zeitreihen
+      </a>
+    </div>
+  </footer>
+</body>
+</html>

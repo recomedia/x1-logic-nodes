@@ -1,0 +1,60 @@
+﻿{
+  "PackageFormatVersion": "1.0",
+  "Assembly": "Recomedia_de.Logic.VisuWeb.dll",
+  "DependentFiles": [
+    "LogicModule.Nodes.Helpers.dll"
+  ],
+  "Version": "1.1.1",
+  "Author": "Horst Lehner / Recomedia GbR",
+  "Copyright": "Copyright ©2019 Recomedia GbR. Distributed under Creative-Commons-License CC-BY-NC-SA.",
+  "DeveloperId": "recomedia_de",
+  "PackageId": "688D5884-1FE8-4946-8218-F71E0F607E9A",
+  "Nodes": [
+    {
+      "Type": "Recomedia_de.Logic.VisuWeb.StringFormatter",
+      "Name": {
+        "en": "Text Formatter",
+        "de": "Textformatierer"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/StringFormatterNode.png",
+      "HelpTooltip": {
+        "en": "Formats output strings based on given templates and value inputs.",
+        "de": "Formatiert Ausgabetexte anhand von Vorlagen und Dateneingängen."
+      },
+      "HelpFileReference": "$help/StringFormatter.html"
+    },
+    {
+      "Type": "Recomedia_de.Logic.VisuWeb.ExpressionCalculator",
+      "Name": {
+        "en": "Expression Calculator",
+        "de": "Formelberechnung"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/ExpressionCalculatorNode.png",
+      "HelpTooltip": {
+        "en": "Calculates values of mathematical expressions using variable value inputs.",
+        "de": "Errechnet Werte mathematischer Formeln mit Dateneingängen als Variablen."
+      },
+      "HelpFileReference": "$help/ExpressionCalculator.html"
+    },
+    {
+      "Type": "Recomedia_de.Logic.VisuWeb.XmlJsonParser",
+      "Name": {
+        "en": "XML/JSON Parser",
+        "de": "XML/JSON-Parser"
+      },
+      "IsConverter": false,
+      "Category": "Node",
+      "DefaultIcon": "icons/XmlJsonParserNode.png",
+      "HelpTooltip": {
+        "en": "Extracts items from XML or JSON input based on XPath queries.",
+        "de": "Extrahiert Daten anhand von XPath-Abfragen aus XML- oder JSON-Eingabetext."
+      },
+      "HelpFileReference": "$help/XmlJsonParser.html"
+    }
+
+  ]
+}
