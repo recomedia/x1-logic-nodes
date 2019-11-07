@@ -266,13 +266,19 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual(1, node.mOutputTrend.Value);
     }
 
-    private static double[] exp = { 0.5,
-                                    0.65 * 0.7 + 1.0 * 0.3,
-                                    0.8 * 0.4 + 1.0 * 0.6,
-                                    0.95 * 0.1 + 1.0 * 0.9,
-                                    1.0
-                                  };
-    // [Test]
+    private static double[] exp_min = { 0.0,
+                                        (5.0/12.0),
+                                        (8.0/12.0),
+                                        (11/12.0),
+                                        1.0
+                                      };
+    private static double[] exp_avg = { 0.5,
+                                        (8.5/12.0) * 0.7 + 1.0 * 0.3,
+                                        (10.0/12.0) * 0.4 + 1.0 * 0.6,
+                                        (11.5/12.0) * 0.1 + 1.0 * 0.9,
+                                        1.0
+                                      };
+    // Horst: Disabled; re-enable to fix issue #1  [Test]
     public void UpdateTest1()
     {
       // Statistics over 10s
@@ -305,7 +311,8 @@ namespace Recomedia_de.Logic.Generic.Test
       {
         schedulerService.Tick(/* advance by */ 1 /* second */);
         // Ensure that the average changes accordingly (other values unchanged)
-        checkValues(2, exp[i/3], 1.0, 0.0, 1.0);
+        checkValues((i >= 12) ? 1 : 2, exp_avg[i/3],
+                    1.0,  exp_min[i/3], 1.0 - exp_min[i / 3]);
       }
     }
 
@@ -317,15 +324,15 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual(n, node.mOutputNumber.Value);
 
       Assert.IsTrue(node.mOutputAvg.HasValue);
-      Assert.AreEqual(avg, node.mOutputAvg.Value);
+      Assert.AreEqual(avg, node.mOutputAvg.Value, 5e-16);
       Assert.IsTrue(node.mOutputMax.HasValue);
       Assert.AreEqual(max, node.mOutputMax.Value);
       Assert.IsTrue(node.mOutputMin.HasValue);
-      Assert.AreEqual(min, node.mOutputMin.Value);
+      Assert.AreEqual(min, node.mOutputMin.Value, 2e-16);
 
       if ( !Double.IsNaN(change) )
       {
-        Assert.AreEqual(change, node.mOutputChange.Value);
+        Assert.AreEqual(change, node.mOutputChange.Value, 2e-16);
       }
       else
       {
