@@ -4,7 +4,7 @@
   "DependentFiles": [
     "LogicModule.Nodes.Helpers.dll"
   ],
-  "Version": "1.0.0",
+  "Version": "1.2.0",
   "Author": "Horst Lehner / Recomedia GbR",
   "Copyright": "Copyright ©2018-2019 Recomedia GbR. Distributed under Creative-Commons-License CC-BY-NC-SA.",
   "DeveloperId": "recomedia_de",
