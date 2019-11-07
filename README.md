@@ -2,17 +2,18 @@
 
 Logikbausteine für Gira X1/L1 KNX Server/Logikmodul.
 
+Hinweise für **Entwickler**, die an der Weiterentwicklung mitwirken möchten,
+finden sich in der Datei
+[CONTRIBUTE.md](https://github.com/recomedia/x1-logic-nodes/blob/master/CONTRIBUTE.md)
+
 Für **Endbenutzer** stehen die fertig kompilierten und signierten Pakete
 im Download-Bereich des KNX-User-Forums zur Verfügung:
 * [Generische Logikbausteine](https://service.knx-user-forum.de/?comm=download&id=20000011)
 * [Visu- & Web-Logikbausteine](https://service.knx-user-forum.de/?comm=download&id=20000010)
 
-Die ausführliche Benutzerdokumentation ist in die Pakete so integriert,
-dass sie direkt im GPA zur Verfügung steht.
-
-Hinweise für Entwickler, die an der Weiterentwicklung mitwirken möchten,
-finden sich in der Datei
-[CONTRIBUTE.md](https://github.com/recomedia/x1-logic-nodes/blob/master/CONTRIBUTE.md)
+Die ausführliche Benutzerdokumentation ist in die Pakete so integriert, dass
+sie direkt im GPA zur Verfügung steht. Hier folgen die Kurzbeschreibungen
+der Pakete und der enthaltenen Logikbausteine.
 
 ## Generische Logikbausteine
 
