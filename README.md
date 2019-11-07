@@ -16,8 +16,10 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
 * Eine DeveloperId und ein Entwicklerzertifikat (Wie man das bekommt und verwendet, steht in der mit dem SDK gelieferten PDF-Dokumentation)
 * [Microsoft Visual Studio](https://visualstudio.microsoft.com/de/downloads/) (die kostenlose Community Edition reicht)
 * AxoCover (kann direkt innerhalb von Visual Studio installiert werden) zur Messung der Abdeckung automatisierter Tests
+* Weitere Abhängigkeiten wie auf github unter Insights->Dependency graph angegeben
 
-Voraussetzungen für die Integration von Pull Requests sind:
+Codeänderungen werden nur über Pull Requests integriert und nur dann,
+wenn die folgenden weiteren Voraussetzungen erfüllt sind:
 * Vorherige Absprache von neuen Bausteinen, Paketzuordnung und Design(änderungen)
 * Bugfixes werden mit neuen automatisierten Testfällen validiert, die mit dem Bugfix "Passed"-Ergebnisse liefern, ohnen ihn aber "Failed"-Ergebnisse
 * Alle vorher existierenden und neu hinzugefügten automatisierten Testfälle liefern "Passed"-Ergebnisse
