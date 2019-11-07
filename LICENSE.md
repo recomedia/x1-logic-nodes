@@ -14,4 +14,4 @@ Ansprüche aus Sachmängel- und Produkthaftung.
 Codeänderungen oder -erweiterungen sollen auch als Pullrequests
 in dieses Repository zurück integriert werden. Näheres dazu findet
 sich in der Datei
-[CONTRIBUTE.md](https://github.com/recomedia/x1-logic-nodes/CONTRIBUTE.md).
+[CONTRIBUTE.md](https://github.com/recomedia/x1-logic-nodes/blob/master/CONTRIBUTE.md).
