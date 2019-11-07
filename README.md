@@ -25,12 +25,14 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
   angegeben
 
 **Codeänderungen** werden nur über Pull Requests integriert und nur dann,
-wenn die folgenden weiteren Voraussetzungen erfüllt sind:
-* Vorherige Absprache von neuen Bausteinen, Paketzuordnung und
-  Design(änderungen)
-* Bugfixes werden mit neuen automatisierten Testfällen validiert, die
-  _mit_ dem Bugfix "Passed"-Ergebnisse liefern, _ohne_ ihn aber "Failed"-
-  Ergebnisse
+wenn die folgenden Voraussetzungen erfüllt sind:
+* Vorherige Absprache von neuen Bausteinen, Paketzuordnung und Design
+  (änderungen)
+* Die Benutzerdokumentation ist für alle Änderungen aktualisiert, die für
+  Endbenutzer sichtbar sind.
+* Änderungen werden mit neuen automatisierten Testfällen getestet, die
+  _mit_ den Änderungen "Passed"-Ergebnisse liefern, _ohne_ sie aber
+  "Failed"-Ergebnisse
 * Alle vorher existierenden und neu hinzugefügten automatisierten Testfälle
   liefern "Passed"-Ergebnisse
 * Die automatisierten Testfälle müssen 100% aller Klassen und Methoden,
