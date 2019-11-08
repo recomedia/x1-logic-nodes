@@ -259,9 +259,17 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Code coverage output
 /.axoCover
+
+# All generated output
 /out
+
+# SDK from Gira
+/LogicNodesSDK
+
+# Private stuff used to sign packages
 /Horst_Lehner.p12
 /Recomedia.sln
-/LogicNodesSDK
 /PaketeSignieren.bat
