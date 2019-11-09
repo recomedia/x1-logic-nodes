@@ -266,19 +266,10 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual(1, node.mOutputTrend.Value);
     }
 
-    private static double[] exp_min = { 0.0,
-                                        (5.0/12.0),
-                                        (8.0/12.0),
-                                        (11/12.0),
-                                        1.0
-                                      };
-    private static double[] exp_avg = { 0.5,
-                                        (8.5/12.0) * 0.7 + 1.0 * 0.3,
-                                        (10.0/12.0) * 0.4 + 1.0 * 0.6,
-                                        (11.5/12.0) * 0.1 + 1.0 * 0.9,
-                                        1.0
-                                      };
-    // Horst: Disabled; re-enable to fix issue #1  [Test]
+    // Issue #1 (Geringfügig falscher Durchschnitts-Ausgabewert,
+    // wenn länger als für den Betrachtungszeitraum keine neuen
+    // Werte eingegeben werden)
+    [Test]
     public void UpdateTest1()
     {
       // Statistics over 10s
@@ -306,7 +297,20 @@ namespace Recomedia_de.Logic.Generic.Test
       // Ensure that the output values change accordingly
       checkValues(2, 0.5, 1.0, 0.0, 1.0);
 
-      // Advance mocked time in 1s steps but don't input a third value
+      // Advance mocked time in 1s steps but don't input a third value,
+      // then check how the values change over time
+      double[] exp_min = { 0.0,
+                           (5.0/12.0),
+                           (8.0/12.0),
+                           (11/12.0),
+                           1.0
+                         };
+      double[] exp_avg = { 0.5,
+                           (8.5/12.0) * 0.7 + 1.0 * 0.3,
+                           (10.0/12.0) * 0.4 + 1.0 * 0.6,
+                           (11.5/12.0) * 0.1 + 1.0 * 0.9,
+                           1.0
+                         };
       for (int i = 1; i <= 14; i++)
       {
         schedulerService.Tick(/* advance by */ 1 /* second */);

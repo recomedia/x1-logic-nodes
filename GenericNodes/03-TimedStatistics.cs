@@ -351,26 +351,31 @@ namespace Recomedia_de.Logic.Generic
           var endValue = secondEntry.mEndValue;
           var oldInterValue = secondEntry.mInterValue;
 
-          // Calculate new values
-          var oldBeginValue = 2 * oldInterValue - endValue;
-          var timeFactor = (double)(beginTime - oldBeginTime) /
-                            (double)(oldEndTime - oldBeginTime);
-          var newBeginValue = oldBeginValue + timeFactor * (endValue - oldBeginValue);
-          var newInterValue = (newBeginValue + endValue) / 2;
-
           // Modify the first two list entries with those new values
           mTimedValues.RemoveFirst();
           mTimedValues.RemoveFirst();
-          secondEntry.mInterValue = newInterValue;
-          mTimedValues.AddFirst(secondEntry);
-          numberOfTimedValues--;
+          numberOfTimedValues--;  // We will re-insert at least one entry
           if (beginTime < secondEntry.mEndTime)
-          { // Re-add the first entry only if it has data for a non-zero length
-            // time interval before the second
+          { // Calculate new values
+            var oldBeginValue = 2 * oldInterValue - endValue;
+            var timeFactor = (double)(beginTime - oldBeginTime) /
+                              (double)(oldEndTime - oldBeginTime);
+            var newBeginValue = oldBeginValue + timeFactor * (endValue - oldBeginValue);
+            // Re-insert the second entry with a new average value
+            secondEntry.mInterValue = (newBeginValue + endValue) / 2;
+            mTimedValues.AddFirst(secondEntry);
+            // Re-insert the first entry with its remaining time interval
             firstEntry.mEndTime = beginTime;
             firstEntry.mEndValue = newBeginValue;
             mTimedValues.AddFirst(firstEntry);
             numberOfTimedValues++;
+          }
+          else
+          { // The first entry is no longer needed, because it covers no
+            // time any more.
+            // Re-insert the second entry with its own value
+            secondEntry.mInterValue = secondEntry.mEndValue;
+            mTimedValues.AddFirst(secondEntry);
           }
         }
       }
