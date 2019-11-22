@@ -10,13 +10,13 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
   (die kostenlose Community Edition reicht)
 * AxoCover (kann direkt innerhalb von Visual Studio installiert werden)
   zur Messung der Abdeckung automatisierter Tests
-* Weitere Abhängigkeiten wie auf github unter Insights -> Dependency graph
-  angegeben
+* Weitere Abhängigkeiten wie unter [Insights -> Dependency graph
+  angegeben](https://github.com/recomedia/x1-logic-nodes/network/dependencies)
 
 **Codeänderungen** werden nur über Pull Requests integriert und nur dann,
 wenn die folgenden Voraussetzungen erfüllt sind:
 * Vorherige Absprache von neuen Bausteinen, Paketzuordnung und Design
-  (änderungen)
+  (-änderungen)
 * Die Benutzerdokumentation ist für alle Änderungen aktualisiert, die für
   Endbenutzer sichtbar sind.
 * Änderungen werden mit neuen automatisierten Testfällen getestet, die
@@ -28,4 +28,4 @@ wenn die folgenden Voraussetzungen erfüllt sind:
   mindestens 98% aller Codezeilen und mindestens 94% aller Zweige
   abdecken
 * Geänderte oder neue Logikbausteine müssen interaktiv im GPA (Simulation)
-  und nach der Inbetriebnahme auf einem L1 oder X1 funktionieren
+  und nach der Inbetriebnahme auf einem L1 oder X1 getestet worden sein
