@@ -529,7 +529,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nu,mber of Outputs and Templates ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Number of Outputs and Templates ähnelt.
         /// </summary>
         internal static string TemplateCount {
             get {

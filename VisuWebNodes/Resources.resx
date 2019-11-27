@@ -278,7 +278,7 @@
     <comment>ExpressionCalculator</comment>
   </data>
   <data name="TemplateCount" xml:space="preserve">
-    <value>Nu,mber of Outputs and Templates</value>
+    <value>Number of Outputs and Templates</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="HasOutOfRangeRef" xml:space="preserve">
