@@ -11,9 +11,9 @@ im Download-Bereich des KNX-User-Forums zur Verfügung:
 * [Generische Logikbausteine](https://service.knx-user-forum.de/?comm=download&id=20000011)
 * [Visu- & Web-Logikbausteine](https://service.knx-user-forum.de/?comm=download&id=20000010)
 
-Die ausführliche Benutzerdokumentation ist in die Pakete so integriert, dass
-sie direkt im GPA zur Verfügung steht. Hier folgen die Kurzbeschreibungen
-der Pakete und der enthaltenen Logikbausteine.
+Die ausführliche Benutzerdokumentation ist in die Pakete so integriert,
+dass sie direkt im GPA zur Verfügung steht. Hier folgen daher nur
+Kurzbeschreibungen der Pakete mit den enthaltenen Logikbausteinen.
 
 ## Generische Logikbausteine
 
@@ -72,7 +72,7 @@ Visualisierungen und Integration mit Web-Services:
   werden.)
 * Der Baustein **Textformatierer** setzt aus aus Formatvorlagen und
   Dateneingängen einen oder mehrere Ausgabetexte zusammen. Diese lassen
-  sich z. B. für einfache Visualisierungsaufganben verwenden.
+  sich z. B. für einfache Visualisierungsaufgaben verwenden.
 * Der **XML-/JSON-Parser** extrahiert aus einem XML- oder JSON-Datensatz
   am Eingang über XPath-Abfragen entsprechende Ausgabedaten. So lassen
   sich Daten aus Webservices (z. B. OpenWeatherMap) für die Visualisierung
