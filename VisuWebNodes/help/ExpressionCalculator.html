@@ -1300,10 +1300,14 @@
         <span class="box-noscroll"> <tt>DateTime.Today.AddDays(1).ToString("d")</tt> </span><br />
       </p>
       <p>
-        Dieses dient als Parameter für eine Web-Anfrage mittels des Logikbausteins
-        <a href="https://knx-user-forum.de/forum/supportforen/gira-logik-sdk/1313464-open-source-logic-nodes-wake-on-lan-dimmen-per-bin%C3%A4reingang-http-web-requests">HTTP Web Request von Daniel Albuschat</a> mit folgender URL:<br />
+        Dieses dient als Parameter für eine Web-Anfrage mittels
+        <a href="https://github.com/daniel-kun/Albuschat.LogicNodes/releases"
+        >Web Request</a> oder
+        <a href="http://service.knx-user-forum.de/?comm=download&id=20000065"
+        >HTTP GET Request</a>.
+        Der Request-Baustein wird mit folgender URL parametriert:<br />
         <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW&datum={Morgen}</tt> </span><br />
-        Ein zweiter Web-Request-Baustein verwendet fast die gleiche URL, aber ohne
+        Ein zweiter Request-Baustein verwendet fast die gleiche URL, aber ohne
         den Datumsparameter (was implizit "heute" bedeutet):
         <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW</tt> </span><br />
         In beiden steht <tt>BW</tt> für das Bundesland Baden-Württemberg; die Kürzel
@@ -1314,8 +1318,8 @@
         <img src="ExpressionCalculatorExample2.png" alt="" class="example" />
       </p>
       <p>
-        Der Triggereingang löst eine neue Formelauswertung aus. Er wird an die
-        Web-Request-Bausteine nur durch gereicht. Er sollte täglich kurz nach
+        Der Triggereingang löst eine neue Formelauswertung aus. Er wird an
+        die Request-Bausteine nur durch gereicht. Er sollte täglich kurz nach
         Mitternacht eine 1 erhalten. Wir nutzen, dass die Formelberechnung
         <i>alle</i> Formeln neu rechnet, sobald sich <i>ein</i> Eingangswert
         ändert: Die Datumsberechnung hat <i>gar keinen</i> Eingangswert, wird
