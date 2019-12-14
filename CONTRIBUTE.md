@@ -8,7 +8,7 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
   verwendet, steht in der mit dem SDK gelieferten PDF-Dokumentation)
 * [Microsoft Visual Studio](https://visualstudio.microsoft.com/de/downloads/)
   (die kostenlose Community Edition reicht)
-* AxoCover (kann direkt innerhalb von Visual Studio installiert werden)
+* [AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)
   zur Messung der Abdeckung automatisierter Tests
 * Weitere Abhängigkeiten wie unter [Insights -> Dependency graph
   angegeben](https://github.com/recomedia/x1-logic-nodes/network/dependencies)
