@@ -6,9 +6,9 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
   (der ausgepackte Ordner muss im gleichen Ordner liegen, wie die Quelltextordner)
 * Eine DeveloperId und ein Entwicklerzertifikat (Wie man das bekommt und
   verwendet, steht in der mit dem SDK gelieferten PDF-Dokumentation)
-* [Microsoft Visual Studio](https://visualstudio.microsoft.com/de/downloads/)
+* [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15)
   (die kostenlose Community Edition reicht)
-* AxoCover (kann direkt innerhalb von Visual Studio installiert werden)
+* [AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)
   zur Messung der Abdeckung automatisierter Tests
 * Weitere Abhängigkeiten wie unter [Insights -> Dependency graph
   angegeben](https://github.com/recomedia/x1-logic-nodes/network/dependencies)
