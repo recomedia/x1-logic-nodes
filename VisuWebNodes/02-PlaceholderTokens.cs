@@ -214,7 +214,14 @@ namespace Recomedia_de.Logic.VisuWeb
                            string format, List<Mapping> mappings)
       : base(source, type, name, isDefaultName, mappings)
     {
+      // We use the format as-is, formatting  ...
       mFormat = format;
+      // ...  based on the current culture but ...
+      mNumberInfo = CultureInfo.CurrentCulture.NumberFormat.Clone() as NumberFormatInfo;
+      // ... ensure that there is no blank between a Number and the percent
+      // sign when using 'P' formats
+      mNumberInfo.PercentPositivePattern = 1;
+      mNumberInfo.PercentNegativePattern = 1;
     }
 
     public override string getFormat()
@@ -245,7 +252,7 @@ namespace Recomedia_de.Logic.VisuWeb
               }
             }
           }
-          return input.Value.ToString(format, CultureInfo.CurrentCulture);
+          return input.Value.ToString(format, mNumberInfo);
         }
         return "?";
       }
@@ -259,7 +266,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return base.getError();
     }
 
-    private string mFormat;
+    private string           mFormat;
+    private NumberFormatInfo mNumberInfo;
   }
 
   class VarStringToken : VarTokenBase
