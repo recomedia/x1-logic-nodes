@@ -75,7 +75,7 @@
           </td>
         </tr>
       </table>
-      <h2>Ausgänge</h2>
+      <h2 id="ausg">Ausgänge</h2>
       <table class="Tabelle_Logicnode" cellspacing="0">
         <colgroup>
           <col width="120" />
@@ -102,7 +102,15 @@
           </td>
           <td>
             <p>
-              Die Anzahl der Ausgänge hängt von der Einstellung des <a href="#parameter">Parameters</a> "Anzahl der Pfade und Ausgänge" ab.
+              Die Anzahl der Ausgänge hängt von der Einstellung des
+              <a href="#parameter">Parameters</a> "Anzahl der Pfade und Ausgänge" ab.
+            </p>
+            <p>
+              Sollte die Eingabe
+              <a href="https://wiki.selfhtml.org/wiki/Referenz:HTML/Zeichenreferenz"
+              >benannte HTML-Zeichen (<i>HTML entities</i>)</a> enthalten, so werden
+              diese in Ausgabetexten dekodiert. (z. B. wird <tt>&amp;auml;</tt> zu
+              <tt>ä</tt>).
             </p>
             <p>
               Ausgabewerte konvertieren bei Weitergabe an nachfolgende Eingänge automatisch
@@ -163,13 +171,15 @@
           <td>
             <p>
               Dieser Parameter legt fest, ob am Eingang XML- oder JSON-formatierte
-              Daten erwartet werden.
+              Daten erwartet werden. In beiden Fällen werden benannte HTML-Zeichen
+              (<i>HTML entities</i>) ggf. dekodiert, wie <a href="#ausg">oben im
+              Abschnitt "Ausgänge"</a> beschrieben.
             </p>
             <p>
-              Stehen wahlweise XML- oder JSON-Daten zur Verfügung, so bevorzugt man
-              das XML-Format, weil es das native Format dieses Logikbausteins ist.
-              Für Besonderheiten bei der Behandlung von JSON-Daten siehe auch bei
-              den Pfad-Parametern.
+              Stehen von einem Webservice wahlweise XML- oder JSON-Daten zur Verfügung,
+              so bevorzugt man das XML-Format, weil es das native Format dieses
+              Logikbausteins ist. Für Besonderheiten bei der Behandlung von JSON-Daten
+              siehe bei den Pfad-Parametern.
             </p>
           </td>
         </tr>
@@ -229,13 +239,15 @@
               </li>
             </ul>
             <p>
-              <b>Beispiel:</b> Aus der <a href="https://openweathermap.org/forecast5#JSON">JSON-OpenWeatherMap-Vorhersage</a> sollen die Temperaturen der nächsten
+              <b>Beispiel:</b> Aus der <a href="https://openweathermap.org/forecast5#JSON"
+              >JSON-OpenWeatherMap-Vorhersage</a> sollen die Temperaturen der nächsten
               12 Stunden (die stehen in den ersten vier <b>list</b>-Einträgen) ausgewählt
               werden. Der folgende Pfad wählt die entsprechenden Einträge aus:
               <span class="box-noscroll"> /root/list/item[position()&lt;5]/main/temp </span>
               <br />Leider führt der JSON-Text von OpenWeatherMap aber auf dem L1/X1 zu
               einem Laufzeitfehler, weil er den Schlüssel "3h" verwendet, der als XML-Name
-              nicht zulässig ist.
+              nicht zulässig ist. Man verwendet daher besser XML-Daten, wie unten im
+              <a href="#beispiel">Beispiel</a> gezeigt.
             </p>
           </td>
         </tr>
@@ -270,10 +282,15 @@
               </li>
               <li>
                 <b>Alle Treffer als summierte Zahl</b>: Alle ausgewählten Einträge werden
-                XML-Zahlen interpretiert, aufsummiert und die Summe als Fließkommazahl
+                als XML-Zahlen interpretiert, aufsummiert und die Summe als Fließkommazahl
                 ausgegeben
               </li>
             </ul>
+            <p>
+              In Ausgabetexten enthaltene benannte HTML-Zeichen (<i>HTML entities</i>)
+              werden ggf. dekodiert, wie <a href="#ausg">oben im Abschnitt "Ausgänge"</a>
+              beschrieben.
+            </p>
             <p>
               Finden sich mit der Pfad-Angabe im Eingabetext keine Einträge, so wird dies:
             </p>

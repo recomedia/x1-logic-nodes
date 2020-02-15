@@ -2,6 +2,7 @@
 using System.Globalization;
 using System;
 using System.IO;
+using System.Net;
 using System.Xml;
 using System.Runtime.Serialization.Json;
 
@@ -416,7 +417,7 @@ namespace Recomedia_de.Logic.VisuWeb
       }
       else
       {
-        mOutput[i].Value = outStr;
+        mOutput[i].Value = WebUtility.HtmlDecode(outStr);
       }
     }
 

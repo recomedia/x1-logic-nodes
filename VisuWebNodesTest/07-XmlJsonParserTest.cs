@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Globalization;
 using LogicModule.ObjectModel;
 using LogicModule.ObjectModel.TypeSystem;
@@ -324,6 +325,76 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsNotNull(node.mOutput[0]);
       Assert.IsFalse(node.mOutput[0].HasValue);   // still has no output value
       Assert.IsNull(node.mOutput[0].Value);
+    }
+
+    [Test]
+    public void JsonSpecialCharacters()
+    {
+      // Use just one default path
+      node.mSelectInput.Value = "JSON";
+      Assert.AreEqual(1, node.mPath.Count);
+      Assert.AreEqual(1, node.mOutput.Count);
+      node.mPath[0].Value = "/root/word";
+      node.mSelectOperation[0].Value = "FirstAsText";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the initial output states
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.AreEqual(PortTypes.Any, node.mOutput[0].PortType.Name);
+      Assert.IsFalse(node.mOutput[0].HasValue);  // no output value yet
+
+      // Set an input text containing a selection of special characters
+      const string text = "'îáèäöü?!§$%&/()=?";
+      node.mInput.Value = "{\"word\":\"" + text + "\"}";
+      node.Execute();
+      // Expect no error
+      Assert.IsFalse(result.HasError);
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);     // empty error message
+      // Re-check the output state
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.IsTrue(node.mOutput[0].HasValue);   // now has an output value
+      Assert.IsNotNull(node.mOutput[0].Value);
+      Assert.AreEqual(node.mOutput[0].Value, text);
+    }
+
+    [Test]
+    public void XmlSpecialCharacters()
+    {
+      // Use just one default path
+      Assert.AreEqual(1, node.mPath.Count);
+      Assert.AreEqual(1, node.mOutput.Count);
+      node.mPath[0].Value = "/word";
+      node.mSelectOperation[0].Value = "FirstAsText";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the initial output states
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.AreEqual(PortTypes.Any, node.mOutput[0].PortType.Name);
+      Assert.IsFalse(node.mOutput[0].HasValue);  // no output value yet
+
+      // Set an input text containing a selection of special characters
+      const string text = "'îáèäöü?!§$%&/()=?";
+      node.mInput.Value = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><word>" +
+        WebUtility.HtmlEncode(text) + "</word>";
+      node.Execute();
+      // Expect no error
+      Assert.IsFalse(result.HasError);
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);     // empty error message
+      // Re-check the output state
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.IsTrue(node.mOutput[0].HasValue);   // now has an output value
+      Assert.IsNotNull(node.mOutput[0].Value);
+      Assert.AreEqual(node.mOutput[0].Value, text);
     }
 
   }
