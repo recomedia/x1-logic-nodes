@@ -25,20 +25,21 @@
       <img src="ExpressionCalculator.png" class="description" />
       <p>
         Dieser Baustein errechnet aus einer oder mehreren mathematischen Formeln
-        entsprechende Ausgabewerte. Die Formeln sind als Textparameter frei
-        konfigurierbar. Sie bestehen aus Rechenoperationen, Konstanten und
-        Platzhaltern für variable Eingangswerte. Die Platzhalter bestimmen
-        Anzahl, Namen und Porttypen der Eingänge.
+        entsprechende Ausgabewerte. Die Formeln sind frei konfigurierbar. Sie
+        bestehen aus Rechenoperationen, Konstanten und Platzhaltern für variable
+        Eingangswerte. Die Platzhalter bestimmen Anzahl, Namen und Porttypen der
+        Eingänge.
       </p>
       <p>
-        Folgende Arten von Eingangswerten können verarbeitet werden:
+        Folgende Arten von Eingangs- und Ausgabewerten können verarbeitet werden:
       </p>
       <ul>
         <li>
           Wahrheitswerte (<tt>bool</tt>)
         </li>
         <li>
-          Numerische Werte (Ganzzahlen <tt>byte</tt>, <tt>int</tt>, <tt>long</tt> und Fließkommazahlen <tt>double</tt>)
+          Numerische Werte (Ganzzahlen <tt>byte</tt>, <tt>int</tt>, <tt>long</tt> und
+          Fließkommazahlen <span class="manhyphens"><tt>double</tt></span>)
         </li>
         <li>
           Zeichenketten (<tt>string</tt>)
@@ -61,8 +62,11 @@
       </p>
       <h2 id="eingaenge">Eingänge</h2>
       <p>
-        Die Reihenfolge der Eingänge ergibt sich für jeden Porttyp aus der Reihenfolge
-        der entsprechenden <a href="#platzhalter">Platzhalter</a> in den Formatvorlagen.
+        Solange keine gültige <a href="#parameter">Formel</a> festgelegt wurde, hat der
+        Baustein keine Eingänge. Eingänge werden nur durch gültige Platzhalter in den
+        Formeln angelegt. Die Reihenfolge der Eingänge ergibt sich für jeden Porttyp aus
+        der Reihenfolge der entsprechenden <a href="#platzhalter">Platzhalter</a> in den
+        Formeln.
       </p>
       <table class="Tabelle_Logicnode" cellspacing="0">
         <colgroup>
@@ -317,14 +321,14 @@
         gleichen Typs stehen dürfte.
       </p>
       <p>
-        Große Formeln (oder solche, in denen Zwischenergebnisse mehrfach
-        verwendet werden) lassen sich so in übersichtliche Teile zerlegen.
-        Wird ein Zwischenergebniss außerhalb der weiteren Formeln nicht
-        benötigt, so kann sein Ausgang unbelegt bleiben.
+        Große Formeln (oder solche, in denen Zwischenergebnisse mehrfach verwendet
+        werden) lassen sich so in übersichtliche Teile zerlegen. Wird ein
+        Zwischenergebnis nur in den weiteren Formeln  benötigt, so kann der
+        entsprechende Ausgang unbelegt bleiben.
       </p>
       <p>
         Das <a href="#heizbeispiel">Anwendungsbeispiel "Heizungsregelung"</a> benutzt
-        einen Formelsatz, der dies mehrfach anwendet.
+        einen Formelsatz, der dies an mehreren Stellen anwendet.
       </p>
       <h2 id="platzhalter">Platzhalter für Variablen</h2>
       <p>
@@ -500,7 +504,9 @@
               Nützlich sind sie für Berechnungen mit Daten und Uhrzeiten, die anders nicht ohne
               Weiteres möglich wären. Sie lassen sich auch in gültige Ausgabetypen (Zahlen oder
               Zeichenketten) umwandeln. Siehe dazu die
-              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0">Dokumentation der<tt>DateTime</tt>-Klasse</a> und das <a href="#feiertagbeispiel">Anwendungsbeispiel "Feiertag"</a>.
+              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0"
+              >Dokumentation der <tt>DateTime</tt>-Klasse</a> und das <a href="#feiertagbeispiel"
+              >Anwendungsbeispiel "Feiertag"</a>.
             </p>
           </td>
         </tr>
@@ -601,7 +607,7 @@
             <p style="margin-top:16px;"><tt>(</tt><i>T</i><tt>)</tt></p>
           </td>
           <td>
-            <p>Typumwand-lung (Cast)</p>
+            <p>Typumwand-<br />lung (Cast)</p>
           </td>
           <td>
             <p><i>alle</i> &rarr; <i>T</i></p>
@@ -727,7 +733,7 @@
             <p style="margin-top:16px;"><tt>== &nbsp; !=</tt></p>
           </td>
           <td>
-            <p>Gleichheit, Ungleichheit</p>
+            <p>Gleichheit,<br />Ungleichheit</p>
           </td>
         </tr>
         <tr>
@@ -845,9 +851,8 @@
         enthalten: <tt>*</tt> und <tt>/</tt> werden vor <tt>+</tt> und <tt>-</tt>
         ausgewertet. Geklammerte Ausdrücke <tt>(</tt>...<tt>)</tt> werden "von innen
         nach außen" berechnet. Weitere Angaben dazu finden sich
-        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/programming-guide/statements-expressions-operators/operators#operators-evaluation-and-operator-precedence">
-          im C#-Programmierhandbuch
-        </a>.
+        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/programming-guide/statements-expressions-operators/operators#operators-evaluation-and-operator-precedence"
+        >im C#-Programmierhandbuch</a>.
       </p>
       <h2 id="funktionen">Mathematische Funktionen</h2>
       <h3>Math-Bibliothek und Winkelfunktionen</h3>
@@ -861,10 +866,9 @@
         x und y deren Potenz x<sup>y</sup>.
       </p>
       <p>
-        Die trigonometrischen Funktionen der <tt>Math</tt>-Bibliothek verwenden
-        und liefern Winkelangaben immer im Bogenmaß. Zur Umrechnung zwischen
-        Grad- und Bogenmaß stehen die folgenden beiden Funktionen zur
-        Verfügung:
+        Die trigonometrischen Funktionen der <tt>Math</tt>-Bibliothek verwenden und
+        liefern alle Winkelangaben im Bogenmaß. Zur Umrechnung zwischen Grad- und
+        Bogenmaß stehen die folgenden beiden Funktionen zur Verfügung:
       </p>
       <table class="Tabelle_Logicnode" cellspacing="0">
         <colgroup>
