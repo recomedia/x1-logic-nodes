@@ -572,7 +572,9 @@ namespace Recomedia_de.Logic.VisuWeb
           }
           break;
         case PortTypes.String:
-          initStr += "\"" + value.ToString() + "\"";
+          initStr += "\"" + value.ToString().Replace("\n", "\\n").
+                                             Replace("\r", "\\r").
+                                             Replace("\"", "\\\"") + "\"";
           break;
         default:  // all kinds of integer values
           initStr += value.ToString().ToLower();

@@ -1208,13 +1208,19 @@
         wenn Luftfeuchtigkeit und Taupunkt-Temperatur ohnehin schon höher sind als
         gewünscht.
       </p>
-      <h3>Stringfunktionen</h3>
+      <h3 id="stringfunc">Stringfunktionen</h3>
       <p>
         <a href="https://docs.microsoft.com/de-de/dotnet/api/system.double.tostring?view=netframework-4.0">ToString</a>
         mit seinen verschiedenen Varianten für alle numerischen Typen erlaubt die
         sehr flexible Formatierung von Zahlen als Texte. Auch können fast alle
         <a href="https://docs.microsoft.com/de-de/dotnet/api/system.string?view=netframework-4.0#methoden"><b>String</b>-Methoden des .NET-4.0-Standards</a>
         verwendet werden.
+      </p>
+      <p>
+        Beispiel Textersetzung: Mit
+        <span class="box-noscroll"> {text:S}.Replace("alt","neu") </span>
+        wird der Eingangstext: "<i>Alles alt macht der Mai</i>" am Ausgang zu
+        "<i>Alles neu macht der Mai</i>".
       </p>
       <h2>Beispiele</h2>
       <h3 id="heizbeispiel">Heizungsregelung</h3>

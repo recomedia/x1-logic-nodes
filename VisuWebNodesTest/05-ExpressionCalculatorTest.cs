@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using LogicModule.ObjectModel;
@@ -1260,6 +1261,42 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsNotNull(node.mOutputs[1]);
       Assert.IsTrue(node.mOutputs[1].HasValue);
       Assert.AreEqual(-18.4, (double)node.mOutputs[1].Value, 0.1);
+    }
+
+    [Test]
+    public void TextWithSpecialCharsReplace()
+    {
+      // Use the default template; don't set the number of templates
+
+      // Set and check the output type
+      node.mOutputTypes[0].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+
+      // Set a simple valid template that uses a few placeholders
+      node.mTemplates[0].Value = "{text:S}.Replace(\"3h\", \"three_hours\")";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
+
+      // Check the output state
+      Assert.IsNotNull(node.mOutputs[0]);         // should be bool
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set input values and re-check the output
+      node.mStrInputs[0].Value = File.ReadAllText(@"../../openweather.json");
+      node.Execute();
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual(File.ReadAllText(@"../../openweather2.json"), node.mOutputs[0].Value);
     }
 
     public class ExpressionCalculatorErrorTestCaseData

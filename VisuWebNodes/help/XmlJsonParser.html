@@ -247,7 +247,10 @@
               <br />Leider führt der JSON-Text von OpenWeatherMap aber auf dem L1/X1 zu
               einem Laufzeitfehler, weil er den Schlüssel "3h" verwendet, der als XML-Name
               nicht zulässig ist. Man verwendet daher besser XML-Daten, wie unten im
-              <a href="#beispiel">Beispiel</a> gezeigt.
+              <a href="#beispiel">Beispiel</a> gezeigt. Sind XML-Daten nicht verfügbar,
+              behilft man sich mit einer Textersetzung der fehlerverursachenden Schlüssel
+              durch zulässige Schlüssel. (Diese lässt sich mit dem Baustein
+              <a href="ExpressionCalculator.html#stringfunc">Formelberechnung</a> realisieren).
             </p>
           </td>
         </tr>

@@ -71,6 +71,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="openweather2.json" />
     <None Include="openweather.json" />
     <None Include="packages.config" />
   </ItemGroup>
