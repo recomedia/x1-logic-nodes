@@ -79,5 +79,7 @@ Visualisierungen und Integration mit Web-Services:
   oder Weiterverarbeitung nutzen.
 
 Für die Web-Integration ist zusätzlich der Baustein
-[**HTTP Web Request** von Fabian Fischer](https://service.knx-user-forum.de/?comm=download&id=20000065)
+[**Web Request** von Daniel Albuschat](https://github.com/daniel-kun/Albuschat.LogicNodes/releases)
+oder der Baustein
+[**HTTP GET Request** von Fabian Fischer](https://service.knx-user-forum.de/?comm=download&id=20000065)
 notwendig.
