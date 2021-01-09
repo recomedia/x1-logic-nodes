@@ -89,8 +89,16 @@
           </td>
           <td>
             <p>
-              Bestimmt den Eingang, von dem Werte weitergeleitet werden. Der Wertebereich
-              reicht von 0 (Eingang 1) bis <i>n</i>-1 (Eingang <i>n</i>).
+              Bestimmt den Eingang, von dem Werte weitergeleitet werden. Der
+              Wertebereich für den normalen Betrieb reicht von 0 (Eingang 1)
+              bis <i>n</i>-1 (Eingang <i>n</i>), wobei <i>n</i> die Anzahl der
+              Eingänge ist. Diese Zählweise entspricht der des Gira-Bausteins
+              "Eingangswahlschalter".
+            </p>
+            <p>
+              Werte außerhalb dieses Bereichs können verwendet werden, um
+              <em>keinen</em> Eingang auszuwählen, also <em>alle</em>
+              Eingangstelegramme zu verwerfen.
             </p>
           </td>
         </tr>

@@ -19,12 +19,18 @@ namespace Recomedia_de.Logic.VisuWeb
     TokenTypeDim = 7
   }
 
-  public struct Mapping
+  public struct NumericMapping
   {
     public double minValue;
     public double maxValue;
-    public bool   isMinValueExcluded;
-    public bool   isMaxValueExcluded;
+    public bool isMinValueExcluded;
+    public bool isMaxValueExcluded;
+    public string representation;
+  }
+
+  public struct TextMapping
+  {
+    public string original;
     public string representation;
   }
 
@@ -101,12 +107,14 @@ namespace Recomedia_de.Logic.VisuWeb
   {
     public VarTokenBase(string source, TokenType type,
                         string name, bool isDefaultName,
-                        List<Mapping> mappings)
+                        List<NumericMapping> numericMappings,
+                        List<TextMapping> textMappings)
       : base(source, type)
     {
-      mName          = name;
-      mIsDefaultName = isDefaultName;
-      mMappings      = mappings;
+      mName            = name;
+      mIsDefaultName   = isDefaultName;
+      mNumericMappings = numericMappings;
+      mTextMappings    = textMappings;
     }
 
     public string getName()
@@ -116,9 +124,14 @@ namespace Recomedia_de.Logic.VisuWeb
 
     public abstract string getFormat();
 
-    public List<Mapping> getMappings()
+    public List<NumericMapping> getNumericMappings()
     {
-      return mMappings;
+      return mNumericMappings;
+    }
+
+    public List<TextMapping> getTextMappings()
+    {
+      return mTextMappings;
     }
 
     public override bool hasDefaultName()
@@ -129,9 +142,10 @@ namespace Recomedia_de.Logic.VisuWeb
     public override bool hasFormatOrMappings()
     {
       string format = getFormat();
-      bool hasFormat = ( (null != format) && (format.Length > 1) );
-      bool hasMappings = ( (null != mMappings) && (mMappings.Count > 0) );
-      return hasFormat || hasMappings;
+      bool hasFormat = ((null != format) && (format.Length > 1));
+      bool hasNumericMappings = ((null != mNumericMappings) && (mNumericMappings.Count > 0));
+      bool hasTextMappings = ((null != mTextMappings) && (mTextMappings.Count > 0));
+      return hasFormat || hasNumericMappings || hasTextMappings;
     }
 
     public void setInput(IValueObject input)
@@ -139,14 +153,16 @@ namespace Recomedia_de.Logic.VisuWeb
       mInput = input;
     }
 
-    public abstract string getText(string format, List<Mapping> mappings);
+    public abstract string getText(string format,
+      List<NumericMapping> numericMappings, List<TextMapping> textMappings);
 
     public sealed override string getText()
     {
-      return getText(getFormat(), getMappings());
+      return getText(getFormat(), getNumericMappings(), getTextMappings());
     }
 
-    protected List<Mapping> mMappings;
+    protected List<NumericMapping> mNumericMappings;
+    protected List<TextMapping> mTextMappings;
     protected IValueObject  mInput;
 
     private string mName;
@@ -157,9 +173,8 @@ namespace Recomedia_de.Logic.VisuWeb
   {
     public VarBooleanToken(string source,
                            string name, bool isDefaultName,
-                           List<Mapping> mappings)
-      : base(source,
-          TokenType.VarBoolean, name, isDefaultName, mappings)
+                           List<NumericMapping> numericMappings)
+      : base(source, TokenType.VarBoolean, name, isDefaultName, numericMappings, null)
     {
     }
 
@@ -168,7 +183,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return "";  // we don't have or need a format
     }
 
-    public override string getText(string unusedFormat, List<Mapping> mappings)
+    public override string getText(string unusedFormat,
+      List<NumericMapping> numericMappings, List<TextMapping> unusedTextMappings)
     {
       if ( mInput is BoolValueObject input )
       {
@@ -176,13 +192,13 @@ namespace Recomedia_de.Logic.VisuWeb
         {
           return "?";
         }
-        if ( (null != mappings) && (mappings.Count == 2) )
+        if ( (null != numericMappings) && (numericMappings.Count == 2) )
         {
           if (input.Value)
           {
-            return mappings[1].representation;
+            return numericMappings[1].representation;
           }
-          return mappings[0].representation;
+          return numericMappings[0].representation;
         }
         else
         {
@@ -198,7 +214,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
     public override string getError()
     {
-      if ( (null != mMappings) && (mMappings.Count != 2) )
+      if ( (null != mNumericMappings) && (mNumericMappings.Count != 2) )
         return "WrongNumberOfBooleanMappings";
       else if ( !(mInput is BoolValueObject) )
         return "InputIsNoBoolean";
@@ -211,17 +227,24 @@ namespace Recomedia_de.Logic.VisuWeb
   {
     public VarNumericToken(string source, TokenType type,
                            string name, bool isDefaultName,
-                           string format, List<Mapping> mappings)
-      : base(source, type, name, isDefaultName, mappings)
+                           string format, string groupSeparator, string decimalSeparator,
+                           List<NumericMapping> numericMappings)
+      : base(source, type, name, isDefaultName, numericMappings, null)
     {
-      // We use the format as-is, formatting  ...
+      // We use the format as-is
       mFormat = format;
-      // ...  based on the current culture but ...
+
+      // Formatting is based on the current culture, with some customizations
       mNumberInfo = CultureInfo.CurrentCulture.NumberFormat.Clone() as NumberFormatInfo;
-      // ... ensure that there is no blank between a Number and the percent
-      // sign when using 'P' formats
+      // Customize group and decimal separators
+      mNumberInfo.NumberGroupSeparator = groupSeparator;
+      mNumberInfo.NumberDecimalSeparator = decimalSeparator;
+      mNumberInfo.PercentGroupSeparator = groupSeparator;
+      mNumberInfo.PercentDecimalSeparator = decimalSeparator;
+      // No blank between a Number and the percent sign when using 'P' formats
       mNumberInfo.PercentPositivePattern = 1;
       mNumberInfo.PercentNegativePattern = 1;
+      // We are not using the currency format, so there is no need to customize it
     }
 
     public override string getFormat()
@@ -229,15 +252,16 @@ namespace Recomedia_de.Logic.VisuWeb
       return mFormat;
     }
 
-    public override string getText(string format, List<Mapping> mappings)
+    public override string getText(string format,
+      List<NumericMapping> numericMappings, List<TextMapping> unusedTextMappings)
     {
       if (mInput is NumericValueObject<T> input)
       {
         if (input.HasValue)
         {
-          if ( null != mappings )
+          if ( null != numericMappings)
           {
-            foreach (Mapping mapping in mappings)
+            foreach (NumericMapping mapping in numericMappings)
             {
               double inputValue = Convert.ToDouble(input.Value);
               bool isMinValueOk = mapping.isMinValueExcluded ?
@@ -273,9 +297,8 @@ namespace Recomedia_de.Logic.VisuWeb
   class VarStringToken : VarTokenBase
   {
     public VarStringToken(string source,
-                          string name, bool isDefaultName)
-      : base(source, TokenType.VarString,
-             name, isDefaultName, new List<Mapping>())
+                          string name, bool isDefaultName, List<TextMapping> textMappings)
+      : base(source, TokenType.VarString, name, isDefaultName, null, textMappings)
     {
     }
 
@@ -284,13 +307,22 @@ namespace Recomedia_de.Logic.VisuWeb
       return "";  // we don't have or need a format
     }
 
-    public override string getText(string unusedFormat, List<Mapping> unusedMappings)
+    public override string getText(string unusedFormat,
+      List<NumericMapping> unusedNumericMappings, List<TextMapping> textMappings)
     {
       if (mInput is StringValueObject input)
       {
         if (input.HasValue)
         {
-          return input.Value;
+          string outText = input.Value;
+          if (null != textMappings)
+          {
+            foreach (TextMapping mapping in textMappings)
+            {
+              outText = outText.Replace(mapping.original, mapping.representation);
+            }
+          }
+          return outText;
         }
         return "?";
       }
@@ -303,17 +335,17 @@ namespace Recomedia_de.Logic.VisuWeb
     public VarReferenceToken(string source, VarTokenBase baseToken)
       : base(source, TokenType.VarReference,
              baseToken.getName(), baseToken.hasDefaultName(),
-             baseToken.getMappings())
+             baseToken.getNumericMappings(), baseToken.getTextMappings())
     {
       mBaseToken = baseToken;
       mFormat = baseToken.getFormat();
     }
 
     public VarReferenceToken(string source, VarTokenBase baseToken,
-                             string format, List<Mapping> mappings)
+                             string format, List<NumericMapping> numericMappings)
     : base(source, TokenType.VarReference,
            baseToken.getName(), baseToken.hasDefaultName(),
-           mappings)
+           numericMappings, null)
     {
       mBaseToken = baseToken;
       mFormat = format;
@@ -324,9 +356,10 @@ namespace Recomedia_de.Logic.VisuWeb
       return mFormat;
     }
 
-    public override string getText(string format, List<Mapping> mappings)
+    public override string getText(string format,
+      List<NumericMapping> numericMappings, List<TextMapping> textMappings)
     {
-      return mBaseToken.getText(format, mappings);
+      return mBaseToken.getText(format, numericMappings, textMappings);
     }
 
     public override string getError()

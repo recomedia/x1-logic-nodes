@@ -38,7 +38,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     public void Xml()
     {
       // Use four paths
-      node.mCount.Value = 6;
+      node.mCount.Value = 8;
       Assert.AreEqual(node.mCount.Value, node.mPath.Count);
       Assert.AreEqual(node.mCount.Value, node.mOutput.Count);
       Assert.AreEqual(node.mCount.Value, node.mSelectOperation.Count);
@@ -55,6 +55,10 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.mSelectParam[4].Value = " | ";
       node.mPath[5].Value = "(//humidity[@unit='%']/@value)[position()<=6]";
       node.mSelectOperation[5].Value = "MultiConcatTexts";
+      node.mPath[6].Value = "(//temperature[@unit='celsius']/@value)[position()<=4]";
+      node.mSelectOperation[6].Value = "MultiMinNumber";
+      node.mPath[7].Value = "(//temperature[@unit='celsius']/@value)[position()<=4]";
+      node.mSelectOperation[7].Value = "MultiMaxNumber";
 
       // Expect no validation error
       var result = node.Validate("de");
@@ -70,6 +74,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsNotNull(node.mError);
       Assert.AreEqual(PortTypes.String, node.mError.PortType.Name);
       Assert.IsFalse(node.mError.HasValue);       // no output value yet
+      Assert.AreEqual("2,5", node.mSelectParam[2].Value);
 
       // Set an input value and re-check the outputs
       node.mInput.Value = File.ReadAllText(@"../../openweather.xml");
@@ -96,6 +101,46 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsNotNull(node.mOutput[5]);
       Assert.IsTrue(node.mOutput[5].HasValue);   // now has an output value
       Assert.AreEqual("969697968274", node.mOutput[5].Value);
+      Assert.IsNotNull(node.mOutput[6]);
+      Assert.IsTrue(node.mOutput[6].HasValue);   // now has an output value
+      Assert.AreEqual(10.78, node.mOutput[6].Value);
+      Assert.IsNotNull(node.mOutput[7]);
+      Assert.IsTrue(node.mOutput[7].HasValue);   // now has an output value
+      Assert.AreEqual(11.21, node.mOutput[7].Value);
+
+      // Configure scaling factors, re-execute and re-check
+      node.mSelectParam[2].Value = "7,5";
+      node.mSelectParam[6].Value = "3,5";
+      node.mSelectParam[7].Value = "1,5";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);     // empty error message
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.IsTrue(node.mOutput[0].HasValue);   // now has an output value
+      Assert.AreEqual("Boblingen", node.mOutput[0].Value);
+      Assert.IsNotNull(node.mOutput[1]);
+      Assert.IsTrue(node.mOutput[1].HasValue);   // now has an output value
+      Assert.AreEqual(0.625 + 0.063 + 0.125 + 0.313 +
+                      0.188 + 0.500 + 0.188 + 0.062, node.mOutput[1].Value);
+      Assert.IsNotNull(node.mOutput[2]);
+      Assert.IsTrue(node.mOutput[2].HasValue);   // now has an output value
+      Assert.AreEqual(0.625 * 7.5, node.mOutput[2].Value);
+      Assert.IsNotNull(node.mOutput[3]);
+      Assert.IsTrue(node.mOutput[3].HasValue);   // now has an output value
+      Assert.AreEqual("broken clouds", node.mOutput[3].Value);
+      Assert.IsNotNull(node.mOutput[4]);
+      Assert.IsTrue(node.mOutput[4].HasValue);   // now has an output value
+      Assert.AreEqual("11.21 | 10.94 | 10.78 | 11.07", node.mOutput[4].Value);
+      Assert.IsNotNull(node.mOutput[5]);
+      Assert.IsTrue(node.mOutput[5].HasValue);   // now has an output value
+      Assert.AreEqual("969697968274", node.mOutput[5].Value);
+      Assert.IsNotNull(node.mOutput[6]);
+      Assert.IsTrue(node.mOutput[6].HasValue);   // now has an output value
+      Assert.AreEqual(10.78 * 3.5, node.mOutput[6].Value);
+      Assert.IsNotNull(node.mOutput[7]);
+      Assert.IsTrue(node.mOutput[7].HasValue);   // now has an output value
+      Assert.AreEqual(11.21 * 1.5, node.mOutput[7].Value);
 
       // Reduce number of terms and re-check
       node.mCount.Value = 3;
@@ -108,7 +153,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.AreEqual("MultiAddNumbers", node.mSelectOperation[1].Value);
       Assert.AreEqual("/weatherdata//time[1]/precipitation/@value", node.mPath[2].Value);
       Assert.AreEqual("FirstAsNumber", node.mSelectOperation[2].Value);
-      Assert.AreEqual("2,5", node.mSelectParam[2].Value);
+      Assert.AreEqual("7,5", node.mSelectParam[2].Value);
 
       // Change scaling factor, re-execute and re-check
       node.mSelectParam[2].Value = "7.5"; // alternate decimal separator
@@ -126,7 +171,6 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsNotNull(node.mOutput[2]);
       Assert.IsTrue(node.mOutput[2].HasValue);   // now has an output value
       Assert.AreEqual(0.625 * 7.5, node.mOutput[2].Value);
-
     }
 
     [Test]
@@ -256,9 +300,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       // Expect validation error
       var result = node.Validate("de");
       Assert.IsTrue(result.HasError);
-      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\" ist kein gültiger Skalierungsfaktor. Als " +
-                      "Dezimaltrennzeichen muss , oder . verwendet werden. Gruppentrennzeichen " +
-                      "(Tausendertrennzeichen) sind nicht zulässig.",
+      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\"  ist kein gültiger Skalierungsfaktor. " +
+                      "Als Dezimaltrennzeichen muss Komma (,) oder Punkt (.) verwendet werden. " +
+                      "Gruppentrennzeichen (Tausendertrennzeichen) sind nicht zulässig.",
                       result.Message);
 
       // Expect execution error, no value
@@ -266,9 +310,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
-      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\" ist kein gültiger Skalierungsfaktor. Als " +
-                      "Dezimaltrennzeichen muss , oder . verwendet werden. Gruppentrennzeichen " +
-                      "(Tausendertrennzeichen) sind nicht zulässig.\r\n",
+      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\"  ist kein gültiger Skalierungsfaktor. " +
+                      "Als Dezimaltrennzeichen muss Komma (,) oder Punkt (.) verwendet werden. " +
+                      "Gruppentrennzeichen (Tausendertrennzeichen) sind nicht zulässig.\r\n",
                       node.mError.Value);
       Assert.IsNotNull(node.mOutput[0]);
       Assert.IsFalse(node.mOutput[0].HasValue);   // still has no output value
@@ -278,18 +322,18 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.mSelectOperation[0].Value = "MultiAddNumbers";
       result = node.Validate("de");
       Assert.IsTrue(result.HasError);
-      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\" ist kein gültiger Skalierungsfaktor. Als " +
-                      "Dezimaltrennzeichen muss , oder . verwendet werden. Gruppentrennzeichen " +
-                      "(Tausendertrennzeichen) sind nicht zulässig.",
+      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\"  ist kein gültiger Skalierungsfaktor. " +
+                      "Als Dezimaltrennzeichen muss Komma (,) oder Punkt (.) verwendet werden. " +
+                      "Gruppentrennzeichen (Tausendertrennzeichen) sind nicht zulässig.",
                       result.Message);
 
       // Re-execute; still expect execution error, no value
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
-      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\" ist kein gültiger Skalierungsfaktor. Als " +
-                      "Dezimaltrennzeichen muss , oder . verwendet werden. Gruppentrennzeichen " +
-                      "(Tausendertrennzeichen) sind nicht zulässig.\r\n",
+      Assert.AreEqual("Skalierungsfaktor 1: \"2.500,7\"  ist kein gültiger Skalierungsfaktor. " +
+                      "Als Dezimaltrennzeichen muss Komma (,) oder Punkt (.) verwendet werden. " +
+                      "Gruppentrennzeichen (Tausendertrennzeichen) sind nicht zulässig.\r\n",
                       node.mError.Value);
       Assert.IsNotNull(node.mOutput[0]);
       Assert.IsFalse(node.mOutput[0].HasValue);   // still has no output value

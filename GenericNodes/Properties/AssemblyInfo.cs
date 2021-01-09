@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Recomedia GbR")]
 [assembly: AssemblyProduct("Generic Logic Nodes")]
-[assembly: AssemblyCopyright("Copyright ©2018-2019 Recomedia GbR")]
+[assembly: AssemblyCopyright("Copyright ©2018-2021 Recomedia GbR")]
 [assembly: AssemblyTrademark("Distributed under Creative-Commons-License CC-BY-NC-SA. Partly based on example code Copyright ©2018 by Gira, Giersiepen GmbH & Co.KG")]
 [assembly: AssemblyCulture("neutral")]
 
@@ -22,5 +22,5 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("688D5884-1FE8-4946-8218-F71E0F606D89")]
 
-[assembly: AssemblyVersion(version: "1.2.0")]
-[assembly: AssemblyFileVersion(version: "1.2.0")]
+[assembly: AssemblyVersion(version: "1.3.6")]
+[assembly: AssemblyFileVersion(version: "1.3.6")]

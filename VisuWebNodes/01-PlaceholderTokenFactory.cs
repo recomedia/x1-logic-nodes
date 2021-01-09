@@ -43,7 +43,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return new ConstStringToken(text);
     }
 
-    public TokenBase createPlaceholderToken(string placeholderText)
+    public TokenBase createPlaceholderToken(string placeholderText,
+                    string groupSeparator, string decimalSeparator)
     {
       PlaceholderInfo info = parsePlaceholder(placeholderText);
       if (info.result.HasError)
@@ -57,23 +58,23 @@ namespace Recomedia_de.Logic.VisuWeb
         switch (info.type)
         {
           case TokenType.VarBoolean:
-            ret = new VarBooleanToken(placeholderText, info.name, info.isDefaultName, info.mappings);
+            ret = new VarBooleanToken(placeholderText, info.name, info.isDefaultName, info.numericMappings);
             break;
           case TokenType.VarInteger:
             ret = new VarNumericToken<int>(placeholderText, info.type, info.name, info.isDefaultName,
-                                                         info.format, info.mappings);
+                                           info.format, groupSeparator, decimalSeparator, info.numericMappings);
             break;
           case TokenType.VarNumber:
             ret = new VarNumericToken<double>(placeholderText, info.type, info.name, info.isDefaultName,
-                                                            info.format, info.mappings);
+                                              info.format, groupSeparator, decimalSeparator, info.numericMappings);
             break;
           case TokenType.VarString:
-            ret = new VarStringToken(placeholderText, info.name, info.isDefaultName);
+            ret = new VarStringToken(placeholderText, info.name, info.isDefaultName, info.textMappings);
             break;
           case TokenType.VarReference:
             if ( info.hasType )
             {
-              return new VarReferenceToken(placeholderText, info.reference, info.format, info.mappings);
+              return new VarReferenceToken(placeholderText, info.reference, info.format, info.numericMappings);
             }
             else
             {
@@ -119,7 +120,7 @@ namespace Recomedia_de.Logic.VisuWeb
         {
           case 1:   // Name only; no format given
             if ( retInfo.type != TokenType.VarReference )
-            { // name alone is refernce and should have been found above
+            { // name alone is reference and should have been found above
               retInfo.result.HasError = true;
               retInfo.result.Message = "PlaceholderNameNotFound";
             }
@@ -173,16 +174,16 @@ namespace Recomedia_de.Logic.VisuWeb
       switch ( type )
       {
         case TokenType.VarBoolean:
-          parseBoolean(formatTokens, ref outInfo);
+          parseBooleanPlaceholder(formatTokens, ref outInfo);
           break;
         case TokenType.VarInteger:
-          parseInteger(formatTokens, ref outInfo);
+          parseIntegerPlaceholder(formatTokens, ref outInfo);
           break;
         case TokenType.VarNumber:
-          parseNumber(formatTokens, ref outInfo);
+          parseNumberPlaceholder(formatTokens, ref outInfo);
           break;
         case TokenType.VarString:
-          parseString(formatTokens, ref outInfo);
+          parseStringPlaceholder(formatTokens, ref outInfo);
           break;
         default:
           outInfo.result.HasError = true;
@@ -228,11 +229,11 @@ namespace Recomedia_de.Logic.VisuWeb
       return TokenType.Error;
     }
 
-    private void parseBoolean(string[] formatTokens,
+    private void parseBooleanPlaceholder(string[] formatTokens,
                    ref PlaceholderInfo outInfo)
     {
-      var m0 = new Mapping { minValue = 0, maxValue = 0 };
-      var m1 = new Mapping { minValue = 1, maxValue = 1 };
+      var m0 = new NumericMapping { minValue = 0, maxValue = 0 };
+      var m1 = new NumericMapping { minValue = 1, maxValue = 1 };
 
       switch ( formatTokens.Length )
       {
@@ -263,9 +264,9 @@ namespace Recomedia_de.Logic.VisuWeb
       }
       if ( (null != m0.representation) && (null != m1.representation) )
       {
-        outInfo.mappings = new List<Mapping>();
-        outInfo.mappings.Add(m0);
-        outInfo.mappings.Add(m1);
+        outInfo.numericMappings = new List<NumericMapping>();
+        outInfo.numericMappings.Add(m0);
+        outInfo.numericMappings.Add(m1);
 
         if (!isBinTextValid(m0.representation) || !isBinTextValid(m1.representation))
         {
@@ -290,173 +291,167 @@ namespace Recomedia_de.Logic.VisuWeb
       return true;
     }
 
-    private void parseInteger(string[] formatTokens,
+    private void parseIntegerPlaceholder(string[] formatTokens,
                    ref PlaceholderInfo outInfo)
     {
-      if (formatTokens.Length > 0)
+      System.Diagnostics.Trace.Assert(formatTokens.Length > 0);
+      if (formatTokens[0].Length != 1)
       {
-        if (formatTokens[0].Length != 1)
-        {
-          outInfo.result.HasError = true;
-          outInfo.result.Message = "PlaceholderIntLengthInvalid";
-          return;
-        }
-        outInfo.format = "G";   // shortest possible number format for integers
-        parseMappings(/* allowImplicitValues = */ true, formatTokens, ref outInfo);
+        outInfo.result.HasError = true;
+        outInfo.result.Message = "PlaceholderIntLengthInvalid";
+        return;
       }
+      outInfo.format = "G";   // shortest possible number format for integers
+      parseNumericMappings(/* allowImplicitValues = */ true, formatTokens, ref outInfo);
     }
 
-    private void parseNumber(string[] formatTokens,
+    private void parseNumberPlaceholder(string[] formatTokens,
                   ref PlaceholderInfo outInfo)
     {
-      if (formatTokens.Length > 0)
-      {
-        if ( (formatTokens[0].Length == 1) ||
-             ((formatTokens[0].Length == 2) && (char.IsDigit(formatTokens[0][1]))) )
-        { // No or one digit parameter, use as number format as-is
-          outInfo.format = formatTokens[0];
-        }
-        else
-        {
-          outInfo.result.HasError = true;
-          outInfo.result.Message = "PlaceholderNumFormatInvalid";
-          return;
-        }
-        parseMappings(/* allowImplicitValues = */ false, formatTokens, ref outInfo);
+      System.Diagnostics.Trace.Assert(formatTokens.Length > 0);
+      if ( (formatTokens[0].Length == 1) ||
+            ((formatTokens[0].Length == 2) && (char.IsDigit(formatTokens[0][1]))) )
+      { // No or one digit parameter, use as number format as-is
+        outInfo.format = formatTokens[0];
       }
+      else
+      {
+        outInfo.result.HasError = true;
+        outInfo.result.Message = "PlaceholderNumFormatInvalid";
+        return;
+      }
+      parseNumericMappings(/* allowImplicitValues = */ false, formatTokens, ref outInfo);
     }
 
-    private void parseMappings(bool allowImplicitValues,
+    private void parseNumericMappings(bool allowImplicitValues,
                            string[] formatTokens,
                 ref PlaceholderInfo outInfo)
     {
-      bool allowExplicitValues = true;  // until an implicit value has been found
-      int implicitValue = 0;
-      // Ignore entry at index 0 (type/precision processed by caller)
-      outInfo.mappings = new List<Mapping>(formatTokens.Length - 1);
-      for (int i = 1; i < formatTokens.Length; i++)
+      outInfo.numericMappings = null;
+      if (formatTokens.Length > 1)
       {
-        string[] valueRepresentation = formatTokens[i].Split('=');
-        switch (valueRepresentation.Length)
+        bool allowExplicitValues = true;  // until an implicit value has been found
+        int implicitValue = 0;
+        // Ignore entry at index 0 (type/precision processed by caller)
+        outInfo.numericMappings = new List<NumericMapping>(formatTokens.Length - 1);
+        for (int i = 1; i < formatTokens.Length; i++)
         {
-          case 1:
-            if (allowImplicitValues)
-            {
-              Mapping mapping = new Mapping {
-                minValue = implicitValue,
-                maxValue = implicitValue,
-                representation = valueRepresentation[0]
-              };
-              if ( 0 == mapping.representation.Length )
+          string[] valueRepresentation = formatTokens[i].Split('=');
+          switch (valueRepresentation.Length)
+          {
+            case 1:
+              if (allowImplicitValues)
+              {
+                NumericMapping mapping = new NumericMapping
+                {
+                  minValue = implicitValue,
+                  maxValue = implicitValue,
+                  representation = valueRepresentation[0]
+                };
+                if (0 == mapping.representation.Length)
+                {
+                  outInfo.result.HasError = true;
+                  outInfo.result.Message = "MappingEmptyImplicitValue";
+                  return;
+                }
+
+                outInfo.numericMappings.Add(mapping);
+                allowExplicitValues = false;
+                implicitValue++;
+              }
+              else
               {
                 outInfo.result.HasError = true;
-                outInfo.result.Message = "MappingEmptyImplicitValue";
+                outInfo.result.Message = "MappingNoImplicitValues";
                 return;
               }
-
-              outInfo.mappings.Add(mapping);
-              allowExplicitValues = false;
-              implicitValue++;
-            }
-            else
-            {
-              outInfo.result.HasError = true;
-              outInfo.result.Message = "MappingNoImplicitValues";
-              return;
-            }
-            break;
-          case 2:
-            if (allowExplicitValues)
-            {
-              parseExplicitMapping(valueRepresentation, ref outInfo);
-              if (outInfo.result.HasError)
+              break;
+            case 2:
+              if (allowExplicitValues)
               {
+                parseExplicitNumericMapping(valueRepresentation, ref outInfo);
+                if (outInfo.result.HasError)
+                {
+                  return;
+                }
+                allowImplicitValues = false;
+              }
+              else
+              {
+                outInfo.result.HasError = true;
+                outInfo.result.Message = "MappingNoExplicitValues";
                 return;
               }
-              allowImplicitValues = false;
-            }
-            else
-            {
+              break;
+            default:
               outInfo.result.HasError = true;
-              outInfo.result.Message = "MappingNoExplicitValues";
+              outInfo.result.Message = "MappingWrongAssignment";
               return;
-            }
-            break;
-          default:
-            outInfo.result.HasError = true;
-            outInfo.result.Message = "MappingWrongAssignment";
-            return;
+          }
         }
       }
     }
 
-    private void parseExplicitMapping(string[] valueRepresentation,
+    private void parseExplicitNumericMapping(string[] valueRepresentation,
                            ref PlaceholderInfo outInfo)
     {
-      if ( valueRepresentation.Length == 2 )
+      System.Diagnostics.Trace.Assert(valueRepresentation.Length == 2);
+
+      string[] rangeStrings = valueRepresentation[0].Split('.');
+      if ( rangeStrings.Length == 1 )
       {
-        string[] rangeStrings = valueRepresentation[0].Split('.');
-        if ( rangeStrings.Length == 1 )
+        DoubleVal value = parseValue(rangeStrings[0]);
+        if ( value.isValid )
         {
-          DoubleVal value = parseValue(rangeStrings[0]);
-          if ( value.isValid )
+          NumericMapping mapping = new NumericMapping  {
+            minValue = value.value,
+            maxValue = value.value,
+            representation = valueRepresentation[1]
+          };
+          outInfo.numericMappings.Add(mapping);
+        }
+        else
+        {
+          outInfo.result.HasError = true;
+          outInfo.result.Message = "ExplicitMappingInvalidValue";
+          return;
+        }
+      }
+      else if ( (rangeStrings.Length == 3) && (rangeStrings[1].Length == 0) )
+      {
+        DoubleVal minValue = parseRangeValue(rangeStrings[0], /* isMin = */ true);
+        DoubleVal maxValue = parseRangeValue(rangeStrings[2], /* isMin = */ false);
+        if ( minValue.isValid && maxValue.isValid )
+        {
+          if ( minValue.value < maxValue.value )
           {
-            Mapping mapping = new Mapping  {
-              minValue = value.value,
-              maxValue = value.value,
+            NumericMapping mapping = new NumericMapping {
+              minValue = minValue.value,
+              isMinValueExcluded = minValue.isExcluded,
+              maxValue = maxValue.value,
+              isMaxValueExcluded = maxValue.isExcluded,
               representation = valueRepresentation[1]
             };
-            outInfo.mappings.Add(mapping);
+            outInfo.numericMappings.Add(mapping);
           }
           else
           {
             outInfo.result.HasError = true;
-            outInfo.result.Message = "ExplicitMappingInvalidValue";
-            return;
-          }
-        }
-        else if ( (rangeStrings.Length == 3) && (rangeStrings[1].Length == 0) )
-        {
-          DoubleVal minValue = parseRangeValue(rangeStrings[0], /* isMin = */ true);
-          DoubleVal maxValue = parseRangeValue(rangeStrings[2], /* isMin = */ false);
-          if ( minValue.isValid && maxValue.isValid )
-          {
-            if ( minValue.value < maxValue.value )
-            {
-              Mapping mapping = new Mapping {
-                minValue = minValue.value,
-                isMinValueExcluded = minValue.isExcluded,
-                maxValue = maxValue.value,
-                isMaxValueExcluded = maxValue.isExcluded,
-                representation = valueRepresentation[1]
-              };
-              outInfo.mappings.Add(mapping);
-            }
-            else
-            {
-              outInfo.result.HasError = true;
-              outInfo.result.Message = "ExplicitMappingInvertedRange";
-              return;
-            }
-          }
-          else
-          {
-            outInfo.result.HasError = true;
-            outInfo.result.Message = "ExplicitMappingInvRngVal";
+            outInfo.result.Message = "ExplicitMappingInvertedRange";
             return;
           }
         }
         else
         {
           outInfo.result.HasError = true;
-          outInfo.result.Message = "ExplicitMappingInvalidRange";
+          outInfo.result.Message = "ExplicitMappingInvRngVal";
           return;
         }
       }
       else
-      { // Paranoia; should be checked by caller
+      {
         outInfo.result.HasError = true;
-        outInfo.result.Message = "MappingWrongAssignment";
+        outInfo.result.Message = "ExplicitMappingInvalidRange";
         return;
       }
     }
@@ -497,7 +492,7 @@ namespace Recomedia_de.Logic.VisuWeb
       return val;
     }
 
-    private void parseString(string[] formatTokens,
+    private void parseStringPlaceholder(string[] formatTokens,
                   ref PlaceholderInfo outInfo)
     {
       if ( ( formatTokens.Length > 0 ) &&
@@ -507,19 +502,74 @@ namespace Recomedia_de.Logic.VisuWeb
         outInfo.result.Message = "PlaceholderStrLengthInvalid";
         return;
       }
-      // no additional info to store
+      parseStringMappings(formatTokens, ref outInfo);
+    }
+
+    private void parseStringMappings(string[] formatTokens,
+                          ref PlaceholderInfo outInfo)
+    {
+      // Ignore entry at index 0 (type processed by caller)
+      outInfo.textMappings = null;
+      if (formatTokens.Length > 1)
+      {
+        outInfo.textMappings = new List<TextMapping>(formatTokens.Length - 1);
+        for (int i = 1; i < formatTokens.Length; i++)
+        {
+          string[] valueRepresentation = formatTokens[i].Split('=');
+          switch (valueRepresentation.Length)
+          {
+            case 1:
+              outInfo.result.HasError = true;
+              outInfo.result.Message = "MappingNoImplicitTextValues";
+              return;
+            case 2:
+              parseExplicitTextMapping(valueRepresentation, ref outInfo);
+              if (outInfo.result.HasError)
+              {
+                return;
+              }
+              break;
+            default:
+              outInfo.result.HasError = true;
+              outInfo.result.Message = "MappingWrongTextAssignment";
+              return;
+          }
+        }
+      }
+    }
+
+    private void parseExplicitTextMapping(string[] valueRepresentation,
+                               ref PlaceholderInfo outInfo)
+    {
+      System.Diagnostics.Trace.Assert(valueRepresentation.Length == 2);
+
+      if (valueRepresentation[0].Length > 0)
+      {
+        TextMapping mapping = new TextMapping
+        {
+          original = valueRepresentation[0],
+          representation = valueRepresentation[1]
+        };
+        outInfo.textMappings.Add(mapping);
+      }
+      else
+      {
+        outInfo.result.HasError = true;
+        outInfo.result.Message = "MappingNoOriginalTextValue";
+      }
     }
 
     private struct PlaceholderInfo
     {
-      public ValidationResult result;
-      public string           name;
-      public TokenType        type;
-      public string           format;
-      public List<Mapping>    mappings;
-      public VarTokenBase     reference;
-      public bool             hasType;
-      public bool             isDefaultName;
+      public ValidationResult     result;
+      public string               name;
+      public TokenType            type;
+      public string               format;
+      public List<NumericMapping> numericMappings;
+      public List<TextMapping>    textMappings;
+      public VarTokenBase         reference;
+      public bool                 hasType;
+      public bool                 isDefaultName;
     }
 
     private struct DoubleVal

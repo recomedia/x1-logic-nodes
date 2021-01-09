@@ -87,11 +87,15 @@
           <td>
             <p>
               Bestimmt den Ausgang, an den Werte weitergeleitet werden. Der
-              Wertebereich für den normalen Betrieb reicht von 0 (Ausgang 1) bis
-              <i>n</i>-1 (Ausgang <i>n</i>). Zusätzlich können die Werte -1 oder
-              <i>n</i> verwendet werden, um <em>keinen</em> Ausgang zu auszuwählen,
-              <span class="manhyphens">also</span> <em>alle</em> Eingangstelegramme
-              zu verwerfen.
+              Wertebereich für den normalen Betrieb reicht von 0 (Ausgang 1)
+              bis <i>n</i>-1 (Ausgang <i>n</i>), wobei <i>n</i> die Anzahl der
+              Ausgänge ist. Diese Zählweise entspricht der des Gira-Bausteins
+              "Ausgangswahlschalter".
+            </p>
+            <p>
+              Werte außerhalb dieses Bereichs können verwendet werden, um
+              <em>keinen</em> Ausgang auszuwählen, also <em>alle</em>
+              Eingangstelegramme zu verwerfen.
             </p>
           </td>
         </tr>
@@ -259,7 +263,7 @@
         <li>1: Sperre aktiv; es werden keine Telegramme weiter gegeben.</li>
       </ul>
       <p>
-        Um einen Binärwert für den Eingang verwenden zu können, braucht man
+        Um einen Binärwert für diesen Eingang verwenden zu können, braucht man
         zusätzlich einen Typumwandler.
       </p>
       <p>
@@ -287,10 +291,8 @@
       </p>
       <h3>Bedarfsgeführte Heizungsregelung</h3>
       <p>
-        Dieses Beispiel findet sich <a href="Statistics.html#beispiel">
-          bei der
-          Beschreibung des Statistik-Bausteins
-        </a>.
+        Dieses Beispiel findet sich <a href="Statistics.html#beispiel">bei
+        der Beschreibung des Statistik-Bausteins</a>.
       </p>
     </div>
   </section>

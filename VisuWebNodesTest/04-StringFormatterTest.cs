@@ -53,8 +53,8 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       checkDeLocalizedList<StringValueObject>(new List<string> { "Text 1" },
                                              node.mStrInputs, node.Localize);
       // Check the resulting output
-      Assert.IsNotNull(node.mOutputs[0]);         // should be double
-      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value
+      Assert.IsNotNull(node.mOutputs[0]);         // output should exist ...
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // ... bbut have no output value
       checkDeLocalizedList<IValueObject>(new List<string> { "Ausgang 1" },
                                              node.mOutputs, node.Localize);
 
@@ -70,9 +70,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                       node.mOutputs[0].Value);
     }
 
-    public class StringFormatterErrorTestCaseData
+    public class StringFormatterTemplateErrorTestCaseData
     {
-      public static IEnumerable ErrorTestCases
+      public static IEnumerable TemplateErrorTestCases
       {
         get
         {
@@ -178,6 +178,12 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                .SetName("ErrorMappingNoImplicitValues4");
           yield return new TestCaseData("{:S0}", "PlaceholderStrLengthInvalid")
                                .SetName("ErrorPlaceholderStrLengthInvalidNoText");
+          yield return new TestCaseData("{T:S|alt}", "MappingNoImplicitTextValues")
+                               .SetName("ErrorPlaceholderMappingNoImplicitTextValues");
+          yield return new TestCaseData("{T:S|=new}", "MappingNoOriginalTextValue")
+                               .SetName("ErrorPlaceholderMappingNoOriginalTextValue");
+          yield return new TestCaseData("{T:S|x=y=z}", "MappingWrongTextAssignment")
+                               .SetName("ErrorPlaceholderStrInvalidMapping");
           yield return new TestCaseData("X{:Sy}X", "PlaceholderStrLengthInvalid")
                                .SetName("ErrorPlaceholderStrLengthInvalidWithText");
           yield return new TestCaseData("{1Input:S}", "PlaceholderNameInvalid")
@@ -209,9 +215,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         }
       }
     }
-    [TestCaseSource(typeof(StringFormatterErrorTestCaseData),
-                    "ErrorTestCases", Category = "ErrorTestCases")]
-    public void ErrorTests(string template, string expectedError)
+    [TestCaseSource(typeof(StringFormatterTemplateErrorTestCaseData),
+                    "TemplateErrorTestCases", Category = "TemplateErrorTestCases")]
+    public void TemplateErrors(string template, string expectedError)
     {
       // Set the same simple valid template using one of each kind of placeholders
       // that is used and checked in the GoodTemplate() test case
@@ -220,8 +226,8 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       // Check the resulting inputs
       checkInputCounts(1, 1, 2, 1);
       // Check the output state
-      Assert.IsNotNull(node.mOutputs[0]);         // should be double
-      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value
+      Assert.IsNotNull(node.mOutputs[0]);         // output should exist ...
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // ... but has no output value
 
       // Execute the error test case
       node.mTemplates[0].Value = template;
@@ -240,24 +246,130 @@ namespace Recomedia_de.Logic.VisuWeb.Test
 
       // Recheck the resulting inputs; must be unchanged
       checkInputCounts(1, 1, 2, 1);
-      // Recheck the output state; must still be undefined
-      Assert.IsNotNull(node.mOutputs[0]);         // should be double
-      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value
+      // Recheck the output state; must still have no value
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsFalse(node.mOutputs[0].HasValue);
+    }
+
+
+
+    public class StringFormatterSeparatorErrorTestCaseData
+    {
+      public static IEnumerable SeparatorErrorTestCases
+      {
+        get
+        {
+          yield return new TestCaseData(",", ",",
+                                        "Gruppen- und Dezimaltrennzeichen dürfen nicht gleich sein.",
+                                        "Group and decimal separator cannot be the same.")
+                                        .SetName("BothComma");
+          yield return new TestCaseData("", "",
+                                        "Das Dezimaltrennzeichen darf nicht leer sein.",
+                                        "The decimal separator cannot be empty.")
+                                        .SetName("BothEmpty");
+          yield return new TestCaseData(",", "",
+                                        "Das Dezimaltrennzeichen darf nicht leer sein.",
+                                        "The decimal separator cannot be empty.")
+                                        .SetName("DecimalSepEmpty");
+          yield return new TestCaseData(",,", ",",
+                                        "Das Gruppentrennzeichen darf maximal ein Zeichen haben.",
+                                        "The group separator cannot be longer than one character.")
+                                        .SetName("GroupSepTooLong");
+          yield return new TestCaseData(",", ",,",
+                                        "Das Dezimaltrennzeichen darf maximal ein Zeichen haben.",
+                                        "The decimal separator cannot be longer than one character.")
+                                        .SetName("DecimalSepTooLong");
+          yield return new TestCaseData("ab", "xy",
+                                        "Das Gruppentrennzeichen darf maximal ein Zeichen haben.",
+                                        "The group separator cannot be longer than one character.")
+                                        .SetName("BothTooLong");
+        }
+      }
+    }
+    [TestCaseSource(typeof(StringFormatterSeparatorErrorTestCaseData),
+                    "SeparatorErrorTestCases", Category = "SeparatorErrorTestCases")]
+    public void CustomSeparatorErrors(string groupSeparator,
+                                      string decimalSeparator,
+                                      string expectedErrorDe,
+                                      string expectedErrorEn)
+    {
+      // Customize the separators BEFORE changing templates
+      node.mCustomGroupSeparator.Value = groupSeparator;
+      node.mCustomDecimalSeparator.Value = decimalSeparator;
+
+      // Set a simple valid template that uses one of each kind of placeholders
+      node.mTemplates[0].Value = "{:N}";
+
+      ValidationResult result = node.Validate("en");
+      Assert.IsTrue(result.HasError);     // expect an error
+      Assert.AreEqual(expectedErrorEn, result.Message);
+
+      result = node.Validate("de");
+      Assert.IsTrue(result.HasError);     // expect an error
+      Assert.AreEqual(expectedErrorDe, result.Message);
+    }
+
+
+    public class StringFormatterSeparatorGoodTestCaseData
+    {
+      public static IEnumerable SeparatorGoodTestCases
+      {
+        get
+        {
+          yield return new TestCaseData("", ",", "12345678,09").SetName("German");
+          yield return new TestCaseData("´", ".", "12´345´678.09").SetName("Swiss");
+          // Although not distinguishable from normal (ASCII 32) space in typical source code
+          // editors, the following test data uses the Unicode "Narrow no-break space" (U+202F)
+          // as the group separator
+          yield return new TestCaseData(" ", ",", "12 345 678,09").SetName("InternationalUnicode");
+        }
+      }
+    }
+    [TestCaseSource(typeof(StringFormatterSeparatorGoodTestCaseData),
+                    "SeparatorGoodTestCases", Category = "SeparatorGoodTestCases")]
+    public void CustomSeparators(string groupSeparator,
+                                 string decimalSeparator,
+                                 string expectedOutput)
+    {
+      // Customize the separators BEFORE changing templates
+      node.mCustomGroupSeparator.Value   = groupSeparator;
+      node.mCustomDecimalSeparator.Value = decimalSeparator;
+
+      // Set a simple valid template that uses one of each kind of placeholders
+      node.mTemplates[0].Value = "{:N}";
+
+      ValidationResult result = node.Validate("de");
+      Assert.IsFalse(result.HasError);            // expect no error
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 1, 0);
+      // Check the output state
+      Assert.IsNotNull(node.mOutputs[0]);         // output should exist ...
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // ... but have no output value
+
+      // Assign the value and check the output
+      node.mNumInputs[0].Value = 12345678.09;
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual(expectedOutput, node.mOutputs[0].Value);
     }
 
 
     [Test]
     public void GoodCaseIncremental()
     {
+      // Customize the separators BEFORE changing templates
+      node.mCustomGroupSeparator.Value   = ".";
+      node.mCustomDecimalSeparator.Value = ",";
+
       // Set a simple valid template that uses one of each kind of placeholders
       node.mTemplates[0].Value = mAllTypesGoodTemplate;
+
       ValidationResult result = node.Validate("de");
       Assert.IsFalse(result.HasError);        // expect no error
       // Check the resulting inputs
       checkInputCounts(1, 1, 2, 1);
       // Check the output state
-      Assert.IsNotNull(node.mOutputs[0]);         // should be double
-      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value
+      Assert.IsNotNull(node.mOutputs[0]);         // output should exist ...
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // ... but have no output value
 
       // Assign the values, one by one, and check the output each time
       node.mBinInputs[0].Value = false;
@@ -279,6 +391,11 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.mStrInputs[0].Value = "fox";
       Assert.IsTrue(node.mOutputs[0].HasValue);
       Assert.AreEqual("bool 0; int 42; number 17,00; percent 73,00%; string fox end.",
+                      node.mOutputs[0].Value);
+      // Re-set the numeric input to test the group separator
+      node.mNumInputs[0].Value = 17000;
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("bool 0; int 42; number 17.000,00; percent 73,00%; string fox end.",
                       node.mOutputs[0].Value);
     }
 
@@ -501,7 +618,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                null, null,
                                new List<string> { "NumberInput 1", "NumberInput 2" },
                                null,
-                               "pi 3,14; -e -2,72",
+                               "pi 3.14; -e -2.72",
                                null, null, null, null, null
                                ).SetName("GoodNumDefault");
           yield return new TestCaseData("-pi {:N0}; e {:N0}",
@@ -519,7 +636,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                new List<double> { 3.14159265359, -2.71828182846 },
                                new List<string> { }, true,
                                null, null, null, null,
-                               "pi 3,141592654; -e -2,718281828",
+                               "pi 3.141592654; -e -2.718281828",
                                null, null, null, null, null
                                ).SetName("GoodNum9");
           yield return new TestCaseData("10Mio {:F1}",
@@ -528,7 +645,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                new List<double> { 10e6 },
                                new List<string> { }, true,
                                null, null, null, null,
-                               "10Mio 10000000,0",
+                               "10Mio 10000000.0",
                                null, null, null, null, null
                                ).SetName("GoodNum10MioNoSep");
           yield return new TestCaseData("10Mio {:N1}",
@@ -537,7 +654,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                new List<double> { 10e6 },
                                new List<string> { }, true,
                                null, null, null, null,
-                               "10Mio 10.000.000,0",
+                               "10Mio 10'000'000.0",
                                null, null, null, null, null
                                ).SetName("GoodNum10MioSep");
           yield return new TestCaseData("10Mio {:G1}",
@@ -555,7 +672,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                new List<double> { 12345678.9 },
                                new List<string> { }, true,
                                null, null, null, null,
-                               "10Mio+ 12345678,9",
+                               "10Mio+ 12345678.9",
                                null, null, null, null, null
                                ).SetName("GoodNum10MioSciDef");
           yield return new TestCaseData("10Mio+ {:G4}",
@@ -564,7 +681,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                new List<double> { 12345678.9 },
                                new List<string> { }, true,
                                null, null, null, null,
-                               "10Mio+ 1,235E+07",
+                               "10Mio+ 1.235E+07",
                                null, null, null, null, null
                                ).SetName("GoodNum10MioSci3");
           yield return new TestCaseData("A: {A:F|0=null|..0=neg|0,0..100,0=pos}, B: {B:N|>0,0..=pos|-100..<0=neg}, C: {C:f1|0=null|..0=neg|0,0..=pos}, D: {D:n1|0=null|0,0..=pos|-100..0=neg}, E: {E:n7|>0,0..20,0=pos|..<0=neg}",
@@ -575,7 +692,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                true, null, null,
                                new List<string> { "A", "B", "C", "D", "E" },
                                null,
-                               "A: neg, B: neg, C: null, D: pos, E: 24,6800000",
+                               "A: neg, B: neg, C: null, D: pos, E: 24.6800000",
                                null, null, null, null, null
                                ).SetName("GoodNumRange");
           yield return new TestCaseData("F: {Number:F}; f0: {Number:f0}; n: {Number:n}; N3: {Number:N3}; G0: {Number:G0}; g3: {Number:g3}; G7: {Number:G7}; OutOfRanges: {Number:G|0..1e8=Low|2e8..=High}; InRange: {Number:G|1e8..2e8=In}; MasterFormat: {Number}",
@@ -586,7 +703,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                true, null, null,
                                new List<string> { "Number" },
                                null,
-                               "F: 123456789,12; f0: 123456789; n: 123.456.789,12; N3: 123.456.789,123; G0: 123456789,123457; g3: 1,23E+08; G7: 1,234568E+08; OutOfRanges: 123456789,123457; InRange: In; MasterFormat: 123456789,12",
+                               "F: 123456789.12; f0: 123456789; n: 123'456'789.12; N3: 123'456'789.123; G0: 123456789.123457; g3: 1.23E+08; G7: 1.234568E+08; OutOfRanges: 123456789.123457; InRange: In; MasterFormat: 123456789.12",
                                null, null, null, null, null
                                ).SetName("GoodNumReuse");
           // Percent
@@ -598,7 +715,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                null, null,
                                new List<string> { "NumberInput 1" },
                                null,
-                               "42,73%",
+                               "42.73%",
                                null, null, null, null, null
                                ).SetName("GoodPercentDefault");
           yield return new TestCaseData("{:p0}",
@@ -616,7 +733,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                new List<double> { 0.4273 },
                                new List<string> { }, true,
                                null, null, null, null,
-                               "42,7%",
+                               "42.7%",
                                null, null, null, null, null
                                ).SetName("GoodPercent1");
           yield return new TestCaseData("P1: {P1:P1|..<0=⇩|>1..=⇧}, P2: {P2:P2|..<0=⇩|>1..=⇧}, P3: {P3:P3|..<0=⇩|>1..=⇧}, P4: {P4:P4|..<0=⇩|>1..=⇧}, P5: {P5:P5|..<0=⇩|>1..=⇧}",
@@ -627,7 +744,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                true, null, null,
                                new List<string> { "P1", "P2", "P3", "P4", "P5" },
                                null,
-                               "P1: ⇩, P2: 0,00%, P3: 42,730%, P4: 100,0000%, P5: ⇧",
+                               "P1: ⇩, P2: 0.00%, P3: 42.730%, P4: 100.0000%, P5: ⇧",
                                null, null, null, null, null
                                ).SetName("GoodPercentRange");
           yield return new TestCaseData("{Percent:P|..<0=⇩|0..1=|>1..=⇧}{Percent:P1}{Percent}",
@@ -638,12 +755,12 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                true, null, null,
                                new List<string> { "Percent" },
                                null,
-                               "⇩-0,1%⇩",
+                               "⇩-0.1%⇩",
                                new List<bool> { },
                                new List<int> { },
                                new List<double> { 0.001 },
                                new List<string> { },
-                               "0,1%"
+                               "0.1%"
                                ).SetName("GoodPercentRangeReuse");
           // String
           yield return new TestCaseData("The {:s} brown {:S} jumps {:s} the {:S} dog.",
@@ -656,6 +773,26 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                "The quick brown fox jumps over the lazy dog.",
                                null, null, null, null, null
                                ).SetName("GoodString");
+          yield return new TestCaseData("{Text:S|x=⇩|y=|z=⇧}",
+                               new List<bool> { },
+                               new List<int> { },
+                               new List<double> { },
+                               new List<string> { "xyz" }, true,
+                               null, null, null,
+                               new List<string> { "Text" },
+                               "⇩⇧",
+                               null, null, null, null, null
+                               ).SetName("GoodStringReplaceEmpty");
+          yield return new TestCaseData("{Text:S|x y=bla|a z=fasel}",
+                               new List<bool> { },
+                               new List<int> { },
+                               new List<double> { },
+                               new List<string> { "x y z" }, true,
+                               null, null, null,
+                               new List<string> { "Text" },
+                               "blfasel",
+                               null, null, null, null, null
+                               ).SetName("GoodStringReplaceOverlapping");
           // Mixed incremental
           yield return new TestCaseData("{:bOI} (seit {:s}) | {:b.X} | Tvs {:n0}/{:n0}°C | Trs {:n0}°C",
                                new List<bool>   { true, true },
@@ -794,5 +931,6 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         Assert.AreEqual(expModOutput, node.mOutputs[0].Value);
       }
     }
+
   }
 }

@@ -253,4 +253,8 @@
     <value>Number of stored input values</value>
     <comment>TimedStatistics</comment>
   </data>
+  <data name="MinimumDifferenceUpwards" xml:space="preserve">
+    <value>Minimum Difference for rising values</value>
+    <comment>SendByDifference</comment>
+  </data>
 </root>

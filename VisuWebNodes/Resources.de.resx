@@ -154,7 +154,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="MappingWrongAssignment" xml:space="preserve">
-    <value> enthält eine ungültige Zuweisung für eine Textdarstellung. Gültige Zuweisungen enthalten genau ein = zwischen Wert oder Wertebereich (links) und Text (rechts).</value>
+    <value> enthält eine ungültige Zuweisung für eine Textdarstellung. Gültige Zuweisungen enthalten genau ein Gleichkeitszeichen (=) zwischen Wert oder Wertebereich (links) und Text (rechts).</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="NoPlaceholder" xml:space="preserve">
@@ -178,7 +178,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderMultipleColon" xml:space="preserve">
-    <value> ist ungültig. Platzhalter können höchstens ein ':' enthalten, das den Eingangsnamen (links) von Typ- und Formatierungsinformationen (rechts) trennt.</value>
+    <value> ist ungültig. Platzhalter können höchstens einen Doppelpunkt (:) enthalten, das den Eingangsnamen (links) von Typ- und Formatierungsinformationen (rechts) trennt.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderNameNotFound" xml:space="preserve">
@@ -230,7 +230,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderNameInvalid" xml:space="preserve">
-    <value> enthält einen ungültigen Eingangsnamen. Gültige Namen beginnen mit einem Buchstaben. Weiter sind auch Ziffern, Leerzeichen (nicht am Ende) und Interpunktionszeichen erlaubt. Die Zeichen :, { and } können nicht verwendet werden, weil sie mit umgebenden Syntaxelementen verwechselbar wären.</value>
+    <value> enthält einen ungültigen Eingangsnamen. Gültige Namen beginnen mit einem Buchstaben. Weiter sind auch Ziffern, Leerzeichen (nicht am Ende) und viele Sonderzeichen erlaubt. Doppelpunkt (:) oder geschweifte Klammrern ({ und }) können nicht verwendet werden.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="ExplicitMappingInvertedRange" xml:space="preserve">
@@ -246,19 +246,19 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="MappingEmptyImplicitValue" xml:space="preserve">
-    <value> enthät eine leere Textdarstellung. Dies ist nur erlaubt, wenn der Wert explizit angegeben ist, nicht für implizite Werte. </value>
+    <value> enthält eine leere Textdarstellung. Dies ist nur erlaubt, wenn der Wert explizit angegeben ist, nicht für implizite Werte. </value>
     <comment>StringFormatter</comment>
   </data>
   <data name="HasDefaultName" xml:space="preserve">
-    <value> benutzt einen automatisch vergebenen Namen, was in diesem Baustein nicht erlaubt ist. Vor dem : muss ein Name angegeben werden.</value>
+    <value> benutzt einen automatisch vergebenen Namen, was in diesem Baustein nicht erlaubt ist. Vor dem Doppelpunkt (:) muss ein Name angegeben werden.</value>
     <comment>ExpressionCalculator</comment>
   </data>
   <data name="HasFormatOrMappings" xml:space="preserve">
-    <value> enthält eine Formatangabe und/oder Textdarstellungen, was in diesem Baustein nicht erlaubt ist. Nur ein gültiger Typbuchstabe sollte angegeben werden.</value>
+    <value> enthält eine unerlaubte Formatangabe und/oder Textdarstellungen. Nur ein gültiger Typbuchstabe sollte angegeben werden.</value>
     <comment>ExpressionCalculator</comment>
   </data>
   <data name="HasUnusableName" xml:space="preserve">
-    <value> verwendet im Namen Sonderzeichen, was in diesem Baustein nicht erlaubt ist. Der Name muss mit einem Buchstaben anfangen und darf nur Buchstaben, Ziffern und _ enthalten.</value>
+    <value> verwendet im Namen unerlaubte Sonderzeichen. Der Name muss mit einem Buchstaben anfangen und darf nur Buchstaben, Ziffern (0..9) und Unterstriche (_) enthalten.</value>
     <comment>ExpressionCalculator</comment>
   </data>
   <data name="Expression" xml:space="preserve">
@@ -282,7 +282,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="HasOutOfRangeRef" xml:space="preserve">
-    <value> enthält eine Referenz auf einen Ausgang der entweder nicht existiert oder an dieser Stelle nicht verwendet werden kann. Nur die Ausgänge 1 bis n-1 können verwendet werden, wobei n die Nummer der referenzierenden Formel ist.</value>
+    <value> enthält eine Referenz auf einen Ausgang der entweder nicht existiert oder an dieser Stelle nicht verwendet werden kann. Aktuelle Ausgangswerte (_out.._) können nur aus Formeln mit kleineren Nummern als der referenzierenden Formel verwendet werden.</value>
     <comment>ExpressionCalculator</comment>
   </data>
   <data name="HasAssignment" xml:space="preserve">
@@ -318,14 +318,30 @@
     <comment>XmlJsonParser</comment>
   </data>
   <data name="InvalidScaling" xml:space="preserve">
-    <value>ist kein gültiger Skalierungsfaktor. Als Dezimaltrennzeichen muss , oder . verwendet werden. Gruppentrennzeichen (Tausendertrennzeichen) sind nicht zulässig.</value>
+    <value> ist kein gültiger Skalierungsfaktor. Als Dezimaltrennzeichen muss Komma (,) oder Punkt (.) verwendet werden. Gruppentrennzeichen (Tausendertrennzeichen) sind nicht zulässig.</value>
     <comment>XmlJsonParser</comment>
   </data>
   <data name="MultiAddNumbers" xml:space="preserve">
     <value>Alle Treffer als summierte Zahl</value>
     <comment>XmlJsonParser</comment>
   </data>
+  <data name="MultiMinNumber" xml:space="preserve">
+    <value>Minimum aller Treffer als Zahl</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiMaxNumber" xml:space="preserve">
+    <value>Maximum aller Treffer als Zahl</value>
+    <comment>XmlJsonParser</comment>
+  </data>
   <data name="MultiAddNumbersParam" xml:space="preserve">
+    <value>Skalierungsfaktor</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiMinNumberParam" xml:space="preserve">
+    <value>Skalierungsfaktor</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiMaxNumberParam" xml:space="preserve">
     <value>Skalierungsfaktor</value>
     <comment>XmlJsonParser</comment>
   </data>
@@ -348,5 +364,41 @@
   <data name="SelectCode" xml:space="preserve">
     <value>Eingangskodierung</value>
     <comment>XmlJsonParser</comment>
+  </data>
+  <data name="SeparatorDecimal" xml:space="preserve">
+    <value>Dezimal-Trennzeichen</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorDecimalTooLong" xml:space="preserve">
+    <value>Das Dezimaltrennzeichen darf maximal ein Zeichen haben.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorDecimalTooShort" xml:space="preserve">
+    <value>Das Dezimaltrennzeichen darf nicht leer sein.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorGroup" xml:space="preserve">
+    <value>Gruppen- (Tausender-) Trennzeichen</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorGroupTooLong" xml:space="preserve">
+    <value>Das Gruppentrennzeichen darf maximal ein Zeichen haben.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorsIdentical" xml:space="preserve">
+    <value>Gruppen- und Dezimaltrennzeichen dürfen nicht gleich sein.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingNoImplicitTextValues" xml:space="preserve">
+    <value> verwendet implizite Werte für Textersetzungen. Text-Platzhalter erlauben generell keine impliziten Ersetzungen, sondern nur Zuweisungen mit einem =.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingNoOriginalTextValue" xml:space="preserve">
+    <value> enthält einen leeren Orignaltext für eine Textersetzung. Der Originaltext muss mindestens ein Zeichen lang sein.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingWrongTextAssignment" xml:space="preserve">
+    <value> enthält eine ungültige Zuweisung für eine Textersetzung. Gültige Zuweisungen enthalten genau ein Gleichkeitszeichen (=) zwischen Originaltext (links) und Ersetzungstext (rechts).</value>
+    <comment>StringFormatter</comment>
   </data>
 </root>

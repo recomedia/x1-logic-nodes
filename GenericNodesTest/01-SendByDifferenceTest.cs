@@ -90,5 +90,58 @@ namespace Recomedia_de.Logic.Generic.Test
       node.Execute();
       Assert.AreEqual(16, node.mOutput.Value);
     }
+
+    [Test]
+    public void SendByDifferenceTestSeparateUpDownMinDiffs()
+    {
+      node.mMinimumDifference.Value = 3;
+      node.mMinUpwardsDifference.Value = 5;
+      node.Execute();
+      Assert.IsFalse(node.mOutput.HasValue); // initially no output value
+
+      // First set value must be forwarded
+      node.mInput.Value = 17;
+      node.Execute();
+      Assert.AreEqual(17, node.mOutput.Value);
+
+      // Further set values down < 3 or up < 5 must NOT be forwarded
+      node.mInput.Value = 15;
+      node.Execute();
+      Assert.AreEqual(17, node.mOutput.Value);
+      node.mInput.Value = 21;
+      node.Execute();
+      Assert.AreEqual(17, node.mOutput.Value);
+
+      // Further set values up >= 3 or down >= 5 must be forwarded
+      node.mInput.Value = 22;
+      node.Execute();
+      Assert.AreEqual(22, node.mOutput.Value);
+      node.mInput.Value = 19;
+      node.Execute();
+      Assert.AreEqual(19, node.mOutput.Value);
+
+      // Use smaller (non-integer) min. upwards difference value from now on
+      node.mMinUpwardsDifference.Value = 1.5;
+
+      node.mInput.Value = 20.5;
+      node.Execute();
+      Assert.AreEqual(20.5, node.mOutput.Value);
+
+      node.mInput.Value = 18;
+      node.Execute();
+      Assert.AreEqual(20.5, node.mOutput.Value);
+
+      node.mInput.Value = 17.5;
+      node.Execute();
+      Assert.AreEqual(17.5, node.mOutput.Value);
+
+      node.mInput.Value = 18.99;
+      node.Execute();
+      Assert.AreEqual(17.5, node.mOutput.Value);
+
+      node.mInput.Value = 19.0;
+      node.Execute();
+      Assert.AreEqual(19.0, node.mOutput.Value);
+    }
   }
 }

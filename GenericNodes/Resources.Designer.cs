@@ -178,6 +178,15 @@ namespace Recomedia_de.Logic.Generic {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minimum Difference for rising values ähnelt.
+        /// </summary>
+        internal static string MinimumDifferenceUpwards {
+            get {
+                return ResourceManager.GetString("MinimumDifferenceUpwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Index of minimum value ähnelt.
         /// </summary>
         internal static string MinIndex {

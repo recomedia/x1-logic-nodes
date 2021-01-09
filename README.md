@@ -66,7 +66,7 @@ Visualisierungen und Integration mit Web-Services:
   (einschließlich bedingter Berechnungen) sowie umfassende Funktionen für
   mathematische Berechnungen stehen zur Verfügung. Dazu kommen eigene
   Funktionserweiterugen für Lichtsteuerung und Luftfeuchterechnung.
-  (Obwohl dieser Baustein thematisch besser ins Paket "Generische
+  (Obwohl dieser Baustein thematisch besser ins Paket "Recomedia Generische
   Logikbausteine" passen würde, muss er aus technischen Gründen – er nutzt
   dieselbe Platzhalter-Implementierung – in diesem Paket ausgeliefert
   werden.)

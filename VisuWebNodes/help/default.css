@@ -120,7 +120,7 @@ h4 {
     font-size: 14px;
     line-height: 15px;
     margin: 2px 0 4px 0;
-    padding: 2px 0 0 0;
+    padding: 2px 0 3px 0;
 }
 
 p {
@@ -160,10 +160,42 @@ li {
     margin: 4px 0 4px 0;
 }
 
+dl {
+    padding: 0 0 0 20px;
+    margin: 0 0 0 0;
+    display: grid;
+    grid-template-columns: max-content auto;
+}
+
+dt {
+    grid-column-start: 1;
+    margin: 2px 0 0 0;
+}
+
+dd {
+    grid-column-start: 2;
+    margin: 2px 0 0 1.5em;
+}
+
+th {
+    text-align: left;
+    vertical-align: top;
+    padding: 0 4px 2px 4px;
+    border-bottom: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+}
+
+td {
+    vertical-align: top;
+    padding: 0 4px 0 4px;
+    border-bottom: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+}
+
 table.Tabelle_Logicnode {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 0 8px 0;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 0 8px 0;
 }
 
     table.Tabelle_Logicnode th {
@@ -171,12 +203,20 @@ table.Tabelle_Logicnode {
         vertical-align: top;
         padding: 0 4px 2px 4px;
         border-bottom: 1px solid #cccccc;
+        border-right: none;
     }
 
     table.Tabelle_Logicnode td {
         vertical-align: top;
         padding: 0 4px 0 4px;
         border-bottom: 1px solid #cccccc;
+        border-right: none;
+    }
+
+    table.Tabelle_Logicnode td.group {
+        vertical-align: top;
+        padding: 0 4px 0 4px;
+        border-bottom: none;
     }
 
 td {

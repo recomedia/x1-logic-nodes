@@ -167,44 +167,39 @@ namespace Recomedia_de.Logic.Generic
     private void updateIdleValueType(object sender = null,
                       ValueChangedEventArgs evArgs = null)
     {
-      if ( mIdleValueType.HasValue )
+      System.Diagnostics.Trace.Assert(mIdleValueType.HasValue);
+
+      if (PortTypes.Bool == mIdleValueType.Value)
       {
-        if (PortTypes.Bool == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateBool(PortTypes.Bool, "IdleValue");
-        }
-        else if (PortTypes.Integer == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateInt(PortTypes.Integer, "IdleValue");
-        }
-        else if (PortTypes.Number == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateDouble(PortTypes.Number, "IdleValue");
-        }
-        else if (PortTypes.TimeSpan == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateTimeSpan(PortTypes.TimeSpan, "IdleValue");
-        }
-        else if (PortTypes.Time == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateTimeSpan(PortTypes.Time, "IdleValue");
-        }
-        else if (PortTypes.Date == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateDateTime(PortTypes.Date, "IdleValue");
-        }
-        else if (PortTypes.DateTime == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateDateTime(PortTypes.DateTime, "IdleValue");
-        }
-        else if (PortTypes.String == mIdleValueType.Value)
-        {
-          mIdleValue = mTypeService.CreateString(PortTypes.String, "IdleValue");
-        }
-        else
-        {
-          mIdleValue = null;
-        }
+        mIdleValue = mTypeService.CreateBool(PortTypes.Bool, "IdleValue");
+      }
+      else if (PortTypes.Integer == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateInt(PortTypes.Integer, "IdleValue");
+      }
+      else if (PortTypes.Number == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateDouble(PortTypes.Number, "IdleValue");
+      }
+      else if (PortTypes.TimeSpan == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateTimeSpan(PortTypes.TimeSpan, "IdleValue");
+      }
+      else if (PortTypes.Time == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateTimeSpan(PortTypes.Time, "IdleValue");
+      }
+      else if (PortTypes.Date == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateDateTime(PortTypes.Date, "IdleValue");
+      }
+      else if (PortTypes.DateTime == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateDateTime(PortTypes.DateTime, "IdleValue");
+      }
+      else if (PortTypes.String == mIdleValueType.Value)
+      {
+        mIdleValue = mTypeService.CreateString(PortTypes.String, "IdleValue");
       }
       else
       {

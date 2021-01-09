@@ -108,7 +108,7 @@
             <p>
               Sollte die Eingabe
               <a href="https://wiki.selfhtml.org/wiki/Referenz:HTML/Zeichenreferenz"
-              >benannte HTML-Zeichen (<i>HTML entities</i>)</a> enthalten, so werden
+                 >benannte HTML-Zeichen (<i>HTML entities</i>)</a> enthalten, so werden
               diese in Ausgabetexten dekodiert. (z. B. wird <tt>&amp;auml;</tt> zu
               <tt>ä</tt>).
             </p>
@@ -249,8 +249,10 @@
               nicht zulässig ist. Man verwendet daher besser XML-Daten, wie unten im
               <a href="#beispiel">Beispiel</a> gezeigt. Sind XML-Daten nicht verfügbar,
               behilft man sich mit einer Textersetzung der fehlerverursachenden Schlüssel
-              durch zulässige Schlüssel. (Diese lässt sich mit dem Baustein
-              <a href="ExpressionCalculator.html#stringfunc">Formelberechnung</a> realisieren).
+              durch zulässige Schlüssel. (Diese lässt sich wahlweise mit deb Bausteinen
+              <a href="StringFormatter.html#textzuweisungen">Textformatierer</a> oder
+              <a href="ExpressionCalculator.html#stringfunc">Formelberechnung</a>
+              realisieren).
             </p>
           </td>
         </tr>
@@ -273,20 +275,30 @@
             <ul>
               <li>
                 <b>Erster Treffer als Text</b>: Der erste ausgewählte Eintrag wird als
-                Text ausgegeben
+                Text ausgegeben.
               </li>
               <li>
                 <b>Erster Treffer als Zahl</b>: Der erste ausgewählte Eintrag wird als
-                XML-Zahl interpretiert und als Fließkommazahl ausgegeben
+                XML-Zahl interpretiert und als Fließkommazahl ausgegeben.
               </li>
               <li>
                 <b>Alle Treffer als verketteter Text</b>: Alle ausgewählten Einträge werden
-                verkettet und als Text ausgegeben
+                verkettet und als Text ausgegeben.
               </li>
               <li>
                 <b>Alle Treffer als summierte Zahl</b>: Alle ausgewählten Einträge werden
                 als XML-Zahlen interpretiert, aufsummiert und die Summe als Fließkommazahl
-                ausgegeben
+                ausgegeben.
+              </li>
+              <li>
+                <b>Minimum aller Treffer als Zahl</b>: Alle ausgewählten Einträge werden
+                als XML-Zahlen interpretiert. Die niedrigste davon wird als Fließkommazahl
+                ausgegeben.
+              </li>
+              <li>
+                <b>Maximum aller Treffer als Zahl</b>: Alle ausgewählten Einträge werden
+                als XML-Zahlen interpretiert. Die höchste davon wird als Fließkommazahl
+                ausgegeben.
               </li>
             </ul>
             <p>
@@ -402,8 +414,9 @@
         (englisch)</a> durch eigene Angaben zu ersetzen.
       </p>
       <p>
-        Der XML-Parser verwendet zur Auswertung der XML-Daten zwei XPath-Pfade mit
-        den folgenden Einstellungen:
+        Der XML-Parser verwendet zur Auswertung der XML-Daten zwei XPath-Pfade,
+        die jeweils die ersten 4 Niederschlags- bzw. Temperaturvorhersagewerte
+        auswählen:
       </p>
       <ul>
         <li>
@@ -412,6 +425,12 @@
         <li>
           Pfad 2: <span class="box-noscroll"> /weatherdata/forecast/time[position()&lt;5]/temperature/@value </span>
         </li>
+      </ul>
+      <p>
+        Die folgenden Einstellungen legen fest, wie mit den ausgewählten Werten
+        verfahren werden soll, um die beiden Ausgabewerte zu erzeugen:
+      </p>
+      <ul>
         <li>
           Art der Pfadauswahl 1: <span class="box-noscroll"> Alle Treffer als summierte Zahl &nbsp;</span>
         </li>

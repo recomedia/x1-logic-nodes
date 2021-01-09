@@ -1,0 +1,308 @@
+﻿<!DOCTYPE HTML>
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recomedia Visu- &amp; Web-Logikbausteine - Hilfe - Formelberechnung - Heizungsregelung</title>
+  <link rel="StyleSheet" href="default.css" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <span id="headBlack">Recomedia Visu- &amp; Web-Logikbausteine</span>
+    <span id="headGray">Hilfe</span>
+  </header>
+  <section>
+    <div class="contentholder">
+      <div class="navlinks-top">
+        <a href="ExpressionCalculator.html">← Hauptseite "Formelberechnung"</a>
+      </div>
+      <h2>Formelberechnung &ndash; Heizungsregelung</h2>
+      <h3>Die Funktion HeatingCurve</h3>
+      <p>
+        Die Heizkurve, also die Festlegung der Vorlauftemperatur eine Heizkreises
+        je nach Außentemperatur, ist zentraler Bestandteil jeder Heizungsregelung.
+      </p>
+      <table class="Tabelle_Logicnode" cellspacing="0">
+        <colgroup>
+          <col width="175" />
+          <col width="125" />
+          <col />
+        </colgroup>
+        <tr>
+          <th>
+            <h4>Funktion</h4>
+          </th>
+          <th>
+            <h4>Datentyp</h4>
+          </th>
+          <th>
+            <h4>Beschreibung</h4>
+          </th>
+        </tr>
+        <tr>
+          <td class="group">
+            <p>
+              <tt>
+                Hlk.HeatingCurve(<br />
+              </tt><i>TaAvg</i><tt>, </tt><i>Tg</i><tt>, </tt><i>TaMin</i><tt>
+                ,<br />
+              </tt><i>TSoll</i><tt>, </tt><i>TvMax</i><tt>, </tt><i>k</i><tt>)</tt>
+            </p>
+          </td>
+          <td class="group">
+            <p><tt>double</tt></p>
+          </td>
+          <td class="group">
+            <p>
+              Errechnet aus der gedämpften (zeitlich gemittelten) Außentemperatur <i>TaAvg</i>
+              in °C und weiteren Parametern die benötigte Vorlauftemperatur für einen Heizkreis.
+              Die Parameter passen die Heizkurve an die Gegebenheiten des Gebäudes und der
+              Heizungsanlage an.
+            </p>
+          </td>
+        </tr>
+        </tr>
+      </table>
+      <p>
+        Die Parameter haben folgenden Bedeutungen und sinnvolle Wertebereiche:
+      </p>
+      <dl>
+        <dt><i>Tg</i></dt>
+        <dd>
+          Heizgrenze, also die Außentemperatur Ta, bei der gerade noch nicht geheizt
+          werden muss. Ist <i>TaAvg</i> >= <i>Tg</i>, so gibt die Funktion 0 zurück,
+          um die Heizung abzuschalten. Die Heizgrenze hängt in erster Linie von der
+          Wärmedämmung und Luftdichtheit der Gebäudehülle, aber auch vom Wärmeeintrag
+          z. B. durch elektrische Verbraucher oder die Bewohner selbst ab. Wenn <i>Tg</i>
+          nicht aus den Auslegungsdaten der Heizungsanlage bekannt ist, können als
+          Richtwerte gelten:
+          <dl>
+            <dt>vor 1977</dt>
+            <dd>16..18</dd>
+            <dt>1977-1995</dt>
+            <dd>14..16</dd>
+            <dt>nach 1995</dt>
+            <dd>12..15</dd>
+            <dt>Niedrigenergiehaus</dt>
+            <dd>11..13</dd>
+            <dt>Passivhaus</dt>
+            <dd> 9..11</dd>
+          </dl>
+        </dd>
+        <dt><i>TaMin</i></dt>
+        <dd>
+          Minimale Außentemperatur Ta, für die die Heizungsanlage ausgelegt ist. Für
+          <i>TaAvg</i> <= <i>TaMin</i> gibt die Funktion <i>TvMax</i> zurück, um die
+          maximale Heizleistung zu erreichen.
+        </dd>
+        <dt><i>TvMax</i></dt>
+        <dd>
+          Maximale Vorlauftemperatur, für die die Heizungsanlage ausgelegt ist, um
+          bei <i>TaAvg</i> == <i>TaMin</i> die Raumtemperatur <i>Tsoll</i> gerade
+          noch zu erreichen.
+        </dd>
+        <dt><i>k</i></dt>
+        <dd>
+          Heizkörperexponent; bestimmt die Überhöhung der Heizkurve im unteren und
+          mittleren Bereich; kompensiert die geringere Wärmeabgabe von Heizkörpern
+          bei niedrigen Vorlauftemperaturen. Sinnvolle Werte liegen im Bereich 1 ..
+          1.5 und hängen von der Art der Heizkörper ab; z. B:
+          <dl>
+            <dt>Konvektoren</dt>
+            <dd>1.33</dd>
+            <dt>Wandheizung</dt>
+            <dd>1.3</dd>
+            <dt>Fußbodenheizung</dt>
+            <dd>1.1</dd>
+            <dt>Lineare Heiz"kurve"</dt>
+            <dd>1.0</dd>
+          </dl>
+        </dd>
+        <dt><i>Tsoll</i></dt>
+        <dd>
+          Sollwert für die Raumtemperatur; stellt sich bei <i>TaAvg</i> == <i>Tg</i>
+          ohne Heizung ein; ist gleichzeitig der Fußpunkt der Vorlauftemperatur,
+          bei der noch keine Heizwirkung entsteht (weil die Heizkörper nicht wärmer
+          werden als der Raum).
+        </dd>
+      </dl>
+      <h3>Optimierung der Parameter</h3>
+      <p>
+        Eine Heizungsanlage kann nur energieeffizient arbeiten, wenn sie bei jeder
+        Außentemperatur die dazu passende, niedrigst mögliche Vorlauftemperatur fährt.
+        Dazu optimiert man nach korrektem hydraulischem Abgleich im laufenden Betrieb
+        die Parameter:
+        <ul>
+          <li>
+            In Anlagen <i>ohne Raumtemperaturregler</i> soll die gewünschte
+            Raumtemperatur gerade erreicht werden. Auch bei außergewöhnlichem
+            Fremdwärmeeintrag (z. B. Sonnenschein) soll sie nicht wesentlich
+            überschritten werden (sonst wäre der Einsatz von Raumtemperaturreglern
+            anzuraten). Möglich ist dies nur durch eine niedrige Auslegungstemperatur
+            <i>TvMax</i> mit entsprechendem
+            <a href="http://www.heiz-tipp.de/ratgeber-455-selbstregeleffekt.html">Selbstregeleffekt</a>.
+          </li>
+          <li>
+            In Anlagen <i>ohne Nachtabschaltung oder -absenkung</i>, jedoch <i>
+              mit
+              Raumtemperaturreglern (RTR)
+            </i> sollen die RTR-Stellgrößen nur bei
+            außergewöhnlichem Fremdwärmeeintrag unter 80% liegen. (Die verbleibenden
+            20% Regelreserve werden bei windigem Wetter ohne Fremdwärmeeintrag
+            benötigt. Ist die Gebäudehülle nicht luftdicht, kann mehr Regelreserve
+            notwendig sein.)
+          </li>
+          <li>
+            In Anlagen mit Nachtabschaltung oder -absenkung sind Raumtemperaturregler
+            unbedingt nötig und dürfen später am Tag auch Stellgrößen unter 80% zeigen.
+          </li>
+        </ul>
+      </p>
+      <p>
+        Die Optimierung nimmt man zweckmäßig von oben nach unten gemäß folgender
+        Tabelle vor:
+      </p>
+      <table style="width: 72%; padding-left: 1.3em" cellspacing="0">
+        <tr>
+          <td style="vertical-align: bottom; border-right: none"><i>TaAvg</i> ist ...</td>
+          <td style="text-align: right">Räume sind ...</td>
+          <td>... zu warm bzw.<br />RTR-Stellgrößen zu niedrig</td>
+          <td>... zu kalt</td>
+        </tr>
+        <tr>
+          <td colspan="2">... &gt;<i>Tg</i></td>
+          <td>&mdash;</td>
+          <td><i>Tg</i> erhöhen</td>
+        </tr>
+        <tr>
+          <td colspan="2">... im Bereich <i>Tg</i>-2°C .. <i>Tg</i></td>
+          <td><i>Tg</i> senken</td>
+          <td><i>Tg</i> und <i>Tsoll</i> geringfügig erhöhen</td>
+        </tr>
+        <tr>
+          <td colspan="2">... im Bereich <i>Tg</i>-5°C .. <i>Tg</i>-2°C</td>
+          <td><i>Tsoll</i> senken</td>
+          <td><i>Tsoll</i> erhöhen</td>
+        </tr>
+        <tr>
+          <td colspan="2">... im Bereich <i>Tmin</i> .. <i>Tmin</i>+8°C</td>
+          <td><i>Tmin</i> senken</td>
+          <td><i>Tmin</i> erhöhen</td>
+        </tr>
+        <tr>
+          <td colspan="2">... im Bereich <i>Tmin</i>+8°C .. <i>Tg</i>-5°C</td>
+          <td><i>k</i> senken</td>
+          <td><i>k</i> erhöhen</td>
+        </tr>
+      </table>
+      <p>
+        Das Zusammenspiel von <i>Tg</i> und <i>Tsoll</i> ist subtil; man wird
+        evtl. mehrfach kleine Veränderungen machen und ausprobieren müssen, bis
+        das Verhalten bei Außentemperaturen um <i>Tg</i> herum immer passt. Den
+        <i>k</i>-Parameter sollte man als letzte Feinabstimmung bearbeiten, wenn
+        alle anderen Werte passen. Werden andere Werte erneut verändert, dann
+        sollten <i>Tmin</i> und <i>k</i> ebenfalls nochmals überprüft werden.
+      </p>
+      <h3>Exkurs: Wann ist eine bedarfsgeführte Heizungsregelung sinnvoll?</h3>
+      <p>
+        Eine bedarfsgeführte Absenkung der Vorlauftemperatur ist immer dann
+        sinnvoll, wenn die Raumtemperaturregler trotz richtig eingestellter
+        Heizkurve häufig auf Werte unter ca. 80% abregeln. In der Praxis
+        sind das z. B. die folgenden Fälle:
+      </p>
+      <ul>
+        <li>
+          Mäßige Wärmedämmung in Verbindung mit großen Südfenstern
+        </li>
+        <li>
+          Nachtabschaltung oder -Absenkung erfordert höhere Einstellung
+          der Heizkurve, damit es morgens schnell genug warm wird
+        </li>
+        <li>
+          Heizungsanlage mit hoher Vorlauftemperatur und daher kaum
+          Selbstregeleffekt
+        </li>
+      </ul>
+      <p>
+        Bei Niedertemperaturheizungen in modernen Niedrigenergie- oder
+        Passivhäusern wird es dagegen selbst dann nicht der Fall sein,
+        wenn Raumtemperaturregler vorhanden sind.
+      </p>
+      <h3 id="heizbeispiel">Beispiel: Bedarfsgeführte Heizungsregelung</h3>
+      <p>
+        Für einen nicht energetisch modernisierten Bestandsbau aus den 80er
+        Jahren soll folgende Heizungsregelung realisiert werden:
+      </p>
+      <ol>
+        <li>
+          Die Obergrenze der Vorlauftemperatur folgt einer traditionellen Heizkurve.
+          Diese ist so eingestellt, dass sie für die morgendliche Aufheizung nach
+          Nachtabschaltung/-absenkung ausreicht. Damit ist die Vorlauftemperatur für
+          den Normalbetrieb zu hoch.
+        </li>
+        <li>
+          Bei tatsächlich geringerem Wärmebedarf &ndash; nach der morgendlichen
+          Aufheizung, besonders bei sonnigem Wetter &ndash; soll die Vorlauftemperatur
+          so weit abgesenkt werden, dass die Räume mit dem höchsten Wärmebedarf gerade
+          noch ausreichend mit Wärme versorgt werden, wenn sie ihre Stellventile voll
+          öffnen.
+        </li>
+      </ol>
+      <p><b>Heizkurve</b></p>
+      <p>
+        Aus der zeitlich (im Beispiel über 6 Stunden) gemittelten Außentemperatur
+        <i>TaAvg</i> ist zunächst die Obergrenze für die Vorlauftemperatur des
+        Heizkreises zu <span class="manhyphens">ermitteln</span>. Die Formel dazu
+        benutzt die Funktion HeatingCurve mit folgenden Parametern:
+        <dl>
+          <dt><i>Tg</i></dt>
+          <dd>=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17&nbsp;°C</dd>
+          <dt><i>TaMin</i></dt>
+          <dd>=&nbsp;&nbsp;&nbsp;&nbsp;-10&nbsp;°C</dd>
+          <dt><i>TSoll</i></dt>
+          <dd>=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;21&nbsp;°C</dd>
+          <dt><i>TvMax</i></dt>
+          <dd>=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;70&nbsp;°C</dd>
+          <dt><i>k</i></dt>
+          <dd>=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.33&nbsp;&nbsp;&nbsp;&nbsp;(Konvektorheizung)</dd>
+        </dl>
+      </p>
+      <p>
+        Formel 1: <span class="box-noscroll"> <tt>/* Heizkurve */ Hlk.HeatingCurve({TaAvg:N}, 17, -10, {TSoll:N}, 70, 1.33)</tt></span>
+      </p>
+      <p>
+        Dieses Zwischenergebnis vom Typ NUMBER wird nur für die Visualisierung verwendet.
+      </p>
+      <p><b>Bedarfsführung</b></p>
+      <p>
+        Der tatsächliche Wärmebedarf ist als prozentualer <tt>Bedarf</tt> gegeben. Er senkt
+        die Vorlauftemperatur aus Formel 1 wie folgt ab:<br />
+        Formel 2: <span class="box-noscroll"> <tt>/* Bedarfsführung */ ({Bedarf:N} / 100) * (_out1_ - {TSoll}) + {TSoll}</tt> </span><br />
+        Dieses Endergebnis vom Typ NUMBER wird als Soll-Vorlauftemperatur an den
+        Heizungsregler weiter gegeben.
+      </p>
+      <p><b>Logikblatt</b></p>
+      <p>
+        Gezeigt sind beispielhafte Simulationswerte:
+        <img src="ExpressionCalculatorExample1.png" alt="" class="example" />
+      </p>
+      <p><b>Hinweise:</b></p>
+      <ul>
+        <li>
+          Die notwendige weitere Logik zur Zwangsöffnung der Stellventile in den Räumen mit
+          dem höchsten Wärmebedarf ist nicht gezeigt.
+        </li>
+        <li>
+          Der Baustein "Statistik für Zeitreihen" ist im Paket
+          "Recomedia Generische Bausteine" enthalten.
+        </li>
+      </ul>
+    </div>
+  </section>
+  <footer>
+    <div id="footerHead">
+      Recomedia Visu- &amp; Web-Logikbausteine &nbsp; <span style="color: #a0a0a0;">Hilfe</span>
+    </div>
+  </footer>
+</body>
+</html>

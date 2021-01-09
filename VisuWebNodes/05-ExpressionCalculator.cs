@@ -110,32 +110,30 @@ namespace Recomedia_de.Logic.VisuWeb
       if (sender is EnumValueObject outputType)
       {
         int i = getTemplateIndex(outputType);
-        if (i >= 0)
+        System.Diagnostics.Trace.Assert(i >= 0);
+        if (PortTypes.Number == outputType.Value)
         {
-          if (PortTypes.Number == outputType.Value)
-          {
-            mOutputs[i] = mTypeService.CreateDouble(PortTypes.Number, getOutputName(i));
-          }
-          else if (PortTypes.Int64 == outputType.Value)
-          {
-            mOutputs[i] = mTypeService.CreateValueObject(PortTypes.Int64, getOutputName(i));
-          }
-          else if (PortTypes.Integer == outputType.Value)
-          {
-            mOutputs[i] = mTypeService.CreateInt(PortTypes.Integer, getOutputName(i));
-          }
-          else if (PortTypes.Byte == outputType.Value)
-          {
-            mOutputs[i] = mTypeService.CreateByte(PortTypes.Byte, getOutputName(i));
-          }
-          else if (PortTypes.Bool == outputType.Value)
-          {
-            mOutputs[i] = mTypeService.CreateBool(PortTypes.Bool, getOutputName(i));
-          }
-          else if (PortTypes.String == outputType.Value)
-          {
-            mOutputs[i] = mTypeService.CreateString(PortTypes.String, getOutputName(i));
-          }
+          mOutputs[i] = mTypeService.CreateDouble(PortTypes.Number, getOutputName(i));
+        }
+        else if (PortTypes.Int64 == outputType.Value)
+        {
+          mOutputs[i] = mTypeService.CreateValueObject(PortTypes.Int64, getOutputName(i));
+        }
+        else if (PortTypes.Integer == outputType.Value)
+        {
+          mOutputs[i] = mTypeService.CreateInt(PortTypes.Integer, getOutputName(i));
+        }
+        else if (PortTypes.Byte == outputType.Value)
+        {
+          mOutputs[i] = mTypeService.CreateByte(PortTypes.Byte, getOutputName(i));
+        }
+        else if (PortTypes.Bool == outputType.Value)
+        {
+          mOutputs[i] = mTypeService.CreateBool(PortTypes.Bool, getOutputName(i));
+        }
+        else if (PortTypes.String == outputType.Value)
+        {
+          mOutputs[i] = mTypeService.CreateString(PortTypes.String, getOutputName(i));
         }
       }
     }
@@ -171,14 +169,12 @@ namespace Recomedia_de.Logic.VisuWeb
 
         if ( token.hasFormatOrMappings() )
         {
-          templateTokens[i] = new ErrorToken(token.getSource(),
-                                             "HasFormatOrMappings");
+          templateTokens[i] = new ErrorToken(token.getSource(), "HasFormatOrMappings");
           return createTokenError(language, templateName, templateTokens[i]);
         }
         if ( token.hasDefaultName() )
         {
-          templateTokens[i] = new ErrorToken(token.getSource(),
-                                             "HasDefaultName");
+          templateTokens[i] = new ErrorToken(token.getSource(), "HasDefaultName");
           return createTokenError(language, templateName, templateTokens[i]);
         }
         if (token is ConstStringToken csToken)
@@ -186,14 +182,12 @@ namespace Recomedia_de.Logic.VisuWeb
           string text = csToken.getText();
           if (hasOutOfRangeRef(text, templateName))
           {
-            templateTokens[i] = new ErrorToken(token.getSource(),
-                                               "HasOutOfRangeRef");
+            templateTokens[i] = new ErrorToken(token.getSource(), "HasOutOfRangeRef");
             return createTextError(language, templateName, templateTokens[i]);
           }
           if (hasAssignment(text))
           {
-            templateTokens[i] = new ErrorToken(token.getSource(),
-                                               "HasAssignment");
+            templateTokens[i] = new ErrorToken(token.getSource(), "HasAssignment");
             return createTextError(language, templateName, templateTokens[i]);
           }
         }
@@ -201,8 +195,7 @@ namespace Recomedia_de.Logic.VisuWeb
         {
           if ( !isIdentifier(varToken.getName()) )
           {
-            templateTokens[i] = new ErrorToken(token.getSource(),
-                                               "HasUnusableName");
+            templateTokens[i] = new ErrorToken(token.getSource(), "HasUnusableName");
             return createTokenError(language, templateName, templateTokens[i]);
           }
         }
@@ -217,17 +210,98 @@ namespace Recomedia_de.Logic.VisuWeb
 
     private bool hasOutOfRangeRef(string text, string templateName)
     {
+      // "out" variables can only reference values with lower numbers
+      // because they refer to the current execution
       int exprNum = int.Parse(templateName.Substring(TEMPLATE_PREFIX.Length));
-
       foreach (Match match in Regex.Matches(text, @"_out([0-9]*)_"))
       {
         int number = int.Parse(match.Groups[1].Value);
-        if ((number <= 0) || (number >= exprNum))
+        if ((number < 1) || (number >= exprNum))
+        {
+          return true;
+        }
+      }
+      // "previousOut" variables can reference values with all valid
+      // numbers because they refer to the previous execution
+      int numOfExpressions = mTemplates.Count;
+      foreach (Match match in Regex.Matches(text, @"_previousOut([0-9]*)_"))
+      {
+        int number = int.Parse(match.Groups[1].Value);
+        if ((number < 1) || (number > numOfExpressions))
         {
           return true;
         }
       }
       return false;
+    }
+
+    private bool isStringDelimiter(string text, int i)
+    {
+      if (text[i] != '"')
+      {
+        return false;
+      }
+
+      if (i > 0)
+      {
+        switch (text[i - 1])
+        {
+          case '\\':
+            return false;
+          default:
+            break;
+        }
+      }
+      return true;
+    }
+
+    private int skipStringLiteral(string text, int i)
+    {
+      if (isStringDelimiter(text, i))
+      {
+        int maxI = text.Length - 1;
+        do
+        {
+          i++;
+        } while (!isStringDelimiter(text, i) && (i < maxI));
+      }
+      return i;
+    }
+
+    private bool isAssignment(string text, int i)
+    {
+      int maxI = text.Length - 1;
+
+      if (text[i] != '=')
+      {
+        return false;
+      }
+
+      if (i > 0)
+      {
+        switch (text[i - 1])
+        {
+          case '=':
+          case '!':
+          case '>':
+          case '<':
+            return false;
+          default:
+            break;
+        }
+      }
+
+      if (i < maxI)
+      {
+        switch (text[i + 1])
+        {
+          case '=':
+            return false;
+          default:
+            return true;
+        }
+      }
+      return true;
     }
 
     private bool hasAssignment(string text)
@@ -237,35 +311,14 @@ namespace Recomedia_de.Logic.VisuWeb
       {
         return false;   // empty
       }
-      int i = 0;
-      while ((i = text.IndexOf('=', i)) != -1)
+      for ( int i = 0; i <= maxI; i++ )
       {
-        if (i > 0)
+        i = skipStringLiteral(text, i);
+
+        if ( isAssignment(text, i))
         {
-          switch (text[i - 1])
-          {
-            case '=':
-            case '!':
-            case '>':
-            case '<':
-              i++;
-              continue;
-            default:
-              break;
-          }
+          return true;
         }
-        if (i < maxI)
-        {
-          switch (text[i + 1])
-          {
-            case '=':
-              i++;
-              continue;
-            default:
-              return true;
-          }
-        }
-        return true;
       }
       return false;
     }
@@ -302,6 +355,7 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       mError.Value = "";
       initEvalEngine();
+      updatePreviousOutputFields();
       updateVariableFields();
       for (int i = 0; i < mTokensPerTemplate.Count; i++)
       {
@@ -391,44 +445,58 @@ namespace Recomedia_de.Logic.VisuWeb
       var declText = "";
       foreach (var boolInput in mBinInputs)
       {
-        declText += getVariableDecl(boolInput);
+        declText += getVariableDeclaration(boolInput);
       }
       foreach (var intInput in mIntInputs)
       {
-        declText += getVariableDecl(intInput);
+        declText += getVariableDeclaration(intInput);
       }
       foreach (var doubleInput in mNumInputs)
       {
-        declText += getVariableDecl(doubleInput);
+        declText += getVariableDeclaration(doubleInput);
       }
       foreach (var stringInput in mStrInputs)
       {
-        declText += getVariableDecl(stringInput);
+        declText += getVariableDeclaration(stringInput);
       }
       for (int i = 0; i < mOutputs.Count; i++)
       {
-        declText += getOutputDecl(i);
+        declText += getOutputDeclarations(i);
       }
       return declText;
     }
 
-    private string getVariableDecl(ValueObjectBase input)
+    private string getVariableDeclaration(ValueObjectBase input)
     {
       string typeStr = getTypeString(input.PortType);
-      string initStr = input.HasValue ? getInitString(input.PortType, input.Value) : "";
+      System.Diagnostics.Trace.Assert(input.HasValue);
+      string initStr = getInitString(input.PortType, input.Value);
       input.WasSet = false; // Value has been used
       return typeStr + " " + input.Name + initStr + "; ";
     }
 
-    private string getOutputDecl(int i)
+    private string getOutputDeclarations(int i)
     {
       string typeStr = getTypeString(mOutputs[i].PortType);
-      return typeStr + " " + createOutIdentifier(i) + "; ";
+      string declarations = typeStr + " " + createOutIdentifier(i) + "; " +
+                            typeStr + " " + createPreviousOutIdentifier(i);
+      if (PortTypes.String == mOutputs[i].PortType.Name)
+      { // Initialize strings to empty because C# defaults to a null reference
+        declarations += " = \"\"";
+      }
+      declarations += "; ";
+      return declarations;
     }
 
     private string createOutIdentifier(int i)
     {
       string outIdentifier = "_out" + (i + 1).ToString() + "_";
+      return outIdentifier;
+    }
+
+    private string createPreviousOutIdentifier(int i)
+    {
+      string outIdentifier = "_previousOut" + (i + 1).ToString() + "_";
       return outIdentifier;
     }
 
@@ -465,13 +533,25 @@ namespace Recomedia_de.Logic.VisuWeb
       updateField(createOutIdentifier(i), mOutputs[i].Value);
     }
 
+    private void updatePreviousOutputFields()
+    {
+      for (int i = 0; i < mTokensPerTemplate.Count; i++)
+      {
+        updateField(createPreviousOutIdentifier(i), mOutputs[i].Value);
+      }
+    }
+
     private void updateField(string name, object value)
     {
       Tuple<FieldSpec, FieldInfo> field;
       bool found = mFields.TryGetValue(name, out field);
-      if (found && (field != null))
+      if (found)
       {
-        field.Item2.SetValue(mEngine, value);
+        System.Diagnostics.Trace.Assert(field != null);
+        if ( value != null )
+        {
+          field.Item2.SetValue(mEngine, value);
+        }
       }
     }
 
@@ -487,12 +567,6 @@ namespace Recomedia_de.Logic.VisuWeb
         else if (token is ConstStringToken csToken)
         {
           expressionText += csToken.getText();
-        }
-        else
-        {
-          mError.Value += mTemplates[i].Name + ": Invalid token in Execute()" +
-                                                           Environment.NewLine;
-          return "";
         }
       }
       if (expressionText.Length == 0)
@@ -562,14 +636,8 @@ namespace Recomedia_de.Logic.VisuWeb
       switch (type.Name)
       {
         case PortTypes.Number:
-          if (value is Double numValue)
-          {
-            initStr += numValue.ToString(CultureInfo.InvariantCulture);
-          }
-          else
-          {
-            initStr += "Double.NaN";
-          }
+          System.Diagnostics.Trace.Assert(value is Double);
+          initStr += ((Double)value).ToString(CultureInfo.InvariantCulture);
           break;
         case PortTypes.String:
           initStr += "\"" + value.ToString().Replace("\n", "\\n").

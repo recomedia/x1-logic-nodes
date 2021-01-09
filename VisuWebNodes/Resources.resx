@@ -122,7 +122,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="EmptyPlaceholder" xml:space="preserve">
-    <value> is empty. Placeholders must at least specify a (previously defined) {&lt;name&gt;} or a valid type letter prefixed with a colon {:&lt;T&gt;} .  </value>
+    <value> is empty. Placeholders must at least specify a (previously defined) {&lt;name&gt;} or a valid type letter prefixed with a colon {:&lt;T&gt;}.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="EmptyTemplate" xml:space="preserve">
@@ -154,7 +154,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="MappingWrongAssignment" xml:space="preserve">
-    <value> contains an invalid assignment for a text representation. Valid assignments contain exactly one = between value or range (left hand side) and the text (right hand side). </value>
+    <value> contains an invalid assignment for a text representation. Valid assignments contain exactly one equals sign (=) between value or range (left hand side) and the text (right hand side). </value>
     <comment>StringFormatter</comment>
   </data>
   <data name="NoPlaceholder" xml:space="preserve">
@@ -178,7 +178,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderMultipleColon" xml:space="preserve">
-    <value> is misformed. A placeholder can contain no more than one ':', which separates the input name (left hand side) from type and formatting information (right hand side).</value>
+    <value> is misformed. A placeholder can contain no more than one colon (:), which separates the input name (left hand side) from type and formatting information (right hand side).</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderNameNotFound" xml:space="preserve">
@@ -230,7 +230,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderNameInvalid" xml:space="preserve">
-    <value> contains an invalid input name. Valid names start with a letter and optionally continue with letters, digits, blanks (not at the end) or punctuation. The characters :, {, und } cannot be used, because these would be ambiguous with surrounding syntax elements.</value>
+    <value> contains an invalid input name. Valid names start with a letter and can continue with letters, digits, blanks (not at the end) or most special characters. Colons (:) or curly brackets ({ and }) cannot be used.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="ExplicitMappingInvertedRange" xml:space="preserve">
@@ -282,7 +282,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="HasOutOfRangeRef" xml:space="preserve">
-    <value> contains a reference to an output that either doesn't exist or cannot be used here. Only outputs with numbers from 1 to n-1 can be used, where n is the number of the referencing expression.</value>
+    <value> contains a reference to an output that either doesn't exist or cannot be used here. Current output values (_out..._) can only be used from expressions with lower numbers than the referencing expression.</value>
     <comment>ExpressionCalculator</comment>
   </data>
   <data name="HasAssignment" xml:space="preserve">
@@ -318,14 +318,30 @@
     <comment>XmlJsonParser</comment>
   </data>
   <data name="InvalidScaling" xml:space="preserve">
-    <value>is not a valid scaling factor. Scaling factors must use . or , as the decimal separator and cannot use group (thousands) separators.</value>
+    <value> is not a valid scaling factor. Scaling factors must use full stop (.) or comma (,) as the decimal separator and cannot use group (thousands) separators.</value>
     <comment>XmlJsonParser</comment>
   </data>
   <data name="MultiAddNumbers" xml:space="preserve">
     <value>Sum of matching items as numbers</value>
     <comment>XmlJsonParser</comment>
   </data>
+  <data name="MultiMinNumber" xml:space="preserve">
+    <value>Minimum number of matching items</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiMaxNumber" xml:space="preserve">
+    <value>Maximum number of matching items</value>
+    <comment>XmlJsonParser</comment>
+  </data>
   <data name="MultiAddNumbersParam" xml:space="preserve">
+    <value>Scaling factor</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiMinNumberParam" xml:space="preserve">
+    <value>Scaling factor</value>
+    <comment>XmlJsonParser</comment>
+  </data>
+  <data name="MultiMaxNumberParam" xml:space="preserve">
     <value>Scaling factor</value>
     <comment>XmlJsonParser</comment>
   </data>
@@ -348,5 +364,41 @@
   <data name="SelectCode" xml:space="preserve">
     <value>Input coding</value>
     <comment>XmlJsonParser</comment>
+  </data>
+  <data name="SeparatorDecimal" xml:space="preserve">
+    <value>Decimal Separator</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorDecimalTooLong" xml:space="preserve">
+    <value>The decimal separator cannot be longer than one character.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorDecimalTooShort" xml:space="preserve">
+    <value>The decimal separator cannot be empty.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorGroup" xml:space="preserve">
+    <value>Group (Thousands) Separator</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorGroupTooLong" xml:space="preserve">
+    <value>The group separator cannot be longer than one character.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="SeparatorsIdentical" xml:space="preserve">
+    <value>Group and decimal separator cannot be the same.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingNoImplicitTextValues" xml:space="preserve">
+    <value> uses implicit values for text replacements. String placeholders generally can't use implicit replacement values. Use assignments with an equals sign (=) instead.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingNoOriginalTextValue" xml:space="preserve">
+    <value> contains an empty orignal text for a text replacement. The original text must be one character or longer.</value>
+    <comment>StringFormatter</comment>
+  </data>
+  <data name="MappingWrongTextAssignment" xml:space="preserve">
+    <value> contains an invalid assignment for a text replacement. Valid assignments contain exactly one equals sign (=) between the original text (left hand side) and the replacement text (right hand side).</value>
+    <comment>StringFormatter</comment>
   </data>
 </root>

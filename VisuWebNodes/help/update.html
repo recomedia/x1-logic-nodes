@@ -20,8 +20,9 @@
       <h2>Anleitung zum Update von Versionen vor 0.9.x</h2>
       <h3>Einleitung</h3>
       <p>
-        Wer bisher <em>keine</em> Textformatierer-Bausteine mit Versionsnummern
-        vor 0.9.x verwendet hat, benötigt diese Update-Anleitung nicht.
+        Wer bisher <em>nicht</em> den Textformatierer-Baustein in einer
+        Version vor 0.9.x verwendet hat, benötigt diese Update-Anleitung
+        nicht.
       </p>
       <p>
         Die vorliegende Baustein-Version hat durch die Unterstützung von
@@ -68,15 +69,21 @@
           Falls die Formatvorlagen noch die alte Syntax mit \\ als
           Platzhalterbegrenzung verwenden: Im Texteditor an die
           <a href="StringFormatter.html#platzhalter">neue Syntax</a>
-          mit {} anpassen. Dazu im einfachsten Fall
+          mit geschweiften Klammern ({}) anpassen. Dazu im einfachsten
+          Fall
           <ul>
-            <li>\ am Anfang jedes Platzhalters durch {: ersetzen</li>
-            <li>\ am Ende jedes Platzhalters durch } ersetzen</li>
+            <li>
+              Den Rückwärts-Schrägstrich (\) am <em>Anfang</em> jedes
+              Platzhalters durch <b>{:</b> ersetzen</li>
+            <li>
+              Den Rückwärts-Schrägstrich (\) am <em>Ende</em> jedes
+              Platzhalters durch <b>}</b> ersetzen
+            </li>
           </ul>
           Die neue Syntax erlaubt, jedem Eingang einen sprechenden Namen
-          zu geben. Dieser steht ggf. zwischen { und : am Anfang des
-          Platzhalters. &mdash;
-          Beispiel: Aus (alt) <b>\P1\</b> wird (neu) <b>{Stellgröße:P1}</b>
+          zu geben. Dieser steht ggf. zwischen der öffnenden geschweiften
+          Klammer ({) und dem Doppelpunkt (:) am Anfang des Platzhalters.<br />
+          &nbsp;&nbsp;Beispiel: Aus (alt) <b>\P1\</b> wird (neu) <b>{Stellgröße:P1}</b>
         </li>
       </ul>
       <h4>Projektkopie aktualisieren</h4>

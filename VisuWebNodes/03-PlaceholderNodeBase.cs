@@ -42,6 +42,21 @@ namespace Recomedia_de.Logic.VisuWeb
     private const int MAX_INPUTS = 50;
 
     /// <summary>
+    /// The group and decimal separator to use when formatting numbers as text can
+    /// be customized by derived classes.
+    /// </summary>
+    private string mGroupSeparator = "'";
+    protected virtual string getGroupSeparator()
+    {
+      return mGroupSeparator;
+    }
+    private string mDecimalSeparator = ".";
+    protected virtual string getDecimalSeparator()
+    {
+      return mDecimalSeparator;
+    }
+
+    /// <summary>
     /// The TypeService is saved to allow updating after the constructor is finished.
     /// </summary>
     protected readonly ITypeService mTypeService;
@@ -59,7 +74,7 @@ namespace Recomedia_de.Logic.VisuWeb
       // Initialize one template parameter, but allow more of them
       mTemplateCount = mTypeService.CreateInt(PortTypes.Integer, TEMPLATE_PREFIX + "Count", 1);
       mTemplateCount.MinValue =  1;
-      mTemplateCount.MaxValue = 10;
+      mTemplateCount.MaxValue = 50;
       mTemplates = new List<StringValueObject>();
       ListHelpers.ConnectListToCounter(mTemplates, mTemplateCount,
           mTypeService.GetValueObjectCreator(PortTypes.String, TEMPLATE_PREFIX + " "),
@@ -115,13 +130,13 @@ namespace Recomedia_de.Logic.VisuWeb
     public IntValueObject mIntInputCount { get; private set; }
     public IntValueObject mNumInputCount { get; private set; }
     public IntValueObject mStrInputCount { get; private set; }
-    [Input(DisplayOrder = 96, InitOrder = 96, IsDefaultShown = true)]
+    [Input(DisplayOrder = 30, InitOrder = 30, IsDefaultShown = true)]
     public IList<BoolValueObject> mBinInputs { get; private set; }
-    [Input(DisplayOrder = 97, InitOrder = 97, IsDefaultShown = true)]
+    [Input(DisplayOrder = 31, InitOrder = 33, IsDefaultShown = true)]
     public IList<IntValueObject> mIntInputs { get; private set; }
-    [Input(DisplayOrder = 98, InitOrder = 98, IsDefaultShown = true)]
+    [Input(DisplayOrder = 32, InitOrder = 33, IsDefaultShown = true)]
     public IList<DoubleValueObject> mNumInputs { get; private set; }
-    [Input(DisplayOrder = 99, InitOrder = 99, IsDefaultShown = true)]
+    [Input(DisplayOrder = 33, InitOrder = 33, IsDefaultShown = true)]
     public IList<StringValueObject> mStrInputs { get; private set; }
 
     /// <summary>
@@ -179,9 +194,17 @@ namespace Recomedia_de.Logic.VisuWeb
     private void updateTemplate(object sender = null,
                  ValueChangedEventArgs evArgs = null)
     {
+      // Validate the separators first to prevent throwing exceptions later
+      // in System.Globalization
+      ValidationResult result = validateSeparators("en");
+      if (result.HasError)
+      {
+        return;
+      }
+
       // Even though only one template has changed we must re-evaluate all
-      // templates, because these depend on each other because of their
-      // placeholder re-use.
+      // templates, because these depend on each other due to placeholder
+      // re -use.
       TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
       ttf.restart();
 
@@ -265,6 +288,12 @@ namespace Recomedia_de.Logic.VisuWeb
     /// 
     public override sealed ValidationResult Validate(string language)
     {
+      ValidationResult result = validateSeparators(language);
+      if (result.HasError)
+      {
+        return result;
+      }
+
       TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
       ttf.restart();
 
@@ -275,15 +304,53 @@ namespace Recomedia_de.Logic.VisuWeb
         int numCountDummy = 0;
         int strCountDummy = 0;
         List<TokenBase> localTokens = new List<TokenBase>(10);
-        ValidationResult result = validateInternal(template, ref localTokens,
-                                          ref binCountDummy, ref intCountDummy,
-                                          ref numCountDummy, ref strCountDummy, language);
+        result = validateInternal(template, ref localTokens,
+                                  ref binCountDummy, ref intCountDummy,
+                                  ref numCountDummy, ref strCountDummy, language);
         if (result.HasError)
         {
           return result;
         }
       }
       return base.Validate(language);
+    }
+
+    private ValidationResult validateSeparators(string language)
+    {
+      // Validate separators
+      if (getGroupSeparator().Length > 1)
+      {
+        return new ValidationResult
+        {
+          HasError = true,
+          Message = Localize(language, "SeparatorGroupTooLong")
+        };
+      }
+      if (getDecimalSeparator().Length > 1)
+      {
+        return new ValidationResult
+        {
+          HasError = true,
+          Message = Localize(language, "SeparatorDecimalTooLong")
+        };
+      }
+      if (getDecimalSeparator().Length < 1)
+      {
+        return new ValidationResult
+        {
+          HasError = true,
+          Message = Localize(language, "SeparatorDecimalTooShort")
+        };
+      }
+      if (getDecimalSeparator() == getGroupSeparator())
+      {
+        return new ValidationResult
+        {
+          HasError = true,
+          Message = Localize(language, "SeparatorsIdentical")
+        };
+      }
+      return new ValidationResult { HasError = false };
     }
 
     private ValidationResult validateInternal(StringValueObject template,
@@ -314,8 +381,12 @@ namespace Recomedia_de.Logic.VisuWeb
           templateTokens.Add(ttf.createConstStringToken(
             template.Value.Substring(curPos, curMatch.Index - curPos)));
           // placeholder string between delimiters
-          templateTokens.Add(ttf.createPlaceholderToken(
-            template.Value.Substring(curMatch.Index + 1, curMatch.Length - 2)));
+          templateTokens.Add(
+            ttf.createPlaceholderToken(
+              template.Value.Substring(curMatch.Index + 1, curMatch.Length - 2),
+              getGroupSeparator(), getDecimalSeparator()
+            )
+          );
           curPos = curMatch.Index + curMatch.Length;
         }
         else

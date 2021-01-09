@@ -123,7 +123,7 @@
             <h3>Beschreibung</h3>
           </th>
         </tr>
-        <tr>
+        <tr id="mindiff">
           <td>
             <p>Minimale Differenz</p>
           </td>
@@ -141,6 +141,31 @@
             </p>
           </td>
         </tr>
+        <tr>
+          <td>
+            <p>Minimale Differenz für ansteigende Werte</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Dieser Parameter ist standardmäßig nicht sichtbar und mit -1.0 vorbelegt.
+              Dadurch wird er nicht beachtet. Die minimale Differenz ist für steigende
+              wie fallende Werte durch den Parameter <a href="#mindiff">Minimale
+              Differenz</a> festgelegt.
+            </p>
+            <p>
+              Trägt man hier einen Wert von 0.0 oder größer ein, dann legt dieser die
+              minimale Differenz für <em>ansteigende</em> Telegrammwerte fest. Der
+              Parameter <a href="#mindiff">Minimale Differenz</a> wird dann nur noch
+              für <em>fallende</em> Telegrammwerte verwendet.
+            </p>
+          </td>
+        </tr>
       </table>
       <h2>Beispiel</h2>
       <p>
@@ -153,6 +178,12 @@
       </p>
       <p>
         <img src="SendByDifferenceExample.png" alt="" class="example" />
+      </p>
+      <p>
+        Wenn beim Auf- und Abregeln unterschiedliche Schwellen gelten sollen,
+        so kann dazu der Parameter "Minimale Differenz für ansteigende Werte"
+        sichtbar geschaltet und festgelegt werden. Der Parameter "Minimale
+        Differenz" gilt dann nur noch für fallende Werte.
       </p>
     </div>
   </section>

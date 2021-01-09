@@ -162,5 +162,31 @@ namespace Recomedia_de.Logic.Generic.Test
         Assert.AreEqual(new DateTime(2019, 1, i + 1, 3 * i, 0, 0), node.mOutput.Value);
       }
     }
+
+    [Test]
+    public void TestSelectOutOfRange()
+    {
+      node.mInputCount.Value = 3;
+
+      // Select existing input and check output
+      node.mSelectIndexInput.Value = 1;
+      Assert.IsFalse(node.mOutput.HasValue); // no output value
+
+      // Select non-existent input and check output
+      int[] nonExInputs = { -1, 3 };
+      foreach ( var input in nonExInputs )
+      {
+        node.mSelectIndexInput.Value = input;
+        Assert.IsFalse(node.mOutput.HasValue); // no output value
+
+        // Send values to each input and check again
+        for (int i = 0; i < node.mInputs.Count; i++)
+        {
+          node.mInputs[i].Value = 3 * i;
+          Assert.IsFalse(node.mOutput.HasValue); // no output value
+        }
+      }
+    }
+
   }
 }

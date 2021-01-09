@@ -197,33 +197,118 @@ namespace Recomedia_de.Logic.VisuWeb
     }
   }
 
-  /* 
-   * Anwendungsfall: Berechnung des Taupunktes aus Temperatur und Luftfeuchtigkeit
-   * 
-   * Eingabegrößen:
-   *   rF = relative Luftfeuchte
-   *   T  = Temperatur (in °C wenn nicht anders angegeben)
-   * 
-   * Parameter:
-   *   a = 7.5, b = 237.3 für T >= 0
-   *   a = 7.6, b = 240.7 für T < 0 über Wasser (Taupunkt)
-   *   a = 9.5, b = 265.5 für T < 0 über Eis (Frostpunkt)
-   *   R  = 8314.3 J/(kmol*K) (universelle Gaskonstante)
-   *   mw = 18.016 kg/kmol    (Molekulargewicht des Wasserdampfes)
-   * 
-   * Näherungsformeln basierend auf der Magnusformel:
-   *   absoluteFeuchte[g/m^3](rF,T) = 10^5 * mw/R * DD(rF,T) / TK(T)
-   *   Taupunkttemperatur[°C](rF,T) = b*v(rF,T)/(a-v(rF,T)) = 1 / ( (a/(b*v(rF,T))) - (1/b) )
-   * wobei:
-   *   Sättigungsdampfdruck[hPa] SDD(T)   = 6.1078 * 10^((a*T)/(b+T))
-   *   Dampfdruck[hPa]           DD(rF,T) = rF/100 * SDD(T)
-   *   absolute Temperatur       TK(T)    = T + 273.15
-   *   v(rF,T) = log10(DD(rF,T)/6.1078)
-   * 
-   * Quelle: http://www.wetterochs.de/wetter/feuchte.html
-   */
   public static class Hlk
   {
+    /*
+     * Berechnung der Vorlauftemperatur eines Heizkreises aus der gedämpften Außen-
+     * temperatur
+     *
+     * Alle Temperaturwerte in °C
+     * 
+     * Eingabegröße:
+     *   TaAvg = gedämpfte (zeitlich gemittelte) Außentemperatur
+     *
+     * Parameter:
+     *   Tg    = Heizgrenze (die Ta, bei der gerade noch nicht geheizt werden muss)
+     *   TaMin = minimale Außentemperatur, für die die Heizungsanlage ausgelegt ist
+     *   TvMax = maximale Vorlauftemperatur, für die die Heizungsanlage ausgelegt ist,
+     *           um bei Ta == TaMin die Raumtemperatur Tsoll gerade noch zu erreichen
+     *   k     = Heizkörperexponent; bestimmt die Überhöhung der Heizkurve im unteren
+     *           und mittleren Bereich. Diese kompensiert die geringere Wärmeabgabe
+     *           bei niedrigen Vorlauftemperaturen. Sinnvolle Werte liegen im Bereich
+     *           1 .. 1,5.
+     *   Tsoll = Sollwert für die Raumtemperatur (stellt sich bei Ta == Tg ohne
+     *           Heizung ein und ist gleichzeitig der Fußpunkt der Vorlauftemperatur)
+     *               
+     * Grundeinstellung der Parameter:
+     *   * Tg je nach Alter und Energiestandard des Gebäudes einstellen:
+     *         vor 1977:            16..18
+     *         1977-1995:           14..16
+     *         nach 1995:           12..15
+     *         Niedrigenergiehaus:  11..13
+     *         Passivhaus:           9..11
+     *   * TvMax und TaMin gemäß den Auslegungsdaten der Heizanlage einstellen
+     *   * k je nach Art der Heizanlage gemäß folgender Tabelle wählen:
+     *         Konvektoren:         1,33
+     *         Wandheizung:         1,3
+     *         Fußbodenheizung:     1,1
+     *         Lineare Heiz"kurve": 1,0   
+     *   * TSoll auf gewünschte Raumtemperatur (des wärmsten Raums) einstellen
+     *               
+     * Experimentelle Optimierung der Parameter:
+     *   * Wenn bei milden Außentemperaturen die Heizung anspringt ohne dass die Raum-
+     *     temperatur Tsoll unterschritten hat --> Tg senken
+     *   * Wenn bei milden Außentemperaturen die Heizung nicht läuft obwohl die Raum-
+     *     temperatur Tsoll unterschreitet --> Tg anheben
+     *   * Wenn bei milden Außentemperaturen (wenige °C unter Tg) die Räume zu warm
+     *     werden (oder die Raumthermostaten stark abregeln) --> Tsoll senken
+     *   * Wenn bei milden Außentemperaturen (wenige °C unter Tg) die Räume nicht aus-
+     *     reichend warm werden --> Tsoll erhöhen
+     *   * Wenn bei kalten Außentemperaturen (unter -5°C) die Räume zu warm werden
+     *     (oder die Raumthermostaten stark abregeln) --> TaMin senken
+     *   * Wenn bei kalten Außentemperaturen (unter -5°C) die Räume nicht ausreichend
+     *     warm werden --> TaMin erhöhen
+     *
+     * Feinoptimierung für mittlere Außentemperaturen (5°C .. 10°C) erst dann, wenn
+     * milde und kalte Temperaturen richtig eingestellt sind:
+     *   * Wenn bei mittleren Außentemperaturen die Räume nicht ausreichend warm werden
+     *     --> k erhöhen
+     *   * Wenn bei mittleren Außentemperaturen die Räume zu warm werden (oder die Raum-
+     *     thermostaten stark abregeln) --> k senken
+     *
+     * Verwendete Formel:
+     *   Tv = TSoll + (TvMax - Tsoll) * ((Tg - TaAvg) / (Tg - TaMin))^(1/k)
+     *
+     *   Für k != 1 und TaAvg > Tg liefert diese kein Ergebnis. In diesem Fall muss
+     *   ohnehin nicht geheizt werden, daher wird 0 zurück gegeben. Für TaAvg < TaMin
+     *   wird TvMax zurück gegeben.
+     */
+    public static double HeatingCurve(double tempOutAvg,
+      double tempHeatingLimit, double tempOutMin,
+      double tempInTarget, double tempFlowMax, double heatingCoefficient)
+    {
+      if (tempOutAvg >= tempHeatingLimit)
+      {
+        return 0;             // no heating when outside temperature is at or above tempHeatingLimit
+      }
+      else if (tempOutAvg <= tempOutMin)
+      {
+        return tempFlowMax;   // maximum heating at or below lowest expected outside temperature
+      }
+      else
+      {
+        double tempFlow = tempInTarget +
+          (tempFlowMax - tempInTarget) *
+          Math.Pow((tempHeatingLimit - tempOutAvg) / (tempHeatingLimit - tempOutMin), 1 / heatingCoefficient);
+        return tempFlow;
+      }
+    }
+
+    /* 
+     * Berechnung des Taupunktes aus Temperatur und Luftfeuchtigkeit
+     * 
+     * Eingabegrößen:
+     *   rF = relative Luftfeuchte
+     *   T  = Temperatur (in °C wenn nicht anders angegeben)
+     * 
+     * Parameter:
+     *   a = 7.5, b = 237.3 für T >= 0
+     *   a = 7.6, b = 240.7 für T < 0 über Wasser (Taupunkt)
+     *   a = 9.5, b = 265.5 für T < 0 über Eis (Frostpunkt)
+     *   R  = 8314.3 J/(kmol*K) (universelle Gaskonstante)
+     *   mw = 18.016 kg/kmol    (Molekulargewicht des Wasserdampfes)
+     * 
+     * Näherungsformeln basierend auf der Magnusformel:
+     *   absoluteFeuchte[g/m^3](rF,T) = 10^5 * mw/R * DD(rF,T) / TK(T)
+     *   Taupunkttemperatur[°C](rF,T) = b*v(rF,T)/(a-v(rF,T)) = 1 / ( (a/(b*v(rF,T))) - (1/b) )
+     * wobei:
+     *   Sättigungsdampfdruck[hPa] SDD(T)   = 6.1078 * 10^((a*T)/(b+T))
+     *   Dampfdruck[hPa]           DD(rF,T) = rF/100 * SDD(T)
+     *   absolute Temperatur       TK(T)    = T + 273.15
+     *   v(rF,T) = log10(DD(rF,T)/6.1078)
+     * 
+     * Quelle: http://www.wetterochs.de/wetter/feuchte.html
+     */
     private static double getTk(double temp)
     {
       return temp + 273.15;
@@ -246,7 +331,7 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       return relHum / 100 * getSdd(temp);
     }
-    private static double getV(double temp , double relHum)
+    private static double getV(double temp, double relHum)
     {
       return Math.Log10(getDd(temp, relHum) / 6.1078);
     }

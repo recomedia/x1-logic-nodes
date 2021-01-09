@@ -70,7 +70,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  is empty. Placeholders must at least specify a (previously defined) {&lt;name&gt;} or a valid type letter prefixed with a colon {:&lt;T&gt;} .   ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  is empty. Placeholders must at least specify a (previously defined) {&lt;name&gt;} or a valid type letter prefixed with a colon {:&lt;T&gt;}. ähnelt.
         /// </summary>
         internal static string EmptyPlaceholder {
             get {
@@ -205,7 +205,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  contains a reference to an output that either doesn&apos;t exist or cannot be used here. Only outputs with numbers from 1 to n-1 can be used, where n is the number of the referencing expression. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains a reference to an output that either doesn&apos;t exist or cannot be used here. Current output values (_out..._) can only be used from expressions with lower numbers than the referencing expression. ähnelt.
         /// </summary>
         internal static string HasOutOfRangeRef {
             get {
@@ -232,7 +232,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die is not a valid scaling factor. Scaling factors must use . or , as the decimal separator and cannot use group (thousands) separators. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  is not a valid scaling factor. Scaling factors must use full stop (.) or comma (,) as the decimal separator and cannot use group (thousands) separators. ähnelt.
         /// </summary>
         internal static string InvalidScaling {
             get {
@@ -259,6 +259,15 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  uses implicit values for text replacements. String placeholders generally can&apos;t use implicit replacement values. Use assignments with an equals sign (=) instead. ähnelt.
+        /// </summary>
+        internal static string MappingNoImplicitTextValues {
+            get {
+                return ResourceManager.GetString("MappingNoImplicitTextValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die  uses implicit values for text representations. Floating point number representations generally can&apos;t use implicit values. Integer representations don&apos;t support mixing implicit and explicit values. ähnelt.
         /// </summary>
         internal static string MappingNoImplicitValues {
@@ -268,11 +277,29 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  contains an invalid assignment for a text representation. Valid assignments contain exactly one = between value or range (left hand side) and the text (right hand side).  ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains an empty orignal text for a text replacement. The original text must be one character or longer. ähnelt.
+        /// </summary>
+        internal static string MappingNoOriginalTextValue {
+            get {
+                return ResourceManager.GetString("MappingNoOriginalTextValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains an invalid assignment for a text representation. Valid assignments contain exactly one equals sign (=) between value or range (left hand side) and the text (right hand side).  ähnelt.
         /// </summary>
         internal static string MappingWrongAssignment {
             get {
                 return ResourceManager.GetString("MappingWrongAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains an invalid assignment for a text replacement. Valid assignments contain exactly one equals sign (=) between the original text (left hand side) and the replacement text (right hand side). ähnelt.
+        /// </summary>
+        internal static string MappingWrongTextAssignment {
+            get {
+                return ResourceManager.GetString("MappingWrongTextAssignment", resourceCulture);
             }
         }
         
@@ -309,6 +336,42 @@ namespace Recomedia_de.Logic.VisuWeb {
         internal static string MultiConcatTextsParam {
             get {
                 return ResourceManager.GetString("MultiConcatTextsParam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of matching items ähnelt.
+        /// </summary>
+        internal static string MultiMaxNumber {
+            get {
+                return ResourceManager.GetString("MultiMaxNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Scaling factor ähnelt.
+        /// </summary>
+        internal static string MultiMaxNumberParam {
+            get {
+                return ResourceManager.GetString("MultiMaxNumberParam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minimum number of matching items ähnelt.
+        /// </summary>
+        internal static string MultiMinNumber {
+            get {
+                return ResourceManager.GetString("MultiMinNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Scaling factor ähnelt.
+        /// </summary>
+        internal static string MultiMinNumberParam {
+            get {
+                return ResourceManager.GetString("MultiMinNumberParam", resourceCulture);
             }
         }
         
@@ -421,7 +484,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  is misformed. A placeholder can contain no more than one &apos;:&apos;, which separates the input name (left hand side) from type and formatting information (right hand side). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  is misformed. A placeholder can contain no more than one colon (:), which separates the input name (left hand side) from type and formatting information (right hand side). ähnelt.
         /// </summary>
         internal static string PlaceholderMultipleColon {
             get {
@@ -430,7 +493,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  contains an invalid input name. Valid names start with a letter and optionally continue with letters, digits, blanks (not at the end) or punctuation. The characters :, {, und } cannot be used, because these would be ambiguous with surrounding syntax elements. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains an invalid input name. Valid names start with a letter and can continue with letters, digits, blanks (not at the end) or most special characters. Colons (:) or curly brackets ({ and }) cannot be used. ähnelt.
         /// </summary>
         internal static string PlaceholderNameInvalid {
             get {
@@ -507,6 +570,60 @@ namespace Recomedia_de.Logic.VisuWeb {
         internal static string SelectOperation {
             get {
                 return ResourceManager.GetString("SelectOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decimal Separator ähnelt.
+        /// </summary>
+        internal static string SeparatorDecimal {
+            get {
+                return ResourceManager.GetString("SeparatorDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The decimal separator cannot be longer than one character. ähnelt.
+        /// </summary>
+        internal static string SeparatorDecimalTooLong {
+            get {
+                return ResourceManager.GetString("SeparatorDecimalTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The decimal separator cannot be empty. ähnelt.
+        /// </summary>
+        internal static string SeparatorDecimalTooShort {
+            get {
+                return ResourceManager.GetString("SeparatorDecimalTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Group (Thousands) Separator ähnelt.
+        /// </summary>
+        internal static string SeparatorGroup {
+            get {
+                return ResourceManager.GetString("SeparatorGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The group separator cannot be longer than one character. ähnelt.
+        /// </summary>
+        internal static string SeparatorGroupTooLong {
+            get {
+                return ResourceManager.GetString("SeparatorGroupTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Group and decimal separator cannot be the same. ähnelt.
+        /// </summary>
+        internal static string SeparatorsIdentical {
+            get {
+                return ResourceManager.GetString("SeparatorsIdentical", resourceCulture);
             }
         }
         

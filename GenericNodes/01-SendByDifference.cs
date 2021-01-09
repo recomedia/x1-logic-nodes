@@ -32,11 +32,16 @@ namespace Recomedia_de.Logic.Generic
       mInput = typeService.CreateDouble(PortTypes.Number, "Input");
       mOutput = typeService.CreateDouble(PortTypes.Number, "Output");
 
-      // Initialize MinimumDifference parameter with a default of 2.0,
+      // Initialize MinimumDifference parameter with a default of 1.0,
       // and restrict to positive values
       mMinimumDifference = typeService.CreateDouble(PortTypes.Number,
-                                           "MinimumDifference", 1.0);
+                                            "MinimumDifference", 1.0);
       mMinimumDifference.MinValue = 0.0;
+      // Initialize MinimumDifferenceUpwards parameter with default -1 (unused)
+      // (such that it remains unused), and restrict to positive values
+      mMinUpwardsDifference = typeService.CreateDouble(PortTypes.Number,
+                                       "MinimumDifferenceUpwards", -1.0);
+      mMinUpwardsDifference.MinValue = -1.0;
     }
 
     /// <summary>
@@ -46,13 +51,15 @@ namespace Recomedia_de.Logic.Generic
     public DoubleValueObject mInput { get; private set; }
 
     /// <summary>
-    /// Minimum difference to discard input values.
+    /// Minimum difference(s) to discard input values.
     /// </summary>
     [Parameter(DisplayOrder = 2, IsDefaultShown = true)]
     public DoubleValueObject mMinimumDifference { get; private set; }
+    [Parameter(DisplayOrder = 3, IsDefaultShown = false, IsRequired = false)]
+    public DoubleValueObject mMinUpwardsDifference { get; private set; }
 
     /// <summary>
-    /// The filtered input value.
+    /// The output representing the filtered input value.
     /// </summary>
     [Output(DisplayOrder = 1, IsRequired = true)]
     public DoubleValueObject mOutput { get; private set; }
@@ -64,10 +71,23 @@ namespace Recomedia_de.Logic.Generic
     {
       if ( mInput.WasSet && mInput.HasValue )
       {
-        if ( (!mOutput.HasValue) ||     // We have no output value at all yet, or ...
-             (System.Math.Abs(mInput.Value - mOutput.Value) >= mMinimumDifference.Value) )
-        {                               // ... the input value has changed significantly
-          mOutput.Value = mInput.Value; // ==> we have to send the new value
+        if (mOutput.HasValue && mMinimumDifference.HasValue)
+        {
+          double minDownwardsDifference = mMinimumDifference.Value;
+          bool isMinUpwardsDifferenceValid = mMinUpwardsDifference.HasValue &&
+                                             (mMinUpwardsDifference.Value >= 0.0);
+          double minUpwardsDifference = isMinUpwardsDifferenceValid ?
+            mMinUpwardsDifference.Value : mMinimumDifference.Value;
+          double actualDifference = mInput.Value - mOutput.Value;
+          if ( actualDifference >= minUpwardsDifference ||
+               actualDifference <= -minDownwardsDifference )
+          { // The input value has changed significantly, so send the new value
+            mOutput.Value = mInput.Value;
+          }
+        }
+        else
+        { // send first value, or assume minimum difference is 0.0
+          mOutput.Value = mInput.Value;
         }
       }
     }

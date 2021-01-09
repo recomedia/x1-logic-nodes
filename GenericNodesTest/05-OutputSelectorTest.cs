@@ -222,9 +222,41 @@ namespace Recomedia_de.Logic.Generic.Test
       node.mInput.Value = -13;
       Assert.AreEqual(-7.5, node.mOutputs[0].Value);
 
-      // Select output, expect no change
+      // De-select output in a different way, expect no change
+      node.mSelectIndexInput.Value = -2;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+
+      // Send yet another two input values, expect no change
+      node.mInput.Value = 10.5;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+      node.mInput.Value = -15;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+
+      // De-select output in yet another way, expect no change
+      node.mSelectIndexInput.Value = 1;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+
+      // Send yet another two input values, expect no change
+      node.mInput.Value = 11.5;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+      node.mInput.Value = -17;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+
+      // De-select output still differently, expect no change
+      node.mSelectIndexInput.Value = 333;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+
+      // Send yet another two input values, expect no change
+      node.mInput.Value = 12.5;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+      node.mInput.Value = -19;
+      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+
+      // Select output again, expect no change before input is set again
       node.mSelectIndexInput.Value = 0;
       Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+      node.mInput.Value = -6.5;
+      Assert.AreEqual(-6.5, node.mOutputs[0].Value);
 
       // Reconfigure to re-send upon select and send an idle value upon
       //  de-select. With that, repeat all the same actions.
@@ -239,7 +271,7 @@ namespace Recomedia_de.Logic.Generic.Test
 
       // Select output, expect last value before de-select to be resent
       node.mSelectIndexInput.Value = 0;
-      Assert.AreEqual(-7.5, node.mOutputs[0].Value);
+      Assert.AreEqual(-6.5, node.mOutputs[0].Value);
 
       // Send input value, expect it to be forwarded
       node.mInput.Value = 5;

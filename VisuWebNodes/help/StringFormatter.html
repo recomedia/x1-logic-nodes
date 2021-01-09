@@ -17,9 +17,8 @@
         <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
         &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
       </div>
-      <h1><img src="../icons/StringFormatterNode.png" alt="" />&nbsp;
-      Textformatierer</h1>
-      <h2>ACHTUNG &mdash; Neue Versionen sind inkompatibel zu Versionen vor 0.9.x</h2>
+      <h1><img src="../icons/StringFormatterNode.png" alt="" />&nbsp;Textformatierer</h1>
+      <h2>ACHTUNG &ndash; Neue Versionen sind inkompatibel zu Versionen vor 0.9.x</h2>
       <p>
         Benutzer, die bisher eine Version vor 0.9.x verwendet haben, müssen
         unbedingt die <a href="update.html">Update-Anleitung</a> beachten!
@@ -53,22 +52,23 @@
           und einstellbarer Genauigkeit &ndash; wahlweise auch als Prozentwert
           &ndash; ausgegeben werden
         </li>
-        <li>Texte (String) werden unverändert ausgegeben</li>
+        <li>Texte (String) werden unverändert oder mit Textersetzungen ausgegeben</li>
       </ul>
       <p>
-        Bei allen Zahlenwerten lassen sich Werte oder Wertebereiche definieren,
+        Bei Zahlenwerten aller Typen lassen sich Werte oder Wertebereiche definieren,
         die als Textbausteine anstelle der Zahldarstellung ausgegeben werden
         sollen.
       </p>
       <h2 id="eingaenge">Eingänge</h2>
       <p>
-        Solange keine gültige <a href="#parameter">Formatvorlage</a> festgelegt wurde,
-        hat der Baustein keine Eingänge. Eingänge werden nur durch gültige Platzhalter
-        in den Formatvorlagen angelegt. Ihre Reihenfolge ergibt sich für jeden Porttyp
-        aus der Reihenfolge der entsprechenden Platzhalter in den Formatvorlagen. In
-        der <span class="manhyphens">Tabelle</span> sind die automatisch vergebenen
-        Eingangsnamen genannt. Diese werden verwendet, soweit Platzhalter keine
-        benutzerdefinierten Namen <span class="manhyphens">enthalten</span>.
+        Solange keine gültige <a href="#parameter">Formatvorlage</a>(n) festgelegt wurde(n),
+        hat der Baustein keine Eingänge. <b><i>Eingänge werden nur durch gültige Platzhalter
+        in den Formatvorlagen angelegt.</b></i> Ihre Reihenfolge ergibt sich &ndash; für
+        jeden Porttyp getrennt &ndash; aus der Reihenfolge der entsprechenden Platzhalter
+        in den <span class="manhyphens">Formatvorlagen</span>. In der Tabelle sind die
+        automatisch vergebenen Eingangsnamen genannt. Diese werden verwendet, soweit
+        Platzhalter keine <span class="manhyphens">benutzerdefinierten</span> Namen
+        enthalten.
       </p>
       <table class="Tabelle_Logicnode" cellspacing="0">
         <colgroup>
@@ -140,7 +140,7 @@
           </td>
         </tr>
       </table>
-      <h2>Ausgänge</h2>
+      <h2 id="ausgaenge">Ausgänge</h2>
       <table class="Tabelle_Logicnode" cellspacing="0">
         <colgroup>
           <col width="150" />
@@ -173,12 +173,22 @@
               Nicht empfangene Eingangswerte werden als ? dargestellt.
             </p>
             <p>
-              Hinweis:<br />
-              KNX-Datenpunkte vom Typ DPT 16 können maximal 14
-              8-Bit-ASCII-Zeichen enthalten. Text-Datenpunkte
-              innerhalb des L1/X1 können auch Unicode-Zeichen
-              verwenden und mehrere Kilobytes groß sein.
+              Hinweise:
             </p>
+            <ul>
+              <li>
+                Gruppenadress-Datenpunkte vom Typ DPT 16 dürfen maximal 14
+                7-Bit-ASCII- oder 8-Bit-ISO-8859-1-Zeichen enthalten.
+                Variablen-Datenpunkte vom Typ Text, die nur innerhalb des
+                L1/X1 verwendet werden, können mehrere Kilobytes groß sein
+                und auch Unicode-Zeichen verwenden.
+              </li>
+              <li>
+                Nicht alle Visualisierungs-Endgeräte unterstützen
+                Unicode-Zeichen. Man muss also im Zweifelsfall
+                ausprobieren, was funktioniert.
+              </li>
+            </ul>
           </td>
         </tr>
       </table>
@@ -217,7 +227,7 @@
           <td>
             <p>
               Dieser Parameter legt die Anzahl der Ausgänge des Bausteins im
-              Bereich 1..10 fest. Da jeder Ausgang seine eigene Formatvorlage
+              Bereich 1..50 fest. Da jeder Ausgang seine eigene Formatvorlage
               hat, legt dies auch die Anzahl der Formatvorlagen fest.
             </p>
           </td>
@@ -240,6 +250,121 @@
               nächsten Kapitel sind die möglichen Platzhalter detailliert
               beschrieben.
             </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Dezimaltrennzeichen</p>
+          </td>
+          <td>
+            <p>String</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Das hier eingegebene Zeichen wird ggf. verwendet, um den
+              ganzzahlingen Anteil von den Nachkommastellen einer
+              Fließkommazahl zu trennen. Das Eingabefeld muss genau ein
+              Zeichen enthalten.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                In der Regel sollen nur die Zeichen Punkt (<b>.</b>) oder
+                Komma (<b>,</b>) verwendet werden. Gira verwendet in den
+                Original-Visualisierungskacheln den Punkt (<b>.</b>).
+                Daher ist der Punkt (<b>.</b>) auch hier die Vorgabe.
+              </li>
+              <li>
+                Unicode Zeichen sind &ndash; mit den bereits in den
+                <a href="#ausgaenge">Hinweisen zu den Ausgängen</a>
+                genannten Einschränkungen &ndash; technisch möglich
+                (aber nicht empfehlenswert).
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Gruppentrennzeichen</p>
+          </td>
+          <td>
+            <p>String</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Das hier eingegebene Zeichen wird ggf. verwendet, um
+              die Ziffern großer Fließkommazahlen in Dreiergruppen
+              zu formatieren. Dies dient der besseren Lesbarkeit.
+              Es darf höchstens ein Zeichen &ndash; und nicht das
+              Dezimaltrennzeichen &ndash; angegeben werden.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                Um Verwechslungen zu vermeiden, sollten Punkt (<b>.</b>)
+                und Komma (<b>,</b>) <em>generell nicht</em> verwendet
+                werden. Unter den sonstigen üblichen ASCII-Zeichen ist
+                der Hochstrich (<b>'</b>, ASCII-Code 39) das schmalste.
+                Daher ist er die Vorgabe in diesem Feld.<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beispiel: 12'345'678
+              </li>
+              <li>
+                Unicodezeichen sind &ndash; mit den bereits in den
+                <a href="#ausgaenge">Hinweisen zu den Ausgängen</a>
+                genannten Einschränkungen &ndash; möglich. Besonders
+                bieten sich die folgenden Unicode-Zeichen an:
+                <ul>
+                  <li>
+                    schmales geschütztes Leerzeichen, Unicode U+202F<br />
+                    Beispiel: 12 345 678
+                  </li>
+                  <li>
+                    Sechstelgeviert, Unicode U+2006<br />
+                    Beispiel: 12 345 678
+                  </li>
+                  <li>
+                    Haarspatium, Unicode U+200A<br />
+                    Beispiel: 12 345 678
+                  </li>
+                  <li>
+                    Apostroph, einfaches Hochkomma, Unicode U+2019<br />
+                    Beispiel: 12’345’678
+                  </li>
+                  <li>
+                    Hochpunkt, Unicode U+02D9<br />
+                    Beispiel: 12˙345˙678
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Außer dem Hochstrich sind die folgenden universell verwendbaren
+                Zeichen üblich und empfehlenswert:
+                <ul>
+                  <li>
+                    Gravis, Akzent, ASCII-Code 96<br />
+                    Beispiel: 12`345`678
+                  </li>
+                  <li>
+                    Leerzeichen, ASCII-Code 32<br />
+                    Beispiel: 12 345 678
+                  </li>
+                  <li>
+                    geschütztes Leerzeichen, ISO-8859-1-Code 160<br />
+                    Beispiel: 12 345 678
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </td>
         </tr>
       </table>
@@ -283,12 +408,11 @@
         <a href="#eingaenge">Tabelle "Eingänge" oben</a>).
       </p>
       <p>
-        <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter
-        kann er auch Ziffern, Leer- und Interpunktionszeichen enthalten,
-        mit Ausnahme von <tt>:</tt>, <tt>{</tt> und <tt>}</tt> (weil
-        diese als Syntaxelemente für Platzhalter verwendet werden).
-        Leerzeichen am Anfang oder am Ende werden nicht in den Namen
-        übernommen.
+        <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter kann
+        er auch Ziffern, Leer- und Interpunktionszeichen enthalten, mit
+        Ausnahme von geschweiften Klammern (<tt>{</tt> und <tt>}</tt>) und
+        Doppelpunkt (<tt>:</tt>). Leerzeichen am Anfang oder am Ende
+        werden nicht in den Namen übernommen.
       </p>
       <h3>Datentyp und Formatierung</h3>
       <p>
@@ -322,21 +446,22 @@
               <tt>B|Aus|Ein</tt>) wird <tt>false</tt> als der erste
               (im Beispiel "Aus"), <tt>true</tt> als der zweite Text
               (im Beispiel "Ein") dargestellt. Die Texte dürfen alle
-              Sonderzeichen mit Ausnahme von '<tt>{</tt>', '<tt>}</tt>',
-              '<tt>:</tt>', '<tt>=</tt>' und '<tt>|</tt>' enthalten,
-              also auch Leerzeichen.
+              Sonderzeichen mit Ausnahme von geschweiften Klammern
+              (<tt>{</tt> und <tt>}</tt>), Doppelpunkt (<tt>:</tt>),
+              Gleichheitszeichen (<tt>=</tt>) und senkrechtem Strich
+              (<tt>|</tt>) enthalten, also auch Leerzeichen.
             </li>
           </ul>
         </li>
         <li>
           <tt>I</tt> &ndash; Ganzzahl (Integer). Zu möglichen
-          <i>Format</i>parametern siehe im
-          <a href="#textzuweisungen">Abschnitt "Textdarstellungen
-          numerischer Werte" weiter unten</a>.
+          <i>Format</i>parametern siehe im Abschnitt
+          <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
+          weiter unten.
         </li>
         <li>
           <tt>F</tt> &ndash; Fließkommazahl (Number), <em>ohne</em>
-          Tausendertrennzeichen formatiert
+          Gruppentrennzeichen (Tausendertrennzeichen) formatiert
           <ul>
             <li>
               Ohne <i>Format</i>parameter wird die Zahl gerundet
@@ -349,17 +474,16 @@
               einer Nachkommastelle).
             </li>
             <li>
-              Zu möglichen weiteren <i>Format</i>parametern siehe den
-              <a href="#textzuweisungen">
-                Abschnitt "Textdarstellungen
-                numerischer Werte" weiter unten
-              </a>
+              Zu möglichen weiteren <i>Format</i>parametern siehe den Abschnitt
+              <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
+              weiter unten.
             </li>
           </ul>
         </li>
         <li>
-          <tt>N</tt> &ndash; Fließkommazahl (Number), <em>mit</em>
-          Tausendertrennzeichen formatiert. Ansonsten wie <tt>F</tt>.
+          <tt>N</tt> &ndash; Fließkommazahl (Number), <em>mit</em> dem
+          <a href="#parameter">parametrierten</a> Gruppentrennzeichen
+          (Tausendertrennzeichen) formatiert. Ansonsten wie <tt>F</tt>.
         </li>
         <li>
           <tt>G</tt> &ndash; Fließkommazahl, formatiert ähnlich wie
@@ -376,12 +500,12 @@
               Darstellung führt.
             </li>
           </ul>
-          Beispiel: Die Zahl 12.345.678,9 wird mit G4 als 1,235E+07
+          Beispiel: Die Zahl 12 345 678.9 wird mit G4 als 1.235E+07
           dargestellt.
         </li>
         <li>
           <tt>P</tt> &ndash; Fließkommazahl, als Prozentwert formatiert:
-          1,0 wird z. B. als "100,00%" dargestellt.
+          1.0 wird z. B. als "100.00%" dargestellt.
           <ul>
             <li>
               Ohne <i>Format</i>-Ziffer wird der Prozentwert gerundet
@@ -392,24 +516,23 @@
               auf die angegebene Zahl von Nachkommastellen dargestellt.
             </li>
             <li>
-              Zu möglichen weiteren <i>Format</i>parametern siehe den
-              <a href="#textzuweisungen">
-                Abschnitt "Textdarstellungen
-                numerischer Werte" weiter unten
-              </a>
+              Zu möglichen weiteren <i>Format</i>parametern siehe den Abschnitt
+              <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
+              weiter unten.
             </li>
           </ul>
         </li>
         <li>
-          <tt>S</tt> - Variabler Text. Es sind keine
-          <i>Format</i>parameter möglich. Der Text
-          wird immer unverändert eingesetzt.
+          <tt>S</tt> - Variabler Text. Zu möglichen <i>Format</i>parametern
+          siehe den Abschnitt
+          <a href="#textersetzungen">Textersetzungen in Text-Platzhaltern</a>
+          weiter unten.
         </li>
       </ul>
       <h3 id="textzuweisungen">Textdarstellungen numerischer Werte</h3>
       <p>
         Das <i>Format</i> für numerische Werte kann zusätzlich
-        eine oder mehrere &ndash; durch '|' getrennte &ndash;
+        eine oder mehrere &ndash; durch <b>|</b> getrennte &ndash;
         <b>Textzuweisungen</b> enthalten. Diese bilden Zahlenwerte
         am Eingang auf Unicode-Textbausteine im Ausgabetext ab.
       </p>
@@ -418,7 +541,7 @@
         abgebildet werden so folgt die Zuweisung dieser Form:<br />
         &nbsp;&nbsp;&nbsp;&nbsp;[<i>Wert</i><tt>=</tt>][<i>Text</i>]<br />
         Darin ist <i>Wert</i> eine Dezimalzahl, bei der ggf. als
-        Dezimaltrennzeichen ein Komma vor den Nachkommastellen
+        Dezimaltrennzeichen ein Komma (,) vor den Nachkommastellen
         steht. Gruppentrennzeichen (Tausendertrennzeichen) dürfen
         nicht verwendet werden. Bei Ganzzahlen kann der <i>Wert</i>
         bei allen Zuweisungen eines Platzhalters entfallen. Werte
@@ -432,7 +555,7 @@
         der zweite der obere.
       </p>
       <p>
-        Die optionalen Zeichen '<tt>&gt;</tt>' bzw. '<tt>&lt;</tt>'
+        Die optionalen Zeichen <tt>&gt;</tt> bzw. <tt>&lt;</tt>
         geben an, dass der Grenzwert selbst ausgeschlossen ist (also
         ein offenes Intervall festgelegt werden soll). Ohne sie ist
         der Grenzwert jeweils enthalten (geschlossenes Intervall).
@@ -443,17 +566,18 @@
       </p>
       <p>
         Wenn sich die Bereiche oder Werte mehrerer Zuweisungen
-        überschneiden, so greift die erste passende Zuweisung.
-        Passt für einen Eingangswert keine der Zuweisungen, so
+        überschneiden, so greift die <em>erste</em> passende Zuweisung.
+        Passt für einen Eingangswert <em>keine</em> der Zuweisungen, so
         wird der Wert numerisch &ndash; wie im vorigen Abschnitt
         beschrieben &ndash; ausgegeben.
       </p>
       <p>
-        <i>Text</i> darf &mdash; wie schon bei Wahrheitswerten
-        &mdash; alle Sonderzeichen mit Ausnahme von '<tt>{</tt>',
-        '<tt>}</tt>', '<tt>:</tt>', '<tt>=</tt>' und '<tt>|</tt>'
-        enthalten, also auch Leerzeichen. Wenn ein Wert oder
-        Bereich angegeben ist, darf der Text auch leer sein, um
+        <i>Text</i> darf &ndash; wie schon bei Wahrheitswerten &ndash;
+        alle Sonderzeichen mit Ausnahme von geschweiften Klammern
+        (<tt>{</tt> und <tt>}</tt>), Doppelpunkt (<tt>:</tt>),
+        Gleichheitszeichen (<tt>=</tt>) und senkrechtem Strich
+        (<tt>|</tt>) enthalten, also auch Leerzeichen. Wenn ein Wert
+        oder Bereich angegeben ist, darf der Text auch leer sein, um
         die Ausgabe zu unterdrücken.
       </p>
       <h4>Beispiele</h4>
@@ -465,12 +589,13 @@
         </li>
         <li>
           Die ganzzahlig in Grad gegebene meteorologische Windrichtung als
-          Pfeilrichtung in 45°-Schritten ausgeben (0 Grad entspricht Nord, Werte
-          steigen im Uhrzeigersinn, -1 bedeutet "unbestimmt, wechselnd"):<br />
+          Pfeilrichtung in 45°-Schritten ausgeben (0 Grad entspricht Nord;
+          Werte steigen im Uhrzeigersinn, -1 bedeutet "unbestimmt, wechselnd"):<br />
           <div class="box-noscroll"> <tt>{Windrichtung(Grad):I|-1=↻|0..22=↓|23..67=↙|68..112=←|113..157=↖|158..202=↑|203..247=↗|248..292=→|293..337=↘|338..360=↓} </tt></div>
         </li>
         <li>
-          Eine in m/s als Fließkommazahl gegebene Windgeschwindigkeit umgerechnet nach Beaufort ausgeben:<br />
+          Eine in m/s als Fließkommazahl gegebene Windgeschwindigkeit
+          umgerechnet nach Beaufort ausgeben:<br />
           <div class="box-scroll-x"> <tt>{Windgeschwindigkeit(m/s):F|..&lt;0,3=0|0,3..&lt;1,54=1|1,54..&lt;3,3=2|3,3..&lt;5,47=3|5,47..&lt;8=4|8..&lt;10,8=5|10,8..&lt;13,86=6|13,86..&lt;17,17=7|17,17..&lt;20,72=8|20,72..&lt;24,48=9|24,48..&lt;28,44=10|28,44..&lt;32,6=11|32,6..=12} </tt></div>
         </li>
         <li>
@@ -482,6 +607,42 @@
           ohne den allgemeineren Bereich zerstückeln zu müssen.
         </li>
       </ul>
+      <h3 id="textersetzungen">Textersetzungen in Text-Platzhaltern</h3>
+      <p>
+        Ähnlich wie numerische Werte oder Wertebereiche durch Texte
+        ersetzt werden können, ist es mit Text-Platzhaltern möglich,
+        bestimmte Textteile in den Eingangswerten durch andere zu
+        ersetzen. Das <i>Format</i> von Text-Platzhaltern kann dazu
+        eine oder mehrere &ndash; durch <b>|</b> getrennte &ndash;
+        <b>Textersetzungen</b> enthalten. Diese bilden Originaltexte
+        am Eingang auf Ersetzungstexte im Ausgabetext ab.
+      </p>
+      <p>
+        Die einzelnen Textersetzungen haben dabei folgende Form:<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<i>Originaltext</i><tt>=</tt>[<i>Ersetzungstext</i>]<br />
+        Die Texte dürfen alle Sonderzeichen mit Ausnahme von geschweiften
+        Klammern (<tt>{</tt> und <tt>}</tt>), Doppelpunkt (<tt>:</tt>),
+        Gleichheitszeichen (<tt>=</tt>) und senkrechtem Strich (<tt>|</tt>)
+        enthalten, also auch Leerzeichen und Unicode-Zeichen. Der Originaltext
+        muss mindestens ein Zeichen umfassen. Der Ersetzungstext darf auch
+        leer sein.
+      </p>
+      <p>
+        Sind mehrere Textersetzungen angegeben, so werden sie von links
+        nach rechts angewendet. Weiter hinten stehende Ersetzungen
+        wirken daher auch auf Textteile, die in einer vorherigen
+        Ersetzung erst eingefügt worden sind. Sie wirken andererseits
+        nicht mehr auf Textteile, die bereits von einer weiter vorne
+        stehenden Ersetzung entfernt oder verändert worden sind.
+      </p>
+      <h4>Beispiel</h4>
+      <p>
+        Den Wetterkurztext eines Internet-Wetterdienstes als Unicode-Piktogramm
+        ausgeben:<br />
+        <div class="box-noscroll"> <tt>{cond:S|sunny=☀️|partly cloudy=⛅|cloudy=☁️|rainy=🌧|snowy=❄️|thunderstorm=🌩️} </tt></div>
+        Für das gewünchte Verhalten ist es wichtig, dass die Ersetzung von
+        "partly cloudy" <em>vor</em> der für "cloudy" steht.
+      </p>
       <h2>Anwendungsbeispiel</h2>
       <p>
         In der der Visualisierung einer Heizungsanlage sollen die Daten eines
@@ -499,13 +660,23 @@
       <p>
         Sechs Eingangsgrößen verschiedener Typen und (sehr wenig) Festtext
         setzen den Ausgabetext zusammen. Dieser zeigt &ndash; durch senkrechte
-        Striche getrennt &ndash; die folgenden Daten:
-      </p>
+        Striche <span class="manhyphens">getrennt</span> &ndash; die folgenden Daten:
+</p>
       <ul>
-        <li>Ob Heizwärmebedarf vorliegt (🔴) oder nicht (⚪) und seit welcher Uhrzeit dieser Zustand unverändert andauert</li>
-        <li>Ob die Pumpe läuft (✇) oder nicht (⋅). (Dies kann wegen Warmwasservorrang oder Pumpennachlauf vom Bedarf abweichen.)</li>
-        <li>Ist-/Sollwert der Vorlauftemperatur (▲)</li>
-        <li>Istwert der Rücklauftemperatur (▽)</li>
+        <li>
+          Ob Heizwärmebedarf vorliegt (🔴) oder nicht (⚪) und seit wann
+          dieser Zustand unverändert andauert
+        </li>
+        <li>
+          Ob die Pumpe läuft (✇) oder nicht (⋅). (Dies kann wegen
+          Warmwasservorrang oder Pumpennachlauf vom Bedarf abweichen.)
+        </li>
+        <li>
+          Ist-/Sollwert der Vorlauftemperatur (▲)
+        </li>
+        <li>
+          Istwert der Rücklauftemperatur (▽)
+        </li>
       </ul>
       <p>
         Der fertig formatierte Ausgabetext sieht dann z. B. so aus:

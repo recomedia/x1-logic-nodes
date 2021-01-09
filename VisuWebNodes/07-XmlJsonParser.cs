@@ -29,6 +29,8 @@ namespace Recomedia_de.Logic.VisuWeb
     private const string OPERATION_1STASNUMBER = "FirstAsNumber";
     private const string OPERATION_CONCATTEXTS = "MultiConcatTexts";
     private const string OPERATION_ADDNUMBERS = "MultiAddNumbers";
+    private const string OPERATION_MINNUMBER = "MultiMinNumber";
+    private const string OPERATION_MAXNUMBER = "MultiMaxNumber";
     private const string PARAM_POSTFIX = "Param";
     private const string PARAM_EMPTY = "";
 
@@ -139,7 +141,8 @@ namespace Recomedia_de.Logic.VisuWeb
     public List<EnumValueObject> mSelectOperation { get; private set; }
     static private readonly string[] mSelectOperationValues = {
                                 OPERATION_1STASTEXT, OPERATION_1STASNUMBER,
-                                OPERATION_CONCATTEXTS, OPERATION_ADDNUMBERS };
+                                OPERATION_CONCATTEXTS, OPERATION_ADDNUMBERS,
+                                OPERATION_MINNUMBER, OPERATION_MAXNUMBER};
 
     /// <summary>
     /// Parameter semantics depend on selected kind of processing:
@@ -247,7 +250,7 @@ namespace Recomedia_de.Logic.VisuWeb
         {
           bool success = true;  // until proven otherwise
           string outStr = "";
-          double outVal = 0.0;
+          double outVal = Double.NaN;
           if (isCombinedOutput(i))
           {
             XmlNodeList xmlNodes = xmlDoc.SelectNodes(mPath[i].Value);
@@ -317,12 +320,16 @@ namespace Recomedia_de.Logic.VisuWeb
     bool isNumberOutput(int i)
     {
       return (mSelectOperation[i].Value == OPERATION_ADDNUMBERS) ||
+             (mSelectOperation[i].Value == OPERATION_MINNUMBER) ||
+             (mSelectOperation[i].Value == OPERATION_MAXNUMBER) ||
              (mSelectOperation[i].Value == OPERATION_1STASNUMBER);
     }
 
     bool isCombinedOutput(int i)
     {
       return (mSelectOperation[i].Value == OPERATION_ADDNUMBERS) ||
+             (mSelectOperation[i].Value == OPERATION_MINNUMBER) ||
+             (mSelectOperation[i].Value == OPERATION_MAXNUMBER) ||
              (mSelectOperation[i].Value == OPERATION_CONCATTEXTS);
     }
 
@@ -348,14 +355,43 @@ namespace Recomedia_de.Logic.VisuWeb
       {
         if (isNumber)
         {
-          double localVal;
-          success = tryXmlConvertToDouble(i, xmlNodes[j].InnerText, out localVal);
-          outVal += localVal;
+          success = processNodeListNumeric(ref outVal, i, xmlNodes[j].InnerText)
+                    || success;
         }
         else
         {
           string conStr = (j > 0) ? getSelectParam(i) : "";
           outStr = outStr + conStr + xmlNodes[j].InnerXml;
+        }
+      }
+      return success;
+    }
+
+    bool processNodeListNumeric(ref double val, int i, string text)
+    {
+      double localVal;
+      bool success = tryXmlConvertToDouble(i, text, out localVal);
+
+      if (Double.IsNaN(val))
+      {
+        val = localVal;
+      }
+      else
+      {
+        switch (mSelectOperation[i].Value)
+        {
+          case OPERATION_ADDNUMBERS:
+            val += localVal;
+            break;
+          case OPERATION_MINNUMBER:
+            val = Math.Min(localVal, val);
+            break;
+          case OPERATION_MAXNUMBER:
+            val = Math.Max(localVal, val);
+            break;
+          default:
+            System.Diagnostics.Trace.Fail("Unexpected numeric operation");
+            break;
         }
       }
       return success;

@@ -38,7 +38,7 @@ namespace Recomedia_de.Logic.Generic
       context.ThrowIfNull("context");
       mTypeService = context.GetService<ITypeService>();
 
-      // Initialize the input count, allowing range 2..99.
+      // Initialize the input count, allowing range 2..50.
       mInputCount = mTypeService.CreateInt(PortTypes.Integer, "InputCount", 2);
       mInputCount.MinValue = 2;
       mInputCount.MaxValue = 50;
@@ -52,8 +52,8 @@ namespace Recomedia_de.Logic.Generic
 
       // Initialize the input for the index of the input to select.
       mSelectIndexInput = mTypeService.CreateInt(PortTypes.Integer, "InputSelectIndex");
-      mSelectIndexInput.MinValue = 0;
-      mSelectIndexInput.MaxValue = mInputCount.MaxValue - 1;
+      mSelectIndexInput.MinValue = -1;
+      mSelectIndexInput.MaxValue = mInputCount.MaxValue;
       mSelectIndexInput.ValueSet += updateOutputValues;
 
       // Initialize the selector for "send-on-select".

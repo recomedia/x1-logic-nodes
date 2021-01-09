@@ -50,13 +50,15 @@ namespace Recomedia_de.Logic.Generic
     {
       public TimedValue(long time, double interValue, double endValue)
       {
-        mEndTime = time;
-        mInterValue = interValue;
+        mOriginalValue = endValue;
+        mInterpolatedValue = interValue;
         mEndValue = endValue;
+        mEndTime = time;
       }
-      public long mEndTime;
-      public double mInterValue;
+      public readonly double mOriginalValue;
+      public double mInterpolatedValue;
       public double mEndValue;
+      public long mEndTime;
     };
     private LinkedList<TimedValue> mTimedValues;
 
@@ -81,6 +83,7 @@ namespace Recomedia_de.Logic.Generic
       mOutputMax = typeService.CreateDouble(PortTypes.Number, "Max");
       mOutputChange = typeService.CreateDouble(PortTypes.Number, "Change");
       mOutputTrend = typeService.CreateInt(PortTypes.Integer, "Trend");
+      mOutputSum = typeService.CreateDouble(PortTypes.Number, "Sum");
       mOutputNumber = typeService.CreateInt(PortTypes.Integer, "Number");
 
       // Default resolution of input values is 1.0
@@ -143,7 +146,7 @@ namespace Recomedia_de.Logic.Generic
     /// <summary>
     /// Regularly update the output after this time, i. e. discard outdated values
     /// and extrapolate from the last received value even when no new values are
-    /// received. <=0 means never.
+    /// received. 0 means never.
     /// </summary>
     [Parameter(DisplayOrder = 12, IsDefaultShown = false)]
     public TimeSpanValueObject mUpdateTime { get; private set; }
@@ -155,7 +158,7 @@ namespace Recomedia_de.Logic.Generic
     public IntValueObject mMaxEntries { get; private set; }
 
     /// <summary>
-    /// The calculated average value of input values within timespan, if selected.
+    /// The calculated average value of input values (within timespan, if that is given nonzero).
     /// </summary>
     [Output(DisplayOrder = 1, IsDefaultShown = true)]
     public DoubleValueObject mOutputAvg { get; private set; }
@@ -170,7 +173,7 @@ namespace Recomedia_de.Logic.Generic
     public DoubleValueObject mOutputMax { get; private set; }
 
     /// <summary>
-    /// The calculated change of input values within timespan, if selected.
+    /// The calculated change of input values (within timespan, if that is given nonzero).
     /// </summary>
     [Output(DisplayOrder = 3, IsDefaultShown = true)]
     public DoubleValueObject mOutputChange { get; private set; }
@@ -183,9 +186,15 @@ namespace Recomedia_de.Logic.Generic
     public IntValueObject mOutputTrend { get; private set; }
 
     /// <summary>
-    /// The number of received values within timespan, if selected.
+    /// The sum of all received values (within timespan, if that is given nonzero).
     /// </summary>
-    [Output(DisplayOrder = 5, IsDefaultShown = true)]
+    [Output(DisplayOrder = 5, IsDefaultShown = false)]
+    public DoubleValueObject mOutputSum { get; private set; }
+
+    /// <summary>
+    /// The number of received values (within timespan, if that is given nonzero).
+    /// </summary>
+    [Output(DisplayOrder = 6, IsDefaultShown = true)]
     public IntValueObject mOutputNumber { get; private set; }
 
     // Some time utility methods
@@ -271,6 +280,7 @@ namespace Recomedia_de.Logic.Generic
 
           setOutputsFromLastValue();
           mTimedValues.Clear();
+          mOutputSum.Value = 0;
           mOutputNumber.Value = 0;
 
           // not necessary to reschedule until new value is received
@@ -304,7 +314,7 @@ namespace Recomedia_de.Logic.Generic
 
         var endTime = trimBeginning();
         updateOutputs(endTime);
-        mOutputNumber.Value = mTimedValues.Count();
+        mOutputNumber.Value = mTimedValues.Count;
 
         reschedule();
       }
@@ -317,8 +327,8 @@ namespace Recomedia_de.Logic.Generic
     /// </summary>
     private long trimBeginning()
     {
-      var returnTime = mSchedulerService.Now.Ticks;
-      var beginTime = getBeginTimeTicks(returnTime);
+      var currentTime = mSchedulerService.Now.Ticks;
+      var beginTime = getBeginTimeTicks(currentTime);
       var numberOfTimedValues = mTimedValues.Count();
 
       // Remove entries from the beginning of the list that are completely outdated;
@@ -349,7 +359,7 @@ namespace Recomedia_de.Logic.Generic
           var secondEntry = mTimedValues.ElementAt(1);
           var oldEndTime = secondEntry.mEndTime;
           var endValue = secondEntry.mEndValue;
-          var oldInterValue = secondEntry.mInterValue;
+          var oldInterValue = secondEntry.mInterpolatedValue;
 
           // Modify the first two list entries with those new values
           mTimedValues.RemoveFirst();
@@ -362,7 +372,7 @@ namespace Recomedia_de.Logic.Generic
                               (double)(oldEndTime - oldBeginTime);
             var newBeginValue = oldBeginValue + timeFactor * (endValue - oldBeginValue);
             // Re-insert the second entry with a new average value
-            secondEntry.mInterValue = (newBeginValue + endValue) / 2;
+            secondEntry.mInterpolatedValue = (newBeginValue + endValue) / 2;
             mTimedValues.AddFirst(secondEntry);
             // Re-insert the first entry with its remaining time interval
             firstEntry.mEndTime = beginTime;
@@ -374,7 +384,7 @@ namespace Recomedia_de.Logic.Generic
           { // The first entry is no longer needed, because it covers no
             // time any more.
             // Re-insert the second entry with its own value
-            secondEntry.mInterValue = secondEntry.mEndValue;
+            secondEntry.mInterpolatedValue = secondEntry.mEndValue;
             mTimedValues.AddFirst(secondEntry);
           }
         }
@@ -390,7 +400,7 @@ namespace Recomedia_de.Logic.Generic
         var avg = getAvg(tempValues);
         // Use endTime and endValue from last split entry, but new average
         var newValue1 = tempValues.Last();
-        newValue1.mInterValue = avg;
+        newValue1.mInterpolatedValue = avg;
         mTimedValues.AddFirst(newValue1);
         // Save first split entry unchanged because
         // - endTime is begin time for average calculation,
@@ -398,7 +408,7 @@ namespace Recomedia_de.Logic.Generic
         var newValue2 = tempValues.First();
         mTimedValues.AddFirst(newValue2);
       }
-      return returnTime;
+      return currentTime;
     }
 
     LinkedList<TimedValue> splitBefore(int splitIndex,
@@ -419,7 +429,7 @@ namespace Recomedia_de.Logic.Generic
     /// sufficiently from the previous entry's end value.
     /// </summary>
     /// <param name="endTime">The end time of the considered timespan.</param>
-    /// <param name="endValue">The value received with timestamp endTime.</param>
+    /// <param name="endValue">The value received at time endTime.</param>
     private void appendIfValid(long endTime, double endValue)
     {
       bool valueIsValid = !Double.IsNaN(endValue);
@@ -477,37 +487,40 @@ namespace Recomedia_de.Logic.Generic
     }
 
     /// <summary>
-    /// Set the output(s) to the selected function(s) of the list entries (if any
-    /// exist), with constant extrapolation from the last entry if necessary.
+    /// Set the output(s) to their respective function(s) of the list entries
+    /// (if any entries exist), with constant extrapolation from the last entry
+    /// if necessary.
     /// </summary>
     /// <param name="endTime">The end time of the considered timespan.</param>
     /// <param name="value">The end value to use for direct min/max update.</param>
     private void updateOutputs(long endTime, double value = Double.NaN)
     {
-      updateAvgMinMax(endTime, value);  // looks at all entries
+      updateStatistics(endTime, value); // looks at all entries if necessary
       updateTrend();                    // looks at last few entries 
       updateChange();                   // looks at first and last entry 
     }
 
     /// <summary>
-    /// Set the Average, Minimum, and Maximum output(s) based on the given value
-    /// and all list entries (if any exist). If no entry for the given end time
-    /// exists, uses constant extrapolation from the last entry.
+    /// Set the Average, Minimum, Maximum, and Sum output(s) based on the given
+    /// value and all list entries (if any exist). If no entry for the given end
+    /// time exists, uses constant extrapolation from the last entry.
     /// </summary>
     /// <param name="endTime">The end time of the considered timespan.</param>
     /// <param name="value">The end value to use for direct min/max update.</param>
-    private void updateAvgMinMax(long endTime, double value = Double.NaN)
+    private void updateStatistics(long endTime, double value = Double.NaN)
     {
-      var isMinMaxDirectUpdate = isUnlimitedTimeConsidered();
-      if (isMinMaxDirectUpdate && !Double.IsNaN(value))
+      var isDirectUpdate = isUnlimitedTimeConsidered();
+      if (isDirectUpdate && !Double.IsNaN(value))
       {
         mOutputMin.Value = mOutputMin.HasValue ? Math.Min(mOutputMin.Value, value)
-                                             : value;
+                                               : value;
         mOutputMax.Value = mOutputMax.HasValue ? Math.Max(mOutputMax.Value, value)
-                                             : value;
+                                               : value;
+        mOutputSum.Value = mOutputSum.HasValue ? (mOutputSum.Value + value)
+                                               : value;
       }
-      // else min and max will be updated along the way while calculating average
-      updateAvgFromTimedValues(!isMinMaxDirectUpdate, endTime);
+      // else Min, Max, and Sum will be updated along the way while calculating average
+      updateAvgFromTimedValues(!isDirectUpdate, endTime);
     }
 
     /// <summary>
@@ -515,9 +528,9 @@ namespace Recomedia_de.Logic.Generic
     /// from all list entries.
     /// <param name="doUpdateMinMax">True if min/max outputs must be updated.</param>
     /// <param name="endTime">The end time of the considered timespan.</param>
-    private void updateAvgFromTimedValues(bool doUpdateMinMax, long endTime)
+    private void updateAvgFromTimedValues(bool doUpdateMinMaxSum, long endTime)
     {
-      double avg = getAvg(mTimedValues, doUpdateMinMax, endTime);
+      double avg = getAvg(mTimedValues, doUpdateMinMaxSum, endTime);
       if ( !Double.IsNaN(avg) )
       {
         mOutputAvg.Value = avg;
@@ -530,59 +543,75 @@ namespace Recomedia_de.Logic.Generic
     /// <param name="doUpdateMinMax">True if min/max outputs must be updated.</param>
     /// <param name="endTime">The end time of the considered timespan.</param>
     private double getAvg(LinkedList<TimedValue> localValues,
-                                            bool doUpdateMinMax = false,
+                                            bool doUpdateMinMaxSum = false,
                                             long endTime = 0)
     {
       double avg = Double.NaN;
       var numberOfValues = localValues.Count();
-      if (numberOfValues > 1)
+      if (numberOfValues > 0)
       {
         if (0 == endTime)
         {
           endTime = localValues.Last().mEndTime;
         }
-        var firstEntry = localValues.First();
-        var beginTime = firstEntry.mEndTime;
-        var totalDuration = endTime - beginTime;
+        var configuredBeginTime = getBeginTimeTicks(endTime);
 
-        var sum = 0.0;
-        var min = firstEntry.mEndValue;
-        var max = min;
-
-        foreach (TimedValue timedValue in localValues)
+        if (numberOfValues > 1)
         {
-          // Integrate current entry
-          var duration = timedValue.mEndTime - beginTime;
-          sum += timedValue.mInterValue * duration;
 
-          // Calculate minimum and maximum
-          min = Math.Min(min, timedValue.mEndValue);
-          max = Math.Max(max, timedValue.mEndValue);
+          var firstEntry = localValues.First();
+          var actualBeginTime = firstEntry.mEndTime;
+          var totalDuration = endTime - actualBeginTime;
 
-          // Prepare for integrating next entry
-          beginTime = timedValue.mEndTime;
+          var integratedSum = 0.0;
+          var explicitSum = 0.0;
+          var min = firstEntry.mEndValue;
+          var max = min;
+
+          foreach (TimedValue timedValue in localValues)
+          {
+            // Integrate and sum up current entry
+            var currentDuration = timedValue.mEndTime - actualBeginTime;
+            integratedSum += timedValue.mInterpolatedValue * currentDuration;
+
+            if (timedValue.mEndTime > configuredBeginTime)
+            {
+              explicitSum += timedValue.mOriginalValue;
+            }
+
+            // Calculate minimum and maximum
+            min = Math.Min(min, timedValue.mEndValue);
+            max = Math.Max(max, timedValue.mEndValue);
+
+            // Prepare for integrating next entry
+            actualBeginTime = timedValue.mEndTime;
+          }
+          // If we have not enough data at the end, assume constant value after last entry
+          if (actualBeginTime < endTime)
+          {
+            var lastValue = localValues.Last().mEndValue;
+            integratedSum += lastValue * (endTime - actualBeginTime);
+          }
+          avg = integratedSum / totalDuration;
+
+          if (doUpdateMinMaxSum)
+          {
+            mOutputMin.Value = min;
+            mOutputMax.Value = max;
+            mOutputSum.Value = explicitSum;
+          }
         }
-        // If we have not enough data at the end, assume constant value after last entry
-        if (beginTime < endTime)
+        else
         {
-          var lastValue = localValues.Last().mEndValue;
-          sum += lastValue * (endTime - beginTime);
-        }
-        avg = sum / totalDuration;
-        if (doUpdateMinMax)
-        {
-          mOutputMin.Value = min;
-          mOutputMax.Value = max;
-        }
-      }
-      else if (numberOfValues > 0)
-      {
-        var val = localValues.First();
-        avg = val.mInterValue;
-        if (doUpdateMinMax)
-        {
-          mOutputMin.Value = val.mEndValue;
-          mOutputMax.Value = val.mEndValue;
+          var val = localValues.First();
+          avg = val.mInterpolatedValue;
+          if (doUpdateMinMaxSum)
+          {
+            mOutputMin.Value = val.mEndValue;
+            mOutputMax.Value = val.mEndValue;
+            mOutputSum.Value = (val.mEndTime > configuredBeginTime) ? val.mOriginalValue
+                                                                    : 0.0;
+          }
         }
       }
       // else all values remain unchanged

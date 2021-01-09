@@ -106,12 +106,15 @@ namespace Recomedia_de.Logic.Generic.Test
 
       // Input a deterministic series of 100 increasing values that
       // makes it easy to check all output values 
+      double sum = 0;
       for (int i = 0; i <= 100; i++)
       {
         schedulerService.Tick(/* advance by */ 1 /* second */);
         node.mInput.Value = i;
         node.Execute();
         Assert.AreEqual(Math.Min(i + 1, 51), node.mOutputNumber.Value);
+        sum = sum + node.mInput.Value;
+        Assert.AreEqual(sum, node.mOutputSum.Value);
         Assert.AreEqual(i / 2.0, node.mOutputAvg.Value);
         Assert.AreEqual(0, node.mOutputMin.Value);
         Assert.AreEqual(i, node.mOutputMax.Value);
@@ -140,6 +143,8 @@ namespace Recomedia_de.Logic.Generic.Test
         node.mInput.Value = 100 + i;
         node.Execute();
         Assert.AreEqual(51, node.mOutputNumber.Value);
+        sum = sum + node.mInput.Value;
+        Assert.AreEqual(sum, node.mOutputSum.Value);
         Assert.AreEqual(50.0 + i / 2.0, node.mOutputAvg.Value);
         Assert.AreEqual(0, node.mOutputMin.Value);
         Assert.AreEqual(100 + i, node.mOutputMax.Value);
@@ -147,7 +152,7 @@ namespace Recomedia_de.Logic.Generic.Test
         Assert.AreEqual(1, node.mOutputTrend.Value);
       }
 
-      var expectAvg = 100.0;
+      double expectAvg = 100.0;
       Assert.AreEqual(expectAvg, node.mOutputAvg.Value);
 
       // Continue the series for another 100 values, each 2.0 down from its
@@ -160,6 +165,8 @@ namespace Recomedia_de.Logic.Generic.Test
         node.mInput.Value = 200 - 2 * i;
         node.Execute();
         Assert.AreEqual(51, node.mOutputNumber.Value);
+        sum = sum + node.mInput.Value;
+        Assert.AreEqual(sum, node.mOutputSum.Value);
         expectAvg = (expectAvg * (200 + i - 1) + (201.0 - 2 * i)) / (200 + i);
         Assert.AreEqual(expectAvg, node.mOutputAvg.Value, 5e-14);
         Assert.AreEqual(0, node.mOutputMin.Value);
@@ -184,12 +191,14 @@ namespace Recomedia_de.Logic.Generic.Test
         node.mInput.Value = -4 * i;
         node.Execute();
         Assert.AreEqual(51, node.mOutputNumber.Value);
+        sum = sum + node.mInput.Value;
+        Assert.AreEqual(sum, node.mOutputSum.Value);
         expectAvg = (expectAvg * (300 + i - 1) + (2.0 - 4 * i)) / (300 + i);
         Assert.AreEqual(expectAvg, node.mOutputAvg.Value, 8e-14);
         Assert.AreEqual(-4 * i, node.mOutputMin.Value);
         Assert.AreEqual(200, node.mOutputMax.Value);
         Assert.AreEqual(-4 * i, node.mOutputChange.Value);
-        Assert.AreEqual(-1, node.mOutputTrend.Value);  // trend continues falling
+        Assert.AreEqual(-1, node.mOutputTrend.Value); // trend continues falling
       }
       Assert.AreEqual(25, node.mOutputAvg.Value, 8e-14);
       Assert.AreEqual(-400, node.mOutputMin.Value);
@@ -199,10 +208,11 @@ namespace Recomedia_de.Logic.Generic.Test
       node.mInput.WasSet = false;
       node.Execute();
       Assert.AreEqual(0, node.mOutputNumber.Value);
+      Assert.AreEqual(0, node.mOutputSum.Value);    // sum reset to 0
       Assert.AreEqual(-400, node.mOutputAvg.Value, 8e-14);
       Assert.AreEqual(-400, node.mOutputMin.Value);
       Assert.AreEqual(-400, node.mOutputMax.Value);
-      Assert.AreEqual(0, node.mOutputTrend.Value);   // trend flattened
+      Assert.AreEqual(0, node.mOutputTrend.Value);  // trend flattened
     }
 
     [Test]
@@ -277,6 +287,7 @@ namespace Recomedia_de.Logic.Generic.Test
       // Update at least every 3 seconds
       node.mUpdateTime.Value = new TimeSpan(0, 0, 3);
 
+      double sum = 0;
       // At mocked time 0, input a first value
       node.mInput.Value = 0.0;
       node.Execute();
@@ -294,8 +305,9 @@ namespace Recomedia_de.Logic.Generic.Test
       // At mocked time 12s, input a second value
       node.mInput.Value = 1.0;
       node.Execute();
+      sum = sum + node.mInput.Value;
       // Ensure that the output values change accordingly
-      checkValues(2, 0.5, 1.0, 0.0, 1.0);
+      checkValues(2, 0.5, 1.0, 0.0, 1.0, -2, sum);
 
       // Advance mocked time in 1s steps but don't input a third value,
       // then check how the values change over time
@@ -315,14 +327,14 @@ namespace Recomedia_de.Logic.Generic.Test
       {
         schedulerService.Tick(/* advance by */ 1 /* second */);
         // Ensure that the average changes accordingly (other values unchanged)
-        checkValues((i >= 12) ? 1 : 2, exp_avg[i/3],
-                    1.0,  exp_min[i/3], 1.0 - exp_min[i / 3]);
+        checkValues((i < 12) ? 2 : 1, exp_avg[i/3], 1.0, exp_min[i / 3],
+                    1.0 - exp_min[i / 3], -2, (i < 12) ? sum : 0.0);
       }
     }
 
     private void checkValues(int n = 1,
       double avg = 0.0, double max = 0.0, double min = 0.0,
-      Double change = Double.NaN, int trend = -2)
+      Double change = Double.NaN, int trend = -2, double sum = 0.0)
     {
       Assert.IsTrue(node.mOutputNumber.HasValue);
       Assert.AreEqual(n, node.mOutputNumber.Value);
@@ -333,6 +345,8 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual(max, node.mOutputMax.Value);
       Assert.IsTrue(node.mOutputMin.HasValue);
       Assert.AreEqual(min, node.mOutputMin.Value, 2e-16);
+      Assert.IsTrue(node.mOutputSum.HasValue);
+      Assert.AreEqual(sum, node.mOutputSum.Value);
 
       if ( !Double.IsNaN(change) )
       {

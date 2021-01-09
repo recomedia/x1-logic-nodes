@@ -22,7 +22,31 @@ namespace Recomedia_de.Logic.VisuWeb
     public StringFormatter(INodeContext context)
       : base(context)
     {
+      // Initialize the group and decimal separator parameters.
+      mCustomDecimalSeparator = mTypeService.CreateString(PortTypes.String, "SeparatorDecimal",
+                                                                      /* defaultValue = */ ".");
+      mCustomGroupSeparator = mTypeService.CreateString(PortTypes.String, "SeparatorGroup",
+                                                                      /* defaultValue = */ "'");
+      // Initialize for default template count
       updateTemplateCount();
+    }
+
+    /// <summary>
+    /// Parameters to customize the group and decimal separators.
+    /// </summary>
+    [Parameter(DisplayOrder = 40, InitOrder = 40, IsDefaultShown = false)]
+    public StringValueObject mCustomDecimalSeparator { get; private set; }
+    [Parameter(DisplayOrder = 41, InitOrder = 41, IsDefaultShown = false)]
+    public StringValueObject mCustomGroupSeparator { get; private set; }
+
+    protected override string getGroupSeparator()
+    {
+      return mCustomGroupSeparator;
+    }
+
+    protected override string getDecimalSeparator()
+    {
+      return mCustomDecimalSeparator;
     }
 
     protected override IValueObject createOutput(int i)

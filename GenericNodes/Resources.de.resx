@@ -195,7 +195,7 @@
   </data>
   <data name="Sum" xml:space="preserve">
     <value>Summe</value>
-    <comment>Statistics</comment>
+    <comment>Statistics, TimedStatistics</comment>
   </data>
   <data name="UpdateTime" xml:space="preserve">
     <value>Zeitintervall für Aktualisierung</value>
@@ -272,5 +272,9 @@
   <data name="Number" xml:space="preserve">
     <value>Anzahl gespeicherter Eingangswerte</value>
     <comment>TimedStatistics</comment>
+  </data>
+  <data name="MinimumDifferenceUpwards" xml:space="preserve">
+    <value>Minimale Differenz für steigende Werte</value>
+    <comment>SendByDifference</comment>
   </data>
 </root>

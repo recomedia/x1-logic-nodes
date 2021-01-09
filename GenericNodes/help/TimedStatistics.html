@@ -27,6 +27,7 @@
       <ul>
         <li>Mittelwert</li>
         <li>Minimum und Maximum</li>
+        <li>Summe der Werte</li>
         <li>Anzahl der Werte</li>
         <li>Änderung</li>
         <li>Trend der aktuellsten Werte</li>
@@ -220,6 +221,42 @@
             </p>
           </td>
         </tr>
+        <tr id="sum">
+          <td>
+            <p>Summe</p>
+          </td>
+          <td>
+            <p>Number</p>
+          </td>
+          <td>
+            <p>
+              Gibt die Summe aller im Betrachtungszeitraum empfangenen
+              Werte aus.
+            </p>
+            <p>
+              Hinweise:
+            </p>
+            <ul>
+              <li>
+                Wenn der <a href="#timespan">Betrachtungszeitraum</a> <tt>0</tt>
+                (unbegrenzt) ist und keine anderen Ausgänge benötigt werden, kann
+                dieselbe Funktinonalität effizienter mit einer "Formelberechnung"
+                aus dem Paket "Recomedia Visu-& Web-Logikbausteine"
+                <span class="manhyphens">erreicht</span> werden (siehe dort das
+                Beispiel "Summenzähler").
+              </li>
+              <li>
+                Wenn der <a href="#timespan">Betrachtungszeitraum</a> &gt;<tt>0</tt>
+                (also begrenzt) ist, dann kann dieser Ausgabewert nicht in allen
+                Fällen korrekt berechnet werden. Er wird zu niedrig berechnet,
+                wenn Eingabewerte vor Ablauf des Betrachtungszeitraums verworfen
+                werden, weil der Parameter <a href="#maxstore">Maximale Anzahl zu
+                speichernder Eingangswerte</a> zu klein gewählt worden ist (oder
+                zu viele Eingangstelegramme ankommen).
+              </li>
+            </ul>
+          </td>
+        </tr>
         <tr id="curstore">
           <td>
             <p>Anzahl gespeicherter Eingangswerte</p>
@@ -265,7 +302,7 @@
         </tr>
         <tr id="resol">
           <td>
-            <p>Auflösung der Eingangswerte</p>
+            <p>Auflösung der<br />Eingangswerte</p>
           </td>
           <td>
             <p>Number</p>
@@ -285,9 +322,9 @@
             </p>
           </td>
         </tr>
-        <tr>
+        <tr id="timespan">
           <td>
-            <p>Betrachtungszeitraum</p>
+            <p>Betrachtungs-<br />zeitraum</p>
           </td>
           <td>
             <p>Timespan</p>
@@ -313,7 +350,7 @@
         </tr>
         <tr>
           <td>
-            <p>Zeitintervall für Aktualisierung</p>
+            <p>Zeitintervall für<br />Aktualisierung</p>
           </td>
           <td>
             <p>Timespan</p>
@@ -340,7 +377,7 @@
         </tr>
         <tr id="maxstore">
           <td>
-            <p>Maximale Anzahl zu speichernder Eingangswerte</p>
+            <p>Maximale Anzahl<br />zu speichernder<br />Eingangswerte</p>
           </td>
           <td>
             <p>Integer</p>
@@ -353,29 +390,54 @@
               Der Baustein speichert so viele Eingangswerte, wie
               hier angegeben (im Bereich 10 bis 2000). In vielen
               Fällen ist der voreingestellte Wert 50 zweckmäßig.
+              Treffen während des Betrachtungszeitraums sehr viel
+              mehr Telegramme ein, sollten:
             </p>
+            <ul>
+              <li>
+                die Absender so eingestellt werden, dass sie nicht so oft
+                neue Werte senden,
+              </li>
+              <li>
+                der Parameter <a href="#resol">Auflösung der Eingangswerte</a>
+                so eingestellt werden, dass nur relevante Änderungen der
+                Eingangsgröße verarbeitet werden,
+              </li>
+              <li>
+                erst wenn diese Möglichkeiten ausgeschöpft sind, ein höherer
+                Wert für diesen Parameter eingestellt werden.
+              </li>
+            </ul>
             <p>
-              Ist dieser Parameter zu klein gewählt, dann müssen
-              innerhalb des Betrachtungszeitraums &ndash; oder
-              zwischen zwei Neustarts &ndash; mehr Eingangswerte
-              verarbeitet werden, als gespeichert werden können.
-              In diesem Fall werden ältere Werte gelöscht und
-              zwischen den verbleibenden linear interpoliert.
-              Dadurch werden die Ausgabewerte ungenauer.
-            </p>
-            <p>
-              Andererseits bedeutet ein zu hoher Wert unnötigen
-              Speicherverbrauch. Dies kann bei stark ausgelastetem
-              Systemspeicher (RAM) zu Fehlfunktionen &ndash; z. B.
-              unerwarteten Neustarts der Logik &ndash; führen. Zu
-              beachten ist dies insbesondere beim L1, der über
-              deutlich weniger Speicher verfügt als der X1.
-            </p>
-            <p>
-              Hinweis:<br />
-              Der Ausgang <a href="#curstore">Anzahl gespeicherter
-              Eingangswerte</a> kann im laufenden Betrieb zur Kontrolle
-              einer sinnvollen Einstellung verwendet werden.
+              Hinweise:
+              <ul>
+                <li>
+                  Ist dieser Parameter zu klein gewählt, dann müssen
+                  innerhalb des Betrachtungszeitraums &ndash; oder
+                  zwischen zwei Neustarts &ndash; mehr Eingangswerte
+                  verarbeitet werden, als gespeichert werden können.
+                  In diesem Fall werden ältere Werte gelöscht und
+                  zwischen den verbleibenden linear interpoliert.
+                  Die ausgegebene <a href="#sum">Summe</a> wird dann
+                  &ndash; außer bei unbegrenztem Betrachtungszeitraum
+                  &ndash; wegen fehlender Werte zu klein. Andere
+                  Ausgabewerte können durch Rundungsfehler ungenauer
+                  werden.
+                </li>
+                <li>
+                  Andererseits bedeutet ein zu hoher Wert unnötigen
+                  Speicherverbrauch. Dies kann bei stark ausgelastetem
+                  Systemspeicher (RAM) zu Fehlfunktionen &ndash; z. B.
+                  unerwarteten Neustarts der Logik &ndash; führen. Zu
+                  beachten ist dies insbesondere beim L1, der über
+                  deutlich weniger Speicher verfügt als der X1.
+                </li>
+                <li>
+                  Der Ausgang <a href="#curstore">Anzahl gespeicherter
+                  Eingangswerte</a> dient im laufenden Betrieb zur
+                  Kontrolle einer sinnvollen Einstellung.
+                </li>
+              </ul>
             </p>
           </td>
         </tr>
@@ -398,7 +460,7 @@
         T<sub>a</sub> regelmäßig alle 3 Minuten. Daher wird auch der Ausgang
         "Mittelwert" alle 3 Minuten aktualisiert, ohne dass dazu ein
         "Zeitintervall für Aktualisierung" angegeben werden müsste.
-        Über 6 Stunden treffen aber ca. 120 Telegramme ein. Um die Zahl
+        Über 6 Stunden treffen dadurch ca. 120 Telegramme ein. Um die Zahl
         der zu verarbeitenden Telegramme sinnvoll zu reduzieren, ist eine
         "Auflösung der Eingangswerte" von "0,1" &deg;C eingestellt. Dadurch
         werden von aufeinanderfolgenden fast gleichen Eingangstelegrammen
