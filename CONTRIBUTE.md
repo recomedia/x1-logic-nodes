@@ -25,7 +25,7 @@ wenn die folgenden Voraussetzungen erfüllt sind:
 * Alle vorher existierenden und neu hinzugefügten automatisierten Testfälle
   liefern "Passed"-Ergebnisse
 * Die automatisierten Testfälle müssen 100% aller Klassen und Methoden,
-  mindestens 98% aller Codezeilen und mindestens 94% aller Zweige
+  mindestens 98% aller Codezeilen und mindestens 95% aller Zweige
   abdecken
 * Geänderte oder neue Logikbausteine müssen interaktiv im GPA (Simulation)
   und nach der Inbetriebnahme auf einem L1 oder X1 getestet worden sein
