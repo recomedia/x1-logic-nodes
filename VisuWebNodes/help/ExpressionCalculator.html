@@ -69,21 +69,18 @@
       </p>
       <h2 id="eingaenge">Eingänge</h2>
       <p>
-        Solange keine gültige <a href="#parameter">Formel</a> festgelegt wurde,
-        hat der Baustein keine Eingänge. <i>
-          <b>
-            Eingänge werden nur durch gültige
-            Platzhalter in den Formeln angelegt.
-          </b>
-        </i>Die Reihenfolge der Eingänge
-        ergibt sich für jeden Porttyp aus der Reihenfolge der entsprechenden
+        Solange keine gültige(n) <a href="#parameter">Formel</a>(n) festgelegt
+        wurde(n), hat der Baustein keine Eingänge.
+        <i><b>Eingänge werden nur durch gültige Platzhalter in den Formeln angelegt.</b></i>
+        Die Reihenfolge der Eingänge ergibt sich &ndash; für jeden Porttyp
+        getrennt &ndash; aus der Reihenfolge der entsprechenden
         <a href="#platzhalter">Platzhalter</a> in den Formeln.
       </p>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="115" />
-          <col width="180" />
-          <col />
+          <col style="width: 115px">
+          <col style="width: 180px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -150,11 +147,11 @@
         </tr>
       </table>
       <h2>Ausgänge</h2>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="115" />
-          <col width="180" />
-          <col />
+          <col style="width: 115px">
+          <col style="width: 180px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -230,12 +227,12 @@
         </tr>
       </table>
       <h2 id="parameter">Parameter</h2>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="115" />
-          <col width=" 70" />
-          <col width="110" />
-          <col />
+          <col style="width: 115px">
+          <col style="width:  70px">
+          <col style="width: 110px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -345,8 +342,9 @@
         mehrfach verwendet werden) in übersichtliche Teile zerlegen. Wird ein
         Zwischenergebnis nur in den weiteren Formeln (also nicht außerhalb des
         Bausteins) benötigt, so bleibt der entsprechende Ausgang unbelegt.
-        Das Beispiel <a href="#hysteresebeispiel">Verbesserter Schwellwert
-        mit Hysterese</a> benutzt einen solchen Formelsatz.
+        Das Beispiel
+        <a href="#hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</a>
+        benutzt einen solchen Formelsatz.
       </p>
       <p>
         <em>Vorherige</em> Werte sind solche, die <em>zuletzt vor</em> der
@@ -355,10 +353,8 @@
         <em>alle</em> Formeln neu berechnet (auch solche die den geänderten
         Eingangswert gar nicht verwenden). Damit lassen sich einfache
         <a href="https://de.wikipedia.org/wiki/Endlicher_Automat">Zustandsautomaten</a>
-        realisieren. Die Beispiele
-        <a href="#hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</a>
-        und <a href="#summenzaehler">Summenzähler</a> zeigen einfache und
-        nützliche Anwendungen.
+        realisieren. Das Beispiel <a href="#summenzaehler">Summenzähler</a>
+        zeigt eine einfache und nützliche Anwendung.
       </p>
       <p>
         Folgende Werte können in einer Formel verwendet werden, deren Nummer <i>n</i>
@@ -465,11 +461,11 @@
         falschen Ergebnissen.
       </p>
       <h2 id="konstanten">Literale Konstanten in Formeln</h2>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="100" />
-          <col width="100" />
-          <col />
+          <col style="width: 100px">
+          <col style="width: 100px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -487,7 +483,7 @@
             <p><i>Zahl</i></p>
           </td>
           <td>
-            <p><tt>double</tt><br /><tt>integer</tt></p>
+            <p><tt>byte<br />integer<br />long<br />double</tt></p>
           </td>
           <td>
             <p>
@@ -497,7 +493,10 @@
             </p>
             <p>
               Ganzzahlen können auch in hexadezimaler Schreibweise angegeben werden,
-              indem man ihnen <tt>0x</tt>... voran stellt.
+              indem man ihnen <tt>0x</tt>... voran stellt. Weitere Details finden sich
+              im Abschnitt
+              <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/builtin-types/integral-numeric-types#integer-literals">Ganzzahlenliterale</a>
+              der C#-Sprachreferenz von Microsoft.
             </p>
             <p>
               Fließkommazahlen (<tt>double</tt>) können auch in Exponentialschreibweise
@@ -560,7 +559,7 @@
           </td>
           <td>
             <p>
-              Nicht wirklich Konstanten, da die Werte vom Zeitpunkt des Abrufs abhängen:<br />
+              Nicht wirklich Konstanten, da die Werte vom Zeitpunkt des Aufrufs abhängen:<br />
               Aktuelles Datum (<tt>Today</tt> mit Uhrzeit 0:00 Uhr; <tt>Now</tt> mit aktueller
               Uhrzeit)
             </p>
@@ -569,9 +568,8 @@
               verwendbar. Nützlich sind sie für Berechnungen mit Daten und Uhrzeiten, die
               anders nicht ohne Weiteres möglich wären. Sie lassen sich auch in gültige
               Ausgabetypen (Zahlen oder Texte) umwandeln. Siehe dazu die
-              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0"
-              >Dokumentation der <tt>DateTime</tt>-Klasse</a> und das
-              <a href="#feiertagbeispiel">Anwendungsbeispiel "Feiertag"</a>.
+              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0">Dokumentation der <tt>DateTime</tt>-Klasse</a>
+              und das <a href="#feiertagbeispiel">Anwendungsbeispiel "Feiertag"</a>.
               Korrekt formatierte Texte kann der Gira-Typumwandler auch wieder
               in DateTime-Datenpunkte umwandeln.
             </p>
@@ -590,18 +588,42 @@
             </p>
           </td>
         </tr>
+        <tr>
+          <td>
+            <p><tt>null</tt></p>
+          </td>
+          <td>
+            <p>&mdash;</p>
+          </td>
+          <td>
+            <p>
+              Das typlose "nichts" kann überall stehen wo ein beliebiger
+              <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/builtin-types/nullable-value-types">auf NULL festlegbarer Typ</a>
+              zulässig ist. Nützlich ist das vor allem, wenn man in einem
+              Zweig eines Bedingungsoperators <em>keinen</em> Wert an einen
+              Ausgang senden möchte. Für Ausgänge vom Typ STRING funktioniert
+              das direkt. Für alle anderen Ausgangstypen muss man im anderen
+              Zweig des Bedingungsoperators explizit die auf NULL festlegbare
+              Variante des Ausgabetyps verwenden. Das Beispiel
+              <a href="#hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</a>
+              zeigt, wie man das mit Typumwandlungs-Operatoren erreicht.
+            </p>
+          </td>
+        </tr>
       </table>
       <h2 id="operatoren">Operatoren</h2>
-      Alle <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/">C#-Operatoren</a>, die sich auf verfügbare Datentypen anwenden lassen, sind zulässig.
+      Alle
+      <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/">C#-Operatoren</a>,
+      die sich auf verfügbare Datentypen anwenden lassen, sind zulässig.
       Die wichtigsten davon sind:
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="60" />
-          <col width="90" />
-          <col width="115" />
-          <col width="115" />
-          <col width="100" />
-          <col />
+          <col style="width:  60px">
+          <col style="width:  90px">
+          <col style="width: 115px">
+          <col style="width: 115px">
+          <col style="width: 100px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -684,8 +706,8 @@
               Erzwingt eine Typumwandlung des nachfolgenden Ausdrucks<br />auf
               <i>T</i>. Für <i>T</i> können &ndash; über die an Ein- und Ausgängen
               möglichen Typen hinaus &ndash; auch viele andere
-              <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/keywords/value-types-table"
-              >Werttypen von C#</a> stehen.
+              <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/keywords/value-types-table">Werttypen von C#</a>
+              stehen.
             </p>
           </td>
         </tr>
@@ -919,27 +941,26 @@
         "Punkt vor Strich" enthalten: <tt>*</tt> und <tt>/</tt> werden vor
         <tt>+</tt> und <tt>-</tt> ausgewertet. Geklammerte Ausdrücke
         <tt>(</tt>...<tt>)</tt> werden "von innen nach außen" berechnet.
-        Weitere Angaben dazu finden sich
-        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/#operator-precedence"
-        >im C#-Programmierhandbuch</a>.
+        Weitere Angaben dazu finden sich im Abschnitt
+        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/#operator-precedence">Operatorrangfolge</a>
+        der C#-Sprachreferenz.
       </p>
       <h2 id="funktionen">Funktionen</h2>
       <p>
         Soweit ihre Parameter- und Rückgabetypen sinnvoll verwendbar sind,
         stehen viele Klassen des
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0"
-        >gut und in deutscher Sprache dokumentierten .NET 4.0 APIs</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0">gut und in deutscher Sprache dokumentierten .NET 4.0 APIs</a>
         mit ihren Funktionen zur Verfügung. Dieses Kapitel geht nur auf
         einige besonders nützliche Bereiche und Besonderheiten ein.
       </p>
       <p>
-        Neben dem .NET-Framework stehen einige eigene Erweiterungen vor allem
-        zur <a href="#light">Beleuchtungs-</a> und <a href="#HLK">Klimatechnik</a>
+        Neben dem .NET-Framework stehen eigene Erweiterungen vor allem zur
+        <a href="#light">Beleuchtungs-</a> und <a href="#HLK">Klimatechnik</a>
         zur Verfügung.
       </p>
       <h3>Mathematische Funktionen: Math-Bibliothek und Winkelfunktionen</h3>
       <p>
-        DIe meisten
+        Die meisten
         <a href="https://docs.microsoft.com/de-de/dotnet/api/system.math?view=netframework-4.0#methoden"><b>Math</b>-Methoden des .NET-4.0-Standards</a>
         können in den Formeln verwendet werden.
       </p>
@@ -948,15 +969,16 @@
         x und y deren Potenz x<sup>y</sup>.
       </p>
       <p>
-        Die trigonometrischen Funktionen der <tt>Math</tt>-Bibliothek verwenden und
-        liefern alle Winkelangaben im Bogenmaß. Zur Umrechnung zwischen Grad- und
-        Bogenmaß stehen die folgenden beiden Funktionen als Erweiterung zur Verfügung:
+        Die trigonometrischen Funktionen der <tt>Math</tt>-Bibliothek verwenden
+        und liefern alle Winkelangaben im Bogenmaß. Zur Umrechnung zwischen Grad-
+        und Bogenmaß stehen die folgenden beiden Funktionen der
+        <tt>Angle</tt>-Erweiterung zur Verfügung:
       </p>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="175" />
-          <col width="125" />
-          <col />
+          <col style="width: 175px">
+          <col style="width: 125px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -1012,14 +1034,14 @@
       </p>
       <h3 id="light">Funktionen zur Beleuchtungssteuerung</h3>
       <p>
-        Die Funktionen der <tt>Light</tt>-Klasse rechnen gängige Größen der
-        Beleuchtungstechnik um:
+        Die Funktionen der <tt>Light</tt>-Erweiterung rechnen gängige Größen
+        der Beleuchtungstechnik um:
       </p>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="175" />
-          <col width="125" />
-          <col />
+          <col style="width: 175px">
+          <col style="width: 125px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -1236,13 +1258,14 @@
       </p>
       <h3 id="HLK">Funktionen für die Heizungs-, Lüftungs- und Klimatechnik (HLK)</h3>
       <p>
-        Diese Funktionen helfen bei der Realisierung von Heizungs- und Lüftungsreglern.
+        Die Funktionen der <tt>Hlk</tt>-Erweiterung helfen bei der Realisierung
+        von Heizungs- und Lüftungsreglern.
       </p>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="175" />
-          <col width="125" />
-          <col />
+          <col style="width: 175px">
+          <col style="width: 125px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -1268,8 +1291,8 @@
               in °C und weiteren Parametern die benötigte Vorlauftemperatur für einen Heizkreis.
               Die Parameter passen die Heizkurve an die Gegebenheiten des Gebäudes und der
               Heizungsanlage an. Aufgrund des Umfangs findet sich die genaue Beschreibung dieser
-              Funktion und ein Anwendungsbeispiel <a href="HeatingCurve.html">auf einer eigenen
-              Seite</a>.
+              Funktion und ein Anwendungsbeispiel
+              <a href="HeatingCurve.html">auf einer eigenen Seite</a>.
             </p>
           </td>
         </tr>
@@ -1343,9 +1366,10 @@
       </p>
       <h2>Beispiele</h2>
       <p>
-        Das <a href="HeatingCurve.html#heizbeispiel">Anwendungsbeispiel "Bedarfsgeführte
-        Heizungsregelung</a> findet sich bei der <a href="HeatingCurve.html">Beschreibung
-        der Funktion HeatingCurve</a>.
+        Das
+        <a href="HeatingCurve.html#heizbeispiel">Anwendungsbeispiel "Bedarfsgeführte Heizungsregelung"</a>
+        findet sich bei der
+        <a href="HeatingCurve.html">Beschreibung der Funktion HeatingCurve</a>.
       </p>
       <h3 id="feiertagbeispiel">Feiertage</h3>
       <p>
@@ -1393,25 +1417,35 @@
         Formelberechnung mit folgenden Formeln einsetzt:<br />
         Formel 1: <span class="box-noscroll"> <tt>{Auslöser:N} > {ObereSchwelle:N}</tt> </span><br />
         Formel 2: <span class="box-noscroll"> <tt>{Auslöser:N} < {UntereSchwelle:N}</tt> </span><br />
-        Formel 3: <span class="box-noscroll"> <tt>_out1_ ? true : (_out2_ ? false : /* bisherigen Wert erneut senden */ _previousOut3_)</tt> </span>
+        Formel 3: <span class="box-noscroll"> <tt>_out1_ ? (bool?)true : (_out2_ ? (bool?)false : /* nichts senden */ null)</tt> </span>
       </p>
       <p>
         Alle drei Ausgänge sind vom Typ BOOL. Der dritte gibt das gewünschte
         Endergebnis aus; die ersten beiden bleiben daher unbelegt. Solange
         der Auslöser zwischen den beiden Schwellwerten liegt, ergeben die
         beiden ersten Formeln jeweils <tt>false</tt>. Formel 3 gibt in
-        diesem Fall den Ausgabewert erneut &ndash; aber unverändert &ndash;
-        aus. <em>Jede</em> Änderung &ndash; auch die eines oder beider
-        Schwellwerte &ndash; hat die gleiche Wirkung.
+        diesem Fall <em>nichts</em> aus.
       </p>
-      <p>
-        Wie beim Original-Gira-Baustein gibt es sinnvolle Ausgabewerte nur,
-        wenn die Schwellwerte nicht vertauscht werden. Im einfachsten Fall
-        legt man dazu direkt in der ersten Formel den oberen Schwellwert auf
-        eine höhere Zahl als den unteren Schwellwert fest:<br />
-        Formel 1: <span class="box-noscroll"> <tt>{Auslöser:N} > ({UntereSchwelle:N} + 2.0) /* obere Schwelle */</tt> </span><br />
-        Die beiden weiteren Formeln bleiben wie oben angegeben.
-      </p>
+      <p>Hinweise:</p>
+      <ul>
+        <li>
+          Anders als beim Gira-Baustein "Schwellwert mit Hysterese" bleibt
+          der Ausgang mit dieser Formel so lange undefiniert, bis ein
+          Eingangstelegramm eintrifft, dessen Wert entweder unterhalb der
+          unteren oder oberhalb der oberen Schwelle liegt. Man sollte daher
+          die Eingangswerte nachfolgender Bausteine geeignet vorbelegen,
+          sonst werden diese möglicherweise nach einem Neustart für längere
+          Zeit nicht ausgeführt.
+        </li>
+        <li>
+          Wie beim Original-Gira-Baustein gibt es sinnvolle Ausgabewerte nur,
+          wenn die Schwellwerte nicht vertauscht werden. Im einfachsten Fall
+          legt man dazu direkt in der ersten Formel den oberen Schwellwert auf
+          eine höhere Zahl als den unteren Schwellwert fest:<br />
+          Formel 1: <span class="box-noscroll"> <tt>{Auslöser:N} > ({UntereSchwelle:N} + 2.0) /* obere Schwelle */</tt> </span><br />
+          Die beiden weiteren Formeln bleiben wie oben angegeben.
+        </li>
+      </ul>
       <h3 id="summenzaehler">Summenzähler</h3>
       <p>
         Die folgende Formel erhöht, beginnend bei <tt>0</tt>, mit jedem
@@ -1425,8 +1459,8 @@
         bleibt bei) <tt>0</tt>.
       </p>
       <p>
-        Die angegebene Variante erzeugt am Ausgang eine Ganzzahl (z. B.
-        INTEGER). Die Formel lässt sich leicht so abwandeln, dass sie
+        Die angegebene Formel erzeugt am Ausgang eine Ganzzahl (z. B.
+        INTEGER). Sie lässt sich leicht so abwandeln, dass sie
         Fließkommazahlen verarbeitet und ausgibt.
       </p>
     </div>

@@ -153,6 +153,28 @@ namespace Recomedia_de.Logic.VisuWeb
       return -1;
     }
 
+    protected override ValidationResult validateTemplate(string language,
+                                              StringValueObject template)
+    {
+      // Call base class checks first
+      ValidationResult result = base.validateTemplate(language, template);
+      if ( result.HasError)
+      {
+        return result;
+      }
+
+      // Do our own checking
+      if (hasAssignment(template.Value))
+      {
+        return new ValidationResult {
+          HasError = true,
+          Message = Localize(language, template.Name) + ": " +
+                    Localize(language, "HasAssignment")
+        };
+      }
+      return new ValidationResult { HasError = false };
+    }
+
     /// <summary>
     /// Verify that tokens have no format specification and that they have a
     /// user-supplied, valid identifier as name. Offending tokens are replaced
@@ -183,11 +205,6 @@ namespace Recomedia_de.Logic.VisuWeb
           if (hasOutOfRangeRef(text, templateName))
           {
             templateTokens[i] = new ErrorToken(token.getSource(), "HasOutOfRangeRef");
-            return createTextError(language, templateName, templateTokens[i]);
-          }
-          if (hasAssignment(text))
-          {
-            templateTokens[i] = new ErrorToken(token.getSource(), "HasAssignment");
             return createTextError(language, templateName, templateTokens[i]);
           }
         }
@@ -260,10 +277,85 @@ namespace Recomedia_de.Logic.VisuWeb
       if (isStringDelimiter(text, i))
       {
         int maxI = text.Length - 1;
-        do
+        if (i < maxI)
         {
-          i++;
-        } while (!isStringDelimiter(text, i) && (i < maxI));
+          do
+          {
+            i++;
+          } while ((i < maxI) && !isStringDelimiter(text, i));
+        }
+      }
+      return i;
+    }
+
+    private bool isCommentOpening(string text, int i)
+    {
+      if (text[i] != '*')
+      {
+        return false;
+      }
+
+      if (i > 0)
+      {
+        switch (text[i - 1])
+        {
+          case '/':
+            return true;
+          default:
+            break;
+        }
+      }
+      return false;
+    }
+
+    private bool isCommentClosing(string text, int i)
+    {
+      if (text[i] != '/')
+      {
+        return false;
+      }
+
+      if (i > 0)
+      {
+        switch (text[i - 1])
+        {
+          case '*':
+            return true;
+          default:
+            break;
+        }
+      }
+      return false;
+    }
+
+    private int skipComment(string text, int i)
+    {
+      if (isCommentOpening(text, i))
+      {
+        int maxI = text.Length - 1;
+        if (i < maxI)
+        {
+          do
+          {
+            i++;
+          } while ((i < maxI) && !isCommentClosing(text, i));
+        }
+      }
+      return i;
+    }
+
+    private int skipPlaceholder(string text, int i)
+    {
+      if (PLACEHOLDER_OPENING == text[i])
+      {
+        int maxI = text.Length - 1;
+        if (i < maxI)
+        {
+          do
+          {
+            i++;
+          } while ((i < maxI) && (PLACEHOLDER_CLOSING != text[i]));
+        }
       }
       return i;
     }
@@ -307,12 +399,11 @@ namespace Recomedia_de.Logic.VisuWeb
     private bool hasAssignment(string text)
     {
       int maxI = text.Length - 1;
-      if (maxI < 0)
-      {
-        return false;   // empty
-      }
+      System.Diagnostics.Trace.Assert(maxI >= 0);
       for ( int i = 0; i <= maxI; i++ )
       {
+        i = skipComment(text, i);
+        i = skipPlaceholder(text, i); // assignments in placeholders will be checked later
         i = skipStringLiteral(text, i);
 
         if ( isAssignment(text, i))
@@ -372,11 +463,15 @@ namespace Recomedia_de.Logic.VisuWeb
           if (mCompiled[i] != null)
           {
             // Need a temporary object of appropriate type to store output in
-            object value = getValueOfOutputType(i);
-            // Evaluate pre-compiled expression and store in final output
+            object value = null;
+            // Evaluate pre-compiled expression
             mCompiled[i](ref value);
-            mOutputs[i].Value = value;
-            updateOutputField(i);
+            if (value != null)
+            { // Store in final output only when not null
+              // (otherwise just keep what it already has)
+              mOutputs[i].Value = value;
+              updateOutputField(i);
+            }
           }
           else
           {
@@ -481,7 +576,7 @@ namespace Recomedia_de.Logic.VisuWeb
       string declarations = typeStr + " " + createOutIdentifier(i) + "; " +
                             typeStr + " " + createPreviousOutIdentifier(i);
       if (PortTypes.String == mOutputs[i].PortType.Name)
-      { // Initialize strings to empty because C# defaults to a null reference
+      { // Initialize strings to empty instead of dangerous null default
         declarations += " = \"\"";
       }
       declarations += "; ";
@@ -524,12 +619,14 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       if ( var.WasSet )
       {
+        System.Diagnostics.Trace.Assert(var.Value != null);
         updateField(var.Name, var.Value);
       }
     }
 
     private void updateOutputField(int i)
     {
+      System.Diagnostics.Trace.Assert(mOutputs[i].Value != null);
       updateField(createOutIdentifier(i), mOutputs[i].Value);
     }
 
@@ -543,15 +640,13 @@ namespace Recomedia_de.Logic.VisuWeb
 
     private void updateField(string name, object value)
     {
-      Tuple<FieldSpec, FieldInfo> field;
-      bool found = mFields.TryGetValue(name, out field);
-      if (found)
+      if (value != null)
       {
+        Tuple<FieldSpec, FieldInfo> field;
+        bool found = mFields.TryGetValue(name, out field);
+        System.Diagnostics.Trace.Assert(found);
         System.Diagnostics.Trace.Assert(field != null);
-        if ( value != null )
-        {
-          field.Item2.SetValue(mEngine, value);
-        }
+        field.Item2.SetValue(mEngine, value);
       }
     }
 
@@ -576,37 +671,6 @@ namespace Recomedia_de.Logic.VisuWeb
         return "";
       }
       return expressionText;
-    }
-
-    private object getValueOfOutputType(int i)
-    {
-      string outputType = mOutputs[i].PortType.Name;
-
-      if (PortTypes.Number == outputType)
-      {
-        return new double();
-      }
-      else if (PortTypes.Int64 == outputType)
-      {
-        return new Int64();
-      }
-      else if (PortTypes.Integer == outputType)
-      {
-        return new int();
-      }
-      else if (PortTypes.Byte == outputType)
-      {
-        return new byte();
-      }
-      else if (PortTypes.Bool == outputType)
-      {
-        return new bool();
-      }
-      else if (PortTypes.String == outputType)
-      {
-        return String.Empty.Clone();
-      }
-      return null;
     }
 
     private string getTypeString(IPortType type)

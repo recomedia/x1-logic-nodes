@@ -652,6 +652,398 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     }
 
     [Test]
+    public void NullOutputConditional()
+    {
+      // Use four expressions of different types
+      node.mTemplateCount.Value = 4;
+      Assert.AreEqual(4, node.mTemplates.Count);
+      node.mTemplates[0].Value = "(Math.Abs({Wert:N} - _previousOut1_)) >= 0.5 ? (double?){Wert:N} : null";
+      node.mTemplates[1].Value = "(_out1_ > 0.0) ? (bool?)true : ((_out1_ < 0.0) ? (bool?)false : null)";
+      node.mTemplates[2].Value = "_out2_ ? (int?)1 : null";
+      node.mTemplates[3].Value = "_out2_ ? null : \"false\"";
+      node.mOutputTypes[1].Value = PortTypes.Bool;
+      node.mOutputTypes[2].Value = PortTypes.Integer;
+      node.mOutputTypes[3].Value = PortTypes.String;
+
+      // Expect no validation error
+      var result = node.Validate("en");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 1, 0);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "Wert" }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
+
+      // Check the initial output and error state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be double
+      Assert.AreEqual(PortTypes.Number, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[1]);         // should be bool
+      Assert.AreEqual(PortTypes.Bool, node.mOutputs[1].PortType.Name);
+      Assert.IsFalse(node.mOutputs[1].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[2]);         // should be int
+      Assert.AreEqual(PortTypes.Integer, node.mOutputs[2].PortType.Name);
+      Assert.IsFalse(node.mOutputs[2].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[3]);         // should be bool
+      Assert.AreEqual(PortTypes.String, node.mOutputs[3].PortType.Name);
+      Assert.IsFalse(node.mOutputs[3].HasValue);  // no output value yet
+
+      // Set an input value and re-check
+      node.mNumInputs[0].Value = 0.1;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // still no output value
+      Assert.AreEqual(null, node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsFalse(node.mOutputs[1].HasValue);  // still no output value
+      Assert.AreEqual(null, node.mOutputs[1].Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsFalse(node.mOutputs[2].HasValue);  // still no output value
+      Assert.AreEqual(null, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
+      Assert.AreEqual("false", node.mOutputs[3].Value);
+
+      // Set another input value and re-check
+      node.mNumInputs[0].Value = 2.0;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual(2.0, node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsTrue(node.mOutputs[1].HasValue);   // now has an output value
+      Assert.AreEqual(true, node.mOutputs[1].Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
+      Assert.AreEqual(1, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // has unchanged output value
+      Assert.AreEqual("false", node.mOutputs[3].Value);
+
+      // Set another input value and re-check
+      node.mNumInputs[0].Value = 1.6;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // has unchanged output value
+      Assert.AreEqual(2.0, node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsTrue(node.mOutputs[1].HasValue);   // has unchanged output value
+      Assert.AreEqual(true, node.mOutputs[1].Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // has unchanged output value
+      Assert.AreEqual(1, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // has unchanged output value
+      Assert.AreEqual("false", node.mOutputs[3].Value);
+
+      // Set another input value and re-check
+      node.mNumInputs[0].Value = -0.5;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // has a new output value
+      Assert.AreEqual(-0.5, node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsTrue(node.mOutputs[1].HasValue);   // has a new output value
+      Assert.AreEqual(false, node.mOutputs[1].Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // has unchanged output value
+      Assert.AreEqual(1, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // has a new output value
+      Assert.AreEqual("false", node.mOutputs[3].Value);
+    }
+
+    [Test]
+    public void NullHysteresis()
+    {
+      // Use three valid expressions to form a Schmitt-Trigger, and
+      // two more to test string type references
+      node.mTemplateCount.Value = 5;
+      Assert.AreEqual(5, node.mTemplates.Count);
+      node.mTemplates[0].Value = "{Auslöser:N} > {ObereSchwelle:N}";
+      node.mTemplates[1].Value = "{Auslöser:N} < {UntereSchwelle:N}";
+      node.mTemplates[2].Value = "_out1_ ? (bool?)true : (_out2_ ? (bool?)false : /* nichts senden */ null)";
+      node.mTemplates[3].Value = "_out3_ ? \"true\" : /* nichts senden */ null";
+      node.mTemplates[4].Value = "_out3_ ? /* nichts senden */ null : \"false\"";
+      node.mOutputTypes[0].Value = PortTypes.Bool;
+      node.mOutputTypes[1].Value = PortTypes.Bool;
+      node.mOutputTypes[2].Value = PortTypes.Bool;
+      node.mOutputTypes[3].Value = PortTypes.String;
+      node.mOutputTypes[4].Value = PortTypes.String;
+
+      // Expect no validation error
+      var result = node.Validate("en");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 3, 0);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "Auslöser",
+                                     "ObereSchwelle", "UntereSchwelle" },
+                                     node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
+
+      // Check initial error and output states
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be bool
+      Assert.AreEqual(PortTypes.Bool, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[1]);         // should be bool
+      Assert.AreEqual(PortTypes.Bool, node.mOutputs[1].PortType.Name);
+      Assert.IsFalse(node.mOutputs[1].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[2]);         // should be bool
+      Assert.AreEqual(PortTypes.Bool, node.mOutputs[2].PortType.Name);
+      Assert.IsFalse(node.mOutputs[2].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[3]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[3].PortType.Name);
+      Assert.IsFalse(node.mOutputs[3].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[4]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[4].PortType.Name);
+      Assert.IsFalse(node.mOutputs[4].HasValue);  // no output value yet
+
+      // Set input values and re-check
+      node.mNumInputs[0].Value = 20.0000001;
+      node.mNumInputs[1].Value = 30;
+      node.mNumInputs[2].Value = 20;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsFalse(node.mOutputs[2].HasValue);  // still has no output value
+      Assert.AreEqual(null, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsFalse(node.mOutputs[3].HasValue);  // still has no output value
+      Assert.AreEqual(null, node.mOutputs[3].Value);
+      Assert.IsNotNull(node.mOutputs[4]);
+      Assert.IsTrue(node.mOutputs[4].HasValue);   // now has an output value
+      Assert.AreEqual("false", node.mOutputs[4].Value);
+
+      // Set another input value and re-check the output
+      node.mNumInputs[0].Value = 30.0;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsFalse(node.mOutputs[2].HasValue);  // still has no output value
+      Assert.AreEqual(null, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsFalse(node.mOutputs[3].HasValue);  // still has no output value
+      Assert.AreEqual(null, node.mOutputs[3].Value);
+      Assert.IsNotNull(node.mOutputs[4]);
+      Assert.IsTrue(node.mOutputs[4].HasValue);   // has unchanged output value
+      Assert.AreEqual("false", node.mOutputs[4].Value);
+
+      // Set another input value and re-check the output
+      node.mNumInputs[0].Value = 30.0000001;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual(true, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+
+      // Set another input value and re-check the output
+      node.mNumInputs[0].Value = 20.000000;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual(true, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+
+      // Set another input value and re-check the output
+      node.mNumInputs[0].Value = 19.999999;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual(false, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+
+      // Set new bounds and re-check the output
+      node.mNumInputs[1].Value = 20;
+      node.mNumInputs[2].Value = 10;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
+      Assert.AreEqual(false, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+
+      // Set new upper bound and re-check the output
+      node.mNumInputs[1].Value = 19.5;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
+      Assert.AreEqual(true, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+
+      // Set new upper bound and re-check the output
+      node.mNumInputs[1].Value = 25;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
+      Assert.AreEqual(true, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+
+      // Set new lower bound and re-check the output
+      node.mNumInputs[2].Value = 20;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
+      Assert.AreEqual(false, node.mOutputs[2].Value);
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
+      Assert.AreEqual("true", node.mOutputs[3].Value);
+    }
+
+    [Test]
+    public void PrevValueStringConcat()
+    {
+      // Use two string expressions
+      node.mTemplateCount.Value = 2;
+      Assert.AreEqual(2, node.mTemplates.Count);
+      node.mTemplates[0].Value = "{Neustart:B} ? \"\" /* reset to empty */ : (_previousOut1_ + {Anhang:S}) /* concatenate */";
+      node.mTemplates[1].Value = "_previousOut1_ /* test the start value */";
+      node.mOutputTypes[0].Value = PortTypes.String;
+      node.mOutputTypes[1].Value = PortTypes.String;
+
+      // Expect no validation error
+      var result = node.Validate("en");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(1, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { "Neustart" }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "Anhang" }, node.mStrInputs);
+
+      // Check the initial error and output state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[1]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[1].PortType.Name);
+      Assert.IsFalse(node.mOutputs[1].HasValue);  // no output value yet
+
+      // Set input values and re-check the output
+      node.mBinInputs[0].Value = false;
+      node.mStrInputs[0].Value = "42";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("42", node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.AreEqual(PortTypes.String, node.mOutputs[1].PortType.Name);
+      Assert.IsTrue(node.mOutputs[1].HasValue);   // now has empty output value
+      Assert.AreEqual("", node.mOutputs[1].Value);
+
+      // Set input value and re-check the output
+      node.mStrInputs[0].Value = ", 73";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("42, 73", node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.AreEqual(PortTypes.String, node.mOutputs[1].PortType.Name);
+      Assert.IsTrue(node.mOutputs[1].HasValue);   // now has previous output value
+      Assert.AreEqual("42", node.mOutputs[1].Value);
+
+      // Set input value and reset, and re-check the output
+      node.mStrInputs[0].Value = ", 4711";
+      node.mBinInputs[0].Value = true;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("", node.mOutputs[0].Value);
+
+      // Remove reset, and re-check the output
+      node.mStrInputs[0].Value = "";
+      node.mBinInputs[0].Value = false;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("", node.mOutputs[0].Value);
+
+      // Set another input value and re-check the output
+      node.mStrInputs[0].Value = "37";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("37", node.mOutputs[0].Value);
+    }
+
+    [Test]
     public void PrevValueSumCounter()
     {
       // Use only the one default expression
@@ -666,7 +1058,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       // Check the resulting inputs
       checkInputCounts(1, 1, 0, 0);
       checkInputNames<BoolValueObject>(new List<string> { "Neustart" }, node.mBinInputs);
-      checkInputNames<IntValueObject>(new List<string> { "Erhöhung"  }, node.mIntInputs);
+      checkInputNames<IntValueObject>(new List<string> { "Erhöhung" }, node.mIntInputs);
       checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
       checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
@@ -711,143 +1103,6 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsNotNull(node.mOutputs[0]);
       Assert.IsTrue(node.mOutputs[0].HasValue);
       Assert.AreEqual(4711 + 37, node.mOutputs[0].Value);
-    }
-
-    [Test]
-    public void PrevValueHysteresis()
-    {
-      // Use three valid expressions to form a Schmitt-Trigger, and
-      // a fourth to test a string type reference
-      node.mTemplateCount.Value = 4;
-      Assert.AreEqual(4, node.mTemplates.Count);
-      node.mTemplates[0].Value = "{Auslöser:N} > {ObereSchwelle:N}";
-      node.mTemplates[1].Value = "{Auslöser:N} < {UntereSchwelle:N}";
-      node.mTemplates[2].Value = "_out1_ ? true : (_out2_ ? false : /* re-send unchanged */ _previousOut3_)";
-      node.mTemplates[3].Value = "_out3_ ? \"true\" : _previousOut4_";
-      node.mOutputTypes[0].Value = PortTypes.Bool;
-      node.mOutputTypes[1].Value = PortTypes.Bool;
-      node.mOutputTypes[2].Value = PortTypes.Bool;
-      node.mOutputTypes[3].Value = PortTypes.String;
-
-      // Expect no validation error
-      var result = node.Validate("en");
-      Assert.IsFalse(result.HasError);
-
-      // Check the resulting inputs
-      checkInputCounts(0, 0, 3, 0);
-      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
-      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string> { "Auslöser",
-                                     "ObereSchwelle", "UntereSchwelle" },
-                                     node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
-
-      // Check the output states
-      Assert.IsNotNull(node.mOutputs[0]);         // should be bool
-      Assert.AreEqual(PortTypes.Bool, node.mOutputs[0].PortType.Name);
-      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
-      Assert.IsNotNull(node.mOutputs[1]);         // should be bool
-      Assert.AreEqual(PortTypes.Bool, node.mOutputs[1].PortType.Name);
-      Assert.IsFalse(node.mOutputs[1].HasValue);  // no output value yet
-      Assert.IsNotNull(node.mOutputs[2]);         // should be bool
-      Assert.AreEqual(PortTypes.Bool, node.mOutputs[2].PortType.Name);
-      Assert.IsFalse(node.mOutputs[2].HasValue);  // no output value yet
-      Assert.IsNotNull(node.mOutputs[3]);         // should be string
-      Assert.AreEqual(PortTypes.String, node.mOutputs[3].PortType.Name);
-      Assert.IsFalse(node.mOutputs[3].HasValue);  // no output value yet
-
-      // Set input values and re-check the output
-      node.mNumInputs[0].Value = 20.0000001;
-      node.mNumInputs[1].Value = 30;
-      node.mNumInputs[2].Value = 20;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
-      Assert.AreEqual(false, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
-      Assert.AreEqual("", node.mOutputs[3].Value);
-
-      // Set another input value and re-check the output
-      node.mNumInputs[0].Value = 30.0;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);
-      Assert.AreEqual(false, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);
-      Assert.AreEqual("", node.mOutputs[3].Value);
-
-      // Set another input value and re-check the output
-      node.mNumInputs[0].Value = 30.0000001;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);
-      Assert.AreEqual(true, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);
-      Assert.AreEqual("true", node.mOutputs[3].Value);
-
-      // Set another input value and re-check the output
-      node.mNumInputs[0].Value = 20.000000;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);
-      Assert.AreEqual(true, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);
-      Assert.AreEqual("true", node.mOutputs[3].Value);
-
-      // Set another input value and re-check the output
-      node.mNumInputs[0].Value = 19.999999;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);
-      Assert.AreEqual(false, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);
-      Assert.AreEqual("true", node.mOutputs[3].Value);
-
-      // Set new bounds and re-check the output
-      node.mNumInputs[1].Value = 20;
-      node.mNumInputs[2].Value = 10;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
-      Assert.AreEqual(false, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
-      Assert.AreEqual("true", node.mOutputs[3].Value);
-
-      // Set new upper bound and re-check the output
-      node.mNumInputs[1].Value = 19.5;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
-      Assert.AreEqual(true, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
-      Assert.AreEqual("true", node.mOutputs[3].Value);
-
-      // Set new upper bound and re-check the output
-      node.mNumInputs[1].Value = 25;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
-      Assert.AreEqual(true, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
-      Assert.AreEqual("true", node.mOutputs[3].Value);
-
-      // Set new lower bound and re-check the output
-      node.mNumInputs[2].Value = 20;
-      node.Execute();
-      Assert.IsNotNull(node.mOutputs[2]);
-      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
-      Assert.AreEqual(false, node.mOutputs[2].Value);
-      Assert.IsNotNull(node.mOutputs[3]);
-      Assert.IsTrue(node.mOutputs[3].HasValue);   // now has an output value
-      Assert.AreEqual("true", node.mOutputs[3].Value);
     }
 
     [Test]
@@ -1627,7 +1882,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.mOutputTypes[0].Value = PortTypes.Number;
       node.mOutputTypes[1].Value = PortTypes.Number;
 
-      // Check the output states
+      // Check the initial error and output state
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
       Assert.AreEqual("", node.mError.Value);
@@ -1717,16 +1972,69 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
 
       // Check the output state
-      Assert.IsNotNull(node.mOutputs[0]);         // should be bool
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
       Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
       Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
 
-      // Set input values and re-check the output
+      // Set input value and re-check the output
       node.mStrInputs[0].Value = File.ReadAllText(@"../../openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mOutputs[0]);
       Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
       Assert.AreEqual(File.ReadAllText(@"../../openweather2.json"), node.mOutputs[0].Value);
+    }
+
+    [Test]
+    public void SeemingAssignments()
+    {
+      // Use the default template; don't set the number of templates
+
+      // Set and check the output type
+      node.mOutputTypes[0].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+
+      // Set a valid template that uses "=" in comment and string literal
+      node.mTemplates[0].Value = "/* text length = 4: expect {text:S}.Length = less than 4 */ " +
+                                 "({text:S}.Length > 3) ? {text:S} : \"{text:S}.Length = less than 4\"";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
+
+      // Check the initial error and output state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set a "long" input string and re-check
+      node.mStrInputs[0].Value = "1234";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("1234", node.mOutputs[0].Value);
+
+      // Set a "short" input string and re-check
+      node.mStrInputs[0].Value = "123";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("text.Length = less than 4", node.mOutputs[0].Value);
     }
 
     public class ExpressionCalculatorErrorTestCaseData
@@ -1736,6 +2044,15 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         get
         {
           // Own error messages (localized)
+          yield return new TestCaseData("", "EmptyTemplate",
+                                        0, 0, 0, 0).
+                               SetName("ErrorEmptyTemplate");
+          yield return new TestCaseData("=", "HasAssignment",
+                                        0, 0, 0, 0).
+                                SetName("ErrorAssignmentLonely");
+          yield return new TestCaseData("{}", "EmptyPlaceholder",
+                                        0, 0, 0, 0).
+                               SetName("ErrorEmptyPlaceholder");
           yield return new TestCaseData("{:N}", "HasDefaultName",
                                         0, 0, 0, 0).
                                SetName("ErrorHasDefaultName");
@@ -1779,6 +2096,36 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                         0, 0, 0, 0).
                                 SetName("ErrorAssignmentStringLiterals");
           // Errors causing exceptions in interpreter (not localized)
+          yield return new TestCaseData("/", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorSlashTemplate");
+          yield return new TestCaseData("*/", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorStarSlashTemplate");
+          yield return new TestCaseData("x/", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorXSlashTemplate");
+          yield return new TestCaseData("/*x/", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorCommentXTemplate");
+          yield return new TestCaseData("/*x/2", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorCommentX2Template");
+          yield return new TestCaseData("*", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorStarTemplate");
+          yield return new TestCaseData("\"", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorQuoteTemplate");
+          yield return new TestCaseData("}", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorCurlyCloseTemplate");
+          yield return new TestCaseData("}{", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorCurlyCloseOpenTemplate");
+          yield return new TestCaseData("}}", "",
+                                        0, 0, 0, 0).
+                               SetName("ErrorCurlyClose2Template");
           yield return new TestCaseData("{x:N}^2", "",
                                         0, 0, 1, 0).
                                 SetName("ExceptionSyntax");

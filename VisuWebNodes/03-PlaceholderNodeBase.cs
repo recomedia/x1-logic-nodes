@@ -22,12 +22,13 @@ namespace Recomedia_de.Logic.VisuWeb
     /// variable fields (placeholders) in the template
     /// string.
     /// </summary>
-    private static readonly char[] PLACEHOLDER_DELIMITERS = { '{', '}' };
+    public const char PLACEHOLDER_OPENING = '{';
+    public const char PLACEHOLDER_CLOSING = '}';
     private static readonly Regex PLACEHOLDER_REGEX =
-          new Regex(Char.ToString(PLACEHOLDER_DELIMITERS[0]) +
-                    "[^" + Char.ToString(PLACEHOLDER_DELIMITERS[0]) +
-                           Char.ToString(PLACEHOLDER_DELIMITERS[1]) + "]*" +
-                    Char.ToString(PLACEHOLDER_DELIMITERS[1]));
+          new Regex(Char.ToString(PLACEHOLDER_OPENING) +
+                    "[^" + Char.ToString(PLACEHOLDER_OPENING) +
+                           Char.ToString(PLACEHOLDER_CLOSING) + "]*" +
+                    Char.ToString(PLACEHOLDER_CLOSING));
 
     protected abstract string TEMPLATE_PREFIX { get; }
     private const string OUTPUT_PREFIX = "Output";
@@ -217,6 +218,11 @@ namespace Recomedia_de.Logic.VisuWeb
 
       for (int i = 0; i < mTemplates.Count; i++)
       {
+        result = validateTemplate("en", mTemplates[i]);
+        if (result.HasError)
+        {
+          return;
+        }
         // Check parameter.
         // Along the way fill mTemplateTokens and count numbers of inputs
         List<TokenBase> localTokens = new List<TokenBase>(10);
@@ -299,12 +305,17 @@ namespace Recomedia_de.Logic.VisuWeb
 
       foreach (var template in mTemplates)
       {
+        result = validateTemplate(language, template);
+        if (result.HasError)
+        {
+          return result;
+        }
         int binCountDummy = 0;
         int intCountDummy = 0;
         int numCountDummy = 0;
         int strCountDummy = 0;
-        List<TokenBase> localTokens = new List<TokenBase>(10);
-        result = validateInternal(template, ref localTokens,
+        List<TokenBase> localTokensDummy = new List<TokenBase>(10);
+        result = validateInternal(template, ref localTokensDummy,
                                   ref binCountDummy, ref intCountDummy,
                                   ref numCountDummy, ref strCountDummy, language);
         if (result.HasError)
@@ -313,6 +324,20 @@ namespace Recomedia_de.Logic.VisuWeb
         }
       }
       return base.Validate(language);
+    }
+
+    protected virtual ValidationResult validateTemplate(string language,
+                                             StringValueObject template)
+    {
+      if ((!template.HasValue) || (template.Value.Length <= 0))
+      {
+        return new ValidationResult
+        {
+          HasError = true,
+          Message = Localize(language, "EmptyTemplate")
+        };
+      }
+      return new ValidationResult { HasError = false };
     }
 
     private ValidationResult validateSeparators(string language)
@@ -361,15 +386,7 @@ namespace Recomedia_de.Logic.VisuWeb
                                                         ref int strCount,
                                                          string language)
     {
-      if ( (!template.HasValue) || (template.Value.Length <= 0))
-      {
-        return new ValidationResult
-        {
-          HasError = true,
-          Message = Localize(language, "EmptyTemplate")
-        };
-      }
-
+      System.Diagnostics.Trace.Assert(template.HasValue && (template.Value.Length > 0));
       TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
 
       for (int curPos = 0; curPos < template.Value.Length;)
@@ -471,9 +488,9 @@ namespace Recomedia_de.Logic.VisuWeb
       return new ValidationResult {
         HasError = true,
         Message = Localize(language, templateName) + ": " +
-                  Char.ToString(PLACEHOLDER_DELIMITERS[0]) +
+                  Char.ToString(PLACEHOLDER_OPENING) +
                   token.getSource() +
-                  Char.ToString(PLACEHOLDER_DELIMITERS[1]) +
+                  Char.ToString(PLACEHOLDER_CLOSING) +
                   Localize(language, token.getError())
       };
     }

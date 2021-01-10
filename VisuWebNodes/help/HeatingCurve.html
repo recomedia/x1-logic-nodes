@@ -22,11 +22,11 @@
         Die Heizkurve, also die Festlegung der Vorlauftemperatur eine Heizkreises
         je nach Außentemperatur, ist zentraler Bestandteil jeder Heizungsregelung.
       </p>
-      <table class="Tabelle_Logicnode" cellspacing="0">
+      <table class="Tabelle_Logicnode">
         <colgroup>
-          <col width="175" />
-          <col width="125" />
-          <col />
+          <col style="width: 175px">
+          <col style="width: 125px">
+          <col>
         </colgroup>
         <tr>
           <th>
@@ -44,8 +44,8 @@
             <p>
               <tt>
                 Hlk.HeatingCurve(<br />
-              </tt><i>TaAvg</i><tt>, </tt><i>Tg</i><tt>, </tt><i>TaMin</i><tt>
-                ,<br />
+              </tt><i>TaAvg</i><tt>, </tt><i>Tg</i><tt>, </tt><i>TaMin</i><tt>, 
+              <br />
               </tt><i>TSoll</i><tt>, </tt><i>TvMax</i><tt>, </tt><i>k</i><tt>)</tt>
             </p>
           </td>
@@ -86,7 +86,7 @@
             <dt>Niedrigenergiehaus</dt>
             <dd>11..13</dd>
             <dt>Passivhaus</dt>
-            <dd> 9..11</dd>
+            <dd>&nbsp;&nbsp;9..11</dd>
           </dl>
         </dd>
         <dt><i>TaMin</i></dt>
@@ -137,8 +137,8 @@
             In Anlagen <i>ohne Raumtemperaturregler</i> soll die gewünschte
             Raumtemperatur gerade erreicht werden. Auch bei außergewöhnlichem
             Fremdwärmeeintrag (z. B. Sonnenschein) soll sie nicht wesentlich
-            überschritten werden (sonst wäre der Einsatz von Raumtemperaturreglern
-            anzuraten). Möglich ist dies nur durch eine niedrige Auslegungstemperatur
+            überschritten werden (sonst wären Raumtemperaturregler sinnvoll).
+            Möglich ist dies nur durch eine niedrige Auslegungstemperatur
             <i>TvMax</i> mit entsprechendem
             <a href="http://www.heiz-tipp.de/ratgeber-455-selbstregeleffekt.html">Selbstregeleffekt</a>.
           </li>
@@ -148,9 +148,9 @@
               Raumtemperaturreglern (RTR)
             </i> sollen die RTR-Stellgrößen nur bei
             außergewöhnlichem Fremdwärmeeintrag unter 80% liegen. (Die verbleibenden
-            20% Regelreserve werden bei windigem Wetter ohne Fremdwärmeeintrag
-            benötigt. Ist die Gebäudehülle nicht luftdicht, kann mehr Regelreserve
-            notwendig sein.)
+            20% Regelreserve werden bei verstärktem Lüftungsbedarf oder bei windigem
+            Wetter ohne Fremdwärmeeintrag benötigt. Ist die Gebäudehülle nicht
+            luftdicht, kann mehr Regelreserve notwendig sein.)
           </li>
           <li>
             In Anlagen mit Nachtabschaltung oder -absenkung sind Raumtemperaturregler
@@ -162,7 +162,7 @@
         Die Optimierung nimmt man zweckmäßig von oben nach unten gemäß folgender
         Tabelle vor:
       </p>
-      <table style="width: 72%; padding-left: 1.3em" cellspacing="0">
+      <table style="width: 72%; padding-left: 1.3em">
         <tr>
           <td style="vertical-align: bottom; border-right: none"><i>TaAvg</i> ist ...</td>
           <td style="text-align: right">Räume sind ...</td>

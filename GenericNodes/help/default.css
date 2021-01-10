@@ -1,204 +1,244 @@
 ﻿/* General styling of html main parts*/
 html {
-    color: #3C3C3C;
-    background-color: #e6e6e6;
-    font-family: Verdana;
-    font-size: 12px;
-    display: block;
-    line-height: 18px;
-    overflow-y: scroll;
-    -moz-hyphens: auto;
-    -epub-hyphens: auto;
-    -o-hyphens: auto;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
+  color: #3C3C3C;
+  background-color: #e6e6e6;
+  font-family: Verdana;
+  font-size: 12px;
+  display: block;
+  line-height: 18px;
+  overflow-y: scroll;
+  -moz-hyphens: auto;
+  -epub-hyphens: auto;
+  -o-hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 
 .manhyphens {
-    -moz-hyphens: manual;
-    -epub-hyphens: manual;
-    -o-hyphens: manual;
-    -webkit-hyphens: manual;
-    -ms-hyphens: manual;
-    hyphens: manual;
+  -moz-hyphens: manual;
+  -epub-hyphens: manual;
+  -o-hyphens: manual;
+  -webkit-hyphens: manual;
+  -ms-hyphens: manual;
+  hyphens: manual;
 }
 
 body {
-    background-color: #ffffff;
-    width: 970px;
-    border: 0;
-    left: auto;
-    margin: 40px auto 40px auto;
+  background-color: #ffffff;
+  width: 970px;
+  border: 0;
+  left: auto;
+  margin: 40px auto 40px auto;
 }
 
 header {
-    padding: 30px 35px 0 35px;
+  padding: 30px 35px 0 35px;
 }
 
 #headBlack {
-    font-family: Arial;
-    font-size: 36px;
-    font-weight: normal;
-    margin-bottom: 0;
-    padding: 0 36px 0 0;
+  font-family: Arial;
+  font-size: 36px;
+  font-weight: normal;
+  margin-bottom: 0;
+  padding: 0 36px 0 0;
 }
 
 #headGray {
-    font-family: Arial;
-    color: #a0a0a0;
-    font-size: 36px;
-    font-weight: normal;
-    margin-bottom: 0;
+  font-family: Arial;
+  color: #a0a0a0;
+  font-size: 36px;
+  font-weight: normal;
+  margin-bottom: 0;
 }
 
 section {
-    padding: 10px 35px 30px 35px;
+  padding: 10px 35px 30px 35px;
 }
 
 .contentholder {
-    width: 900px;
+  width: 900px;
 }
 
 footer {
-    background-color: #f4f4f4;
-    padding: 30px 35px 30px 35px;
-    font-family: Arial;
+  background-color: #f4f4f4;
+  padding: 30px 35px 30px 35px;
+  font-family: Arial;
 }
 
 #footerHead {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 #footerNav {
-    border-top: 1px solid #cccccc;
-    margin-top: 10px;
-    padding-top: 10px;
+  border-top: 1px solid #cccccc;
+  margin-top: 10px;
+  padding-top: 10px;
 }
 
-    #footerNav img {
-        border: none;
-        vertical-align: middle;
-        width: 33px;
-    }
+  #footerNav img {
+    border: none;
+    vertical-align: middle;
+    width: 33px;
+  }
 
 .navlinks-top {
-    float: right;
-    line-height: 42px;
-    font-weight: normal;
-    padding-right: 33px;
+  float: right;
+  line-height: 42px;
+  font-weight: normal;
+  padding-right: 33px;
 }
 
 h1 {
-    font-family: Arial;
-    font-size: 36px;
-    line-height: 42px;
-    font-weight: normal;
-    color: #323232;
+  font-family: Arial;
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: normal;
+  color: #323232;
 }
 
 h2 {
-    font-family: Arial;
-    font-size: 18px;
-    line-height: 24px;
-    font-weight: normal;
-    color: #323232;
-    margin: 20px 0 5px 0;
-    padding: 8px 0 0 0;
+  font-family: Arial;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: normal;
+  color: #323232;
+  margin: 20px 0 5px 0;
+  padding: 8px 0 0 0;
 }
 
 h3 {
-    font-family: Arial;
-    font-size: 15px;
-    line-height: 20px;
-    margin: 6px 0 4px 0;
-    padding: 6px 0 0 0;
+  font-family: Arial;
+  font-size: 15px;
+  line-height: 20px;
+  margin: 6px 0 4px 0;
+  padding: 6px 0 0 0;
 }
 
 h4 {
-    font-family: Arial;
-    font-size: 14px;
-    line-height: 15px;
-    margin: 2px 0 4px 0;
-    padding: 2px 0 0 0;
+  font-family: Arial;
+  font-size: 14px;
+  line-height: 15px;
+  margin: 2px 0 4px 0;
+  padding: 2px 0 3px 0;
 }
 
 p {
-    margin: 8px 0 8px 0;
+  margin: 8px 0 8px 0;
 }
 
 .box-noscroll {
-    width: 865px;
-    height: 19px;
-    border: 1px solid #CCC;
-    white-space: pre;
+  width: 865px;
+  height: 19px;
+  border: 1px solid #CCC;
+  white-space: pre;
 }
 
 .box-scroll-x {
-    width: 865px;
-    height: 34px;
-    border: 1px solid #CCC;
-    white-space: pre;
-    overflow-x: scroll;
+  width: 865px;
+  height: 34px;
+  border: 1px solid #CCC;
+  white-space: pre;
+  overflow-x: scroll;
 }
 
 a {
-    color: #666;
-    display: inline;
+  color: #666;
+  display: inline;
 }
 
-    a:hover {
-        color: #333;
-    }
+  a:hover {
+    color: #333;
+  }
 
 ol, ul {
-    padding: 0 0 0 20px;
-    margin: -4px 0 0 0;
+  padding: 0 0 0 20px;
+  margin: -4px 0 0 0;
 }
 
 li {
-    margin: 4px 0 4px 0;
+  margin: 4px 0 4px 0;
+}
+
+dl {
+  padding: 0 0 0 20px;
+  margin: 0 0 0 0;
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+
+dt {
+  grid-column-start: 1;
+  margin: 2px 0 0 0;
+}
+
+dd {
+  grid-column-start: 2;
+  margin: 2px 0 0 1.5em;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border-bottom: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  vertical-align: top;
+}
+
+th {
+  text-align: left;
+  padding: 0 4px 2px 4px;
+}
+
+td {
+  padding: 0 4px 0 4px;
 }
 
 table.Tabelle_Logicnode {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 0 8px 0;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 0 8px 0;
 }
 
-    table.Tabelle_Logicnode th {
-        text-align: left;
-        vertical-align: top;
-        padding: 0 4px 2px 4px;
-        border-bottom: 1px solid #cccccc;
-    }
+  table.Tabelle_Logicnode th {
+    text-align: left;
+    vertical-align: top;
+    padding: 0 4px 2px 4px;
+    border-bottom: 1px solid #cccccc;
+    border-right: none;
+  }
 
-    table.Tabelle_Logicnode td {
-        vertical-align: top;
-        padding: 0 4px 0 4px;
-        border-bottom: 1px solid #cccccc;
-    }
+  table.Tabelle_Logicnode td {
+    vertical-align: top;
+    padding: 0 4px 0 4px;
+    border-bottom: 1px solid #cccccc;
+    border-right: none;
+  }
 
-td {
-    padding-bottom: 0;
-}
+    table.Tabelle_Logicnode td.group {
+      vertical-align: top;
+      padding: 0 4px 0 4px;
+      border-bottom: none;
+    }
 
 img {
-    border: none;
-    margin: 0 0 0 0;
-    vertical-align: middle;
+  border: none;
+  margin: 0 0 0 0;
+  vertical-align: middle;
 }
 
 .description {
-    border: none;
-    margin: 0 0 0 0;
-    padding: 3px 30px 40px 40px;
-    float: right;
+  border: none;
+  margin: 0 0 0 0;
+  padding: 3px 30px 40px 40px;
+  float: right;
 }
 
 .example {
-    border: none;
-    margin: 0 0 0 0;
-    padding-top: 6px;
-    max-width: 900px;
+  border: none;
+  margin: 0 0 0 0;
+  padding-top: 6px;
+  max-width: 900px;
 }
