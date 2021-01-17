@@ -277,4 +277,8 @@
     <value>Minimale Differenz für steigende Werte</value>
     <comment>SendByDifference</comment>
   </data>
+  <data name="FirstOutputAfterTime" xml:space="preserve">
+    <value>Erste Werte ausgeben nach</value>
+    <comment>TimedStatistics</comment>
+  </data>
 </root>

@@ -6,7 +6,6 @@ using LogicModule.ObjectModel;
 using LogicModule.ObjectModel.TypeSystem;
 using NUnit.Framework;
 using System.Diagnostics;
-using System.Threading;
 
 namespace Recomedia_de.Logic.VisuWeb.Test
 {

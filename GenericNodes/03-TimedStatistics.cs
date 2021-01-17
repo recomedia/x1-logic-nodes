@@ -92,17 +92,25 @@ namespace Recomedia_de.Logic.Generic
 
       // Default considered timespan is one minute
       mConsideredTime = typeService.CreateTimeSpan(PortTypes.TimeSpan,
-                            "ConsideredTime",  new TimeSpan(0, 0, 1, 0));
+                            "ConsideredTime", new TimeSpan(0, 0, 1, 0));
       // Considered timespan range is 0s (unlimited), or 5s .. 1 year
       mConsideredTime.MinValue = new TimeSpan(0 /* ticks */);
       mConsideredTime.MaxValue = new TimeSpan(366 /* days */, 0, 0, 0);
+      mConsideredTime.ValueSet += updateFirstOutputAfterTimeRange;
+
+      // Default timespan to send first values after is 0 (immediately)
+      mFirstOutputAfterTime = typeService.CreateTimeSpan(PortTypes.TimeSpan,
+                            "FirstOutputAfterTime", new TimeSpan(0 /* ticks */));
+      // Range is 0 (immediately) to considered time 
+      mFirstOutputAfterTime.MinValue = new TimeSpan(0 /* ticks */);
+      mFirstOutputAfterTime.MaxValue = mConsideredTime.Value;
 
       // Default update timespan is 0 (updates only upon receiving new values)
-      mUpdateTime = typeService.CreateTimeSpan(PortTypes.TimeSpan, "UpdateTime",
+      mUpdateInterval = typeService.CreateTimeSpan(PortTypes.TimeSpan, "UpdateTime",
                                                new TimeSpan(0, 0, 0, 0));
       // Update timespan range is 0s (never), or 0,5s .. 1 year
-      mUpdateTime.MinValue = new TimeSpan(0 /* ticks */);
-      mUpdateTime.MaxValue = new TimeSpan(366 /* days */, 0, 0, 0);
+      mUpdateInterval.MinValue = new TimeSpan(0 /* ticks */);
+      mUpdateInterval.MaxValue = new TimeSpan(366 /* days */, 0, 0, 0);
 
       // Default maximum number of stored entries is 50; range is 10 .. 2000
       mMaxEntries = typeService.CreateInt(PortTypes.Integer, "MaxNumber", 50);
@@ -144,12 +152,18 @@ namespace Recomedia_de.Logic.Generic
     public TimeSpanValueObject mConsideredTime { get; private set; }
 
     /// <summary>
+    /// Minimum timespan to cover before sending the first output values.
+    /// </summary>
+    [Parameter(DisplayOrder = 11, IsDefaultShown = true)]
+    public TimeSpanValueObject mFirstOutputAfterTime { get; private set; }
+
+    /// <summary>
     /// Regularly update the output after this time, i. e. discard outdated values
     /// and extrapolate from the last received value even when no new values are
     /// received. 0 means never.
     /// </summary>
     [Parameter(DisplayOrder = 12, IsDefaultShown = false)]
-    public TimeSpanValueObject mUpdateTime { get; private set; }
+    public TimeSpanValueObject mUpdateInterval { get; private set; }
 
     /// <summary>
     /// Maximum number of values to store.
@@ -197,7 +211,37 @@ namespace Recomedia_de.Logic.Generic
     [Output(DisplayOrder = 6, IsDefaultShown = true)]
     public IntValueObject mOutputNumber { get; private set; }
 
+    /// <summary>
+    /// Called when the ConsideredTime receives a new value, in order to update
+    /// the upper limit for FirstOutputAfterTime.
+    /// </summary>
+    private void updateFirstOutputAfterTimeRange(object sender = null,
+                     ValueChangedEventArgs evArgs = null)
+    {
+      // update range
+      if (isUnlimitedTimeConsidered())
+      {
+        mFirstOutputAfterTime.MaxValue = new TimeSpan(366 /* days */, 0, 0, 0);
+      }
+      else
+      {
+        mFirstOutputAfterTime.MaxValue = mConsideredTime.Value;
+      }
+      // autocorrect current value
+      if (getFirstUpdateAfterTimeTicks() > mFirstOutputAfterTime.MaxValue.Ticks)
+      {
+        mFirstOutputAfterTime.Value = mFirstOutputAfterTime.MaxValue;
+      }
+    }
+
     // Some time utility methods
+
+    private long getFirstUpdateAfterTimeTicks()
+    {
+      long ticks = mFirstOutputAfterTime.Value.Ticks - 1;
+      return ticks;
+    }
+
     private bool isUnlimitedTimeConsidered()
     {
       long ticks = mConsideredTime.Value.Ticks;
@@ -243,7 +287,7 @@ namespace Recomedia_de.Logic.Generic
           };
         }
       }
-      var updateTicks = mUpdateTime.Value.Ticks;
+      var updateTicks = mUpdateInterval.Value.Ticks;
       if (updateTicks != 0)
       {
         if (updateTicks < (TimeSpan.TicksPerSecond / 2))
@@ -273,17 +317,22 @@ namespace Recomedia_de.Logic.Generic
     {
       lock(mTimedValues)  // prevent Execute and Trigger from concurrently executing
       {
+        var firstUpdateAfterTimeTicks = getFirstUpdateAfterTimeTicks();
+
         // Upon receiving Reset = true, clear the list
         if (mReset.WasSet && mReset.Value)
         {
           unschedule();
 
-          setOutputsFromLastValue();
+          if ( firstUpdateAfterTimeTicks <= 0)
+          {
+            setOutputsFromLastValue();
+            mOutputSum.Value = 0;
+          }
           mTimedValues.Clear();
-          mOutputSum.Value = 0;
           mOutputNumber.Value = 0;
 
-          // not necessary to reschedule until new value is received
+          // Not necessary to reschedule until a new value is received
         }
 
         // Upon receiving a new input value, remove/trim outdated entries from the list,
@@ -293,9 +342,17 @@ namespace Recomedia_de.Logic.Generic
         {
           unschedule();
 
-          var endTime = trimBeginning();
+          long firstTime = 0;
+          long endTime = trimBeginning(out firstTime);
+
+          // Append any given value just once
           appendIfValid(endTime, mInput.Value);
-          updateOutputs(endTime, mInput.Value);
+          mInput.WasSet = false;
+
+          if ((endTime - firstTime) >= firstUpdateAfterTimeTicks)
+          {
+            updateOutputs(endTime, mInput.Value);
+          }
           mOutputNumber.Value = mTimedValues.Count();
 
           reschedule();
@@ -310,10 +367,17 @@ namespace Recomedia_de.Logic.Generic
     {
       lock(mTimedValues)  // prevent Execute and Trigger from concurrently executing
       {
+        var firstUpdateAfterTimeTicks = getFirstUpdateAfterTimeTicks();
+
         unschedule();
 
-        var endTime = trimBeginning();
-        updateOutputs(endTime);
+        long firstTime = 0;
+        long endTime = trimBeginning(out firstTime);
+
+        if ((endTime - firstTime) >= firstUpdateAfterTimeTicks)
+        {
+          updateOutputs(endTime);
+        }
         mOutputNumber.Value = mTimedValues.Count;
 
         reschedule();
@@ -325,11 +389,14 @@ namespace Recomedia_de.Logic.Generic
     /// Trim first remaining entry's end time such that the time length for the second
     /// entry is not before the start time of the considered timespan.
     /// </summary>
-    private long trimBeginning()
+    private long trimBeginning(out long firstTime)
     {
       var currentTime = mSchedulerService.Now.Ticks;
       var beginTime = getBeginTimeTicks(currentTime);
       var numberOfTimedValues = mTimedValues.Count();
+
+      firstTime = (numberOfTimedValues > 0) ? mTimedValues.ElementAt(0).mEndTime
+                                            : currentTime;
 
       // Remove entries from the beginning of the list that are completely outdated;
       // i. e. we will need neither their timestamp nor their values any more. In
@@ -450,11 +517,8 @@ namespace Recomedia_de.Logic.Generic
             previousValue = mTimedValues.Last().mEndValue;
           }
         }
-        if (valueIsValid)
-        {
-          var interValue = (endValue + previousValue) / 2;
-          mTimedValues.AddLast(new TimedValue(endTime, interValue, endValue));
-        }
+        var interValue = (endValue + previousValue) / 2;
+        mTimedValues.AddLast(new TimedValue(endTime, interValue, endValue));
       }
     }
 
@@ -682,9 +746,9 @@ namespace Recomedia_de.Logic.Generic
     private void reschedule()
     {
       if ( (mTimedValues.Count > 0) && (mUpdateToken == null) &&
-           (mUpdateTime.HasValue) && (mUpdateTime.Value.Ticks > 0) )
+           (mUpdateInterval.HasValue) && (mUpdateInterval.Value.Ticks > 0) )
       {
-        mUpdateToken = mSchedulerService.InvokeIn(mUpdateTime.Value, Trigger);
+        mUpdateToken = mSchedulerService.InvokeIn(mUpdateInterval.Value, Trigger);
       }
     }
 

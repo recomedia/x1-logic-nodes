@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using LogicModule.Nodes.TestHelper;
@@ -53,7 +54,7 @@ namespace Recomedia_de.Logic.Generic.Test
       // Statistics over 10s
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
       // Try to update at least every 5.01s
-      node.mUpdateTime.Value = new TimeSpan(0, 0, 0, 5, 100);
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 0, 5, 100);
       result = node.Validate("en");
       Assert.True(result.HasError);
       Assert.AreEqual("The update period cannot be more than half of the considered timespan" +
@@ -64,7 +65,7 @@ namespace Recomedia_de.Logic.Generic.Test
                       " des Betrachtungszeitraums sein (oder 0 für Aktualisierung nur bei" +
                       " eingehenden Telegrammen).", result.Message);
       // Try to update at least every 0.499s
-      node.mUpdateTime.Value = new TimeSpan(0, 0, 0, 0, 499);
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 0, 0, 499);
       result = node.Validate("en");
       Assert.True(result.HasError);
       Assert.AreEqual("The update period cannot be less than 0.5s (or 0 for no updates between" +
@@ -74,14 +75,14 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual("Das Zeitintervall für Aktualisierung kann nicht kleiner als 0.5s sein" +
                       " (oder 0 für Aktualisierung nur bei eingehenden Telegrammen).", result.Message);
       // Try to update never
-      node.mUpdateTime.Value = new TimeSpan(0);
+      node.mUpdateInterval.Value = new TimeSpan(0);
       result = node.Validate("de");
       Assert.False(result.HasError);
 
       // Statistics over 0 ==> unlimited time
       node.mConsideredTime.Value = new TimeSpan(0);
       // Try to update at least every 0.49s
-      node.mUpdateTime.Value = new TimeSpan(0, 0, 0, 0, 490);
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 0, 0, 490);
       result = node.Validate("en");
       Assert.True(result.HasError);
       Assert.AreEqual("The update period cannot be less than 0.5s (or 0 for no updates between" +
@@ -91,7 +92,7 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual("Das Zeitintervall für Aktualisierung kann nicht kleiner als 0.5s sein" +
                       " (oder 0 für Aktualisierung nur bei eingehenden Telegrammen).", result.Message);
       // Try to update never
-      node.mUpdateTime.Value = new TimeSpan(0);
+      node.mUpdateInterval.Value = new TimeSpan(0);
       result = node.Validate("en");
       Assert.False(result.HasError);
     }
@@ -285,7 +286,7 @@ namespace Recomedia_de.Logic.Generic.Test
       // Statistics over 10s
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
       // Update at least every 3 seconds
-      node.mUpdateTime.Value = new TimeSpan(0, 0, 3);
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 3);
 
       double sum = 0;
       // At mocked time 0, input a first value
@@ -372,7 +373,7 @@ namespace Recomedia_de.Logic.Generic.Test
       // Statistics over 10s
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
       // Update at least every second
-      node.mUpdateTime.Value = new TimeSpan(0, 0, 1);
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 1);
 
       // Check start values
       Assert.IsFalse(node.mOutputAvg.HasValue);
@@ -554,9 +555,9 @@ namespace Recomedia_de.Logic.Generic.Test
       // Statistics over 10s
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
       // Update at least every second
-      node.mUpdateTime.Value = new TimeSpan(0, 0, 1);
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 1);
 
-      // Check start output values
+      // Check initial output values
       Assert.IsFalse(node.mOutputAvg.HasValue);
       Assert.IsFalse(node.mOutputMin.HasValue);
       Assert.IsFalse(node.mOutputMax.HasValue);
@@ -655,7 +656,7 @@ namespace Recomedia_de.Logic.Generic.Test
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
       // Default is to update only when new values arrive
 
-      // Check start output values
+      // Check initial output values
       Assert.IsFalse(node.mOutputAvg.HasValue);
       Assert.IsFalse(node.mOutputMin.HasValue);
       Assert.IsFalse(node.mOutputMax.HasValue);
@@ -754,7 +755,7 @@ namespace Recomedia_de.Logic.Generic.Test
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
       // Resolution default is 1.0
 
-      // Check start output values
+      // Check initial output values
       Assert.IsFalse(node.mOutputAvg.HasValue);
       Assert.IsFalse(node.mOutputMin.HasValue);
       Assert.IsFalse(node.mOutputMax.HasValue);
@@ -956,7 +957,7 @@ namespace Recomedia_de.Logic.Generic.Test
       // Statistics over 10s
       node.mConsideredTime.Value = new TimeSpan(0, 0, 10);
 
-      // Check start output values
+      // Check initial output values
       Assert.IsFalse(node.mOutputAvg.HasValue);
       Assert.IsFalse(node.mOutputMin.HasValue);
       Assert.IsFalse(node.mOutputMax.HasValue);
@@ -1109,6 +1110,183 @@ namespace Recomedia_de.Logic.Generic.Test
       Assert.AreEqual(3, node.mOutputMax.Value);
       Assert.AreEqual(0, node.mOutputChange.Value);
       Assert.AreEqual(0, node.mOutputTrend.Value);
+    }
+
+    [Test]
+    public void FirstOutputAfterTimeUpdateTest()
+    {
+      // Test range and correct updates of FirstOutputAfterTime parameter
+      node.mConsideredTime.Value = new TimeSpan(0, 1 /* minute */, 0);
+      node.mFirstOutputAfterTime.Value = new TimeSpan(0, 2 /* minutes */, 0);
+      Assert.AreEqual(new TimeSpan(0, 1 /* minute */, 0),
+                      node.mFirstOutputAfterTime.Value);  // limited to ConsideredTime
+      node.mConsideredTime.Value = new TimeSpan(0, 0, 30 /* seconds */);
+      Assert.AreEqual(new TimeSpan(0, 0, 30 /* seconds */),
+                      node.mFirstOutputAfterTime.Value);  // limited to ConsideredTime
+      node.mConsideredTime.Value = new TimeSpan(0, 0, -1 /* second */);
+      Assert.AreEqual(new TimeSpan(0),
+                      node.mConsideredTime.Value);        // limited to 0
+      Assert.AreEqual(new TimeSpan(0, 0, 30 /* seconds */),
+                      node.mFirstOutputAfterTime.Value);  // unchanged
+      node.mFirstOutputAfterTime.Value = new TimeSpan(370 /* days */, 0, 0, 0);
+      Assert.AreEqual(new TimeSpan(366, 0, 0, 0),
+                      node.mFirstOutputAfterTime.Value);  // limited to 1 year
+      node.mConsideredTime.Value = new TimeSpan(0, 0, 15 /* seconds */);
+      Assert.AreEqual(new TimeSpan(0, 0, 15 /* seconds */),
+                      node.mConsideredTime.Value);        // new value accepted
+      Assert.AreEqual(new TimeSpan(0, 0, 15 /* seconds */),
+                      node.mFirstOutputAfterTime.Value);  // limited to ConsideredTime
+      node.mConsideredTime.Value = new TimeSpan(0, 0, 20 /* seconds */);
+      Assert.AreEqual(new TimeSpan(0, 0, 15 /* seconds */),
+                      node.mFirstOutputAfterTime.Value);  // unchanged
+    }
+
+    public class TimedStatisticsFirstOutputAfterTimeTestCaseData
+    {
+      public static IEnumerable FirstOutputAfterTimeTestCases
+      {
+        get
+        {
+          yield return new TestCaseData( 0).SetName("Immediately");
+          yield return new TestCaseData( 1).SetName("BeforeSecondValue");
+          yield return new TestCaseData(15).SetName("LessThanConsidered");
+          yield return new TestCaseData(20).SetName("EqualsConsidered");
+          yield return new TestCaseData(21).SetName("MoreThanConsidered");
+        }
+      }
+    }
+    [TestCaseSource(typeof(TimedStatisticsFirstOutputAfterTimeTestCaseData),
+     "FirstOutputAfterTimeTestCases", Category = "FirstOutputAfterTimeTestCases")]
+    public void FirstOutputAfterTimeTest(int firstOutputAfterSeconds)
+    {
+      node.mConsideredTime.Value = new TimeSpan(0, 0, 20 /* seconds */);
+      node.mFirstOutputAfterTime.Value = new TimeSpan(0, 0, firstOutputAfterSeconds);
+      int expectedFirstOutputAfterSeconds = Math.Min(20, firstOutputAfterSeconds);
+      Assert.AreEqual(expectedFirstOutputAfterSeconds,
+                      node.mFirstOutputAfterTime.Value.Seconds);
+      int loopFirstOutputAfterSeconds = (expectedFirstOutputAfterSeconds > 0) ?
+                                 Math.Max(2, expectedFirstOutputAfterSeconds) : 0;
+
+      // Must validate without error
+      var result = node.Validate("en");
+      Assert.False(result.HasError);
+
+      // Check initial output values
+      Assert.IsFalse(node.mOutputAvg.HasValue);
+      Assert.IsFalse(node.mOutputSum.HasValue);
+      Assert.IsFalse(node.mOutputMin.HasValue);
+      Assert.IsFalse(node.mOutputMax.HasValue);
+      Assert.IsFalse(node.mOutputChange.HasValue);
+      Assert.IsFalse(node.mOutputTrend.HasValue);
+
+      node.mUpdateInterval.Value = new TimeSpan(0, 0, 2 /* seconds */);
+
+      // Test output behaviour with
+      //   * mConsideredTime = 20s
+      //   * FirstOutputAfterTime = 15s
+
+      // Expect no output values for the first 15s
+      int numOfEntries = 0;
+      double avg = 0.0;
+      double max = 0.0;
+      double sum = 0.0;
+      for (int i = 0; i < loopFirstOutputAfterSeconds; i++)
+      {
+        schedulerService.Tick(/* advance by */ 1 /* second */);
+        if ( (i % 3) == 0)
+        {
+          node.mInput.Value = i;
+          node.Execute();
+          numOfEntries++;
+          avg = (double)i / 2;
+          max = i;
+          sum += i;
+        }
+        Assert.IsTrue(node.mOutputNumber.HasValue);
+        Assert.AreEqual(numOfEntries, node.mOutputNumber.Value);
+        // Check that we still have no other output values
+        Assert.IsFalse(node.mOutputAvg.HasValue);
+        Assert.IsFalse(node.mOutputSum.HasValue);
+        Assert.IsFalse(node.mOutputMin.HasValue);
+        Assert.IsFalse(node.mOutputMax.HasValue);
+        Assert.IsFalse(node.mOutputChange.HasValue);
+        Assert.IsFalse(node.mOutputTrend.HasValue);
+      }
+
+      // Expect updated output values after the first 15s
+      double min = 0.0;
+      for (int i = loopFirstOutputAfterSeconds; i < 30; i++)
+      {
+        schedulerService.Tick(/* advance by */ 1 /* second */);
+
+        if ((i % 3) == 0)
+        {
+          node.mInput.Value = i;
+          node.Execute();
+          numOfEntries++;
+          avg = (double)i / 2 + ((i > 20) ? (((double)i - 20.0) / 2.0) : 0.0);
+          min = Math.Max(0.0, i - 20);
+          max = i;
+          sum += i;
+        }
+        else if ((i % 3) == 2)
+        {
+          // outputs modified due to 2s update interval
+          if (i > 20)
+          {
+            avg += 1.9;
+            min = i - 20;
+            numOfEntries -= 1;
+          }
+          else
+          {
+            double weight = 2.0 / i;
+            avg = (1 - weight) * avg + weight * max;
+          }
+          sum -= min;
+        }
+        Assert.IsTrue(node.mOutputNumber.HasValue);
+        Assert.AreEqual(numOfEntries, node.mOutputNumber.Value);
+        // Check that we have correct output values from now on
+        Assert.IsTrue(node.mOutputAvg.HasValue);
+        Assert.AreEqual(avg, node.mOutputAvg.Value, 1e-12);
+        Assert.IsTrue(node.mOutputSum.HasValue);
+        Assert.AreEqual(sum, node.mOutputSum.Value, 1.0);
+        Assert.IsTrue(node.mOutputMin.HasValue);
+        Assert.AreEqual(min, node.mOutputMin.Value);
+        Assert.IsTrue(node.mOutputMax.HasValue);
+        if (i >= 6)
+        {
+          Assert.AreEqual(max, node.mOutputMax.Value);
+          Assert.IsTrue(node.mOutputChange.HasValue);
+          Assert.AreEqual(max - min, node.mOutputChange.Value);
+          Assert.IsTrue(node.mOutputTrend.HasValue);
+          Assert.AreEqual(1.0, node.mOutputTrend.Value);
+        }
+      }
+
+      // Check for unchanged output values (except number of entries) after reset
+      node.mReset.Value = true;
+      node.Execute();
+      Assert.IsTrue(node.mOutputNumber.HasValue);
+      Assert.AreEqual(0, node.mOutputNumber.Value);
+      Assert.IsTrue(node.mOutputAvg.HasValue);
+      Assert.AreEqual((expectedFirstOutputAfterSeconds > 0) ?
+                      avg : max, node.mOutputAvg.Value, 1e-9);
+      Assert.IsTrue(node.mOutputSum.HasValue);
+      Assert.AreEqual((expectedFirstOutputAfterSeconds > 0) ?
+                      sum : 0.0, node.mOutputSum.Value, 1.0);
+      Assert.IsTrue(node.mOutputMin.HasValue);
+      Assert.AreEqual((expectedFirstOutputAfterSeconds > 0) ?
+                      min : max, node.mOutputMin.Value);
+      Assert.IsTrue(node.mOutputMax.HasValue);
+      Assert.AreEqual(max, node.mOutputMax.Value);
+      Assert.IsTrue(node.mOutputChange.HasValue);
+      Assert.AreEqual((expectedFirstOutputAfterSeconds > 0) ?
+                      max - min : 0.0, node.mOutputChange.Value);
+      Assert.IsTrue(node.mOutputTrend.HasValue);
+      Assert.AreEqual((expectedFirstOutputAfterSeconds > 0) ?
+                      1.0 : 0.0, node.mOutputTrend.Value);
     }
 
     [Test]

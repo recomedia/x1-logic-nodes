@@ -88,6 +88,15 @@ namespace Recomedia_de.Logic.Generic {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output first values after ähnelt.
+        /// </summary>
+        internal static string FirstOutputAfterTime {
+            get {
+                return ResourceManager.GetString("FirstOutputAfterTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Idle value ähnelt.
         /// </summary>
         internal static string IdleValue {

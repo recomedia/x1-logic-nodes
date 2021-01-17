@@ -87,8 +87,10 @@
                 Parameter <a href="#resol">Auflösung der Eingangswerte</a>
                 sollte(n) so konfiguriert werden, dass über den gewählten
                 Betrachtungszeitraum nicht mehr Telegramme als im Parameter
-                <a href="#maxstore">Maximale Anzahl zu speichernder
-                Eingangswerte</a> angegeben verarbeitet werden müssen.
+                <a href="#maxstore">
+                  Maximale Anzahl zu speichernder
+                  Eingangswerte
+                </a> angegeben verarbeitet werden müssen.
                 Andernfalls können die berechneten Ausgabewerte ungenauer
                 werden.
               </li>
@@ -250,8 +252,10 @@
                 (also begrenzt) ist, dann kann dieser Ausgabewert nicht in allen
                 Fällen korrekt berechnet werden. Er wird zu niedrig berechnet,
                 wenn Eingabewerte vor Ablauf des Betrachtungszeitraums verworfen
-                werden, weil der Parameter <a href="#maxstore">Maximale Anzahl zu
-                speichernder Eingangswerte</a> zu klein gewählt worden ist (oder
+                werden, weil der Parameter <a href="#maxstore">
+                  Maximale Anzahl zu
+                  speichernder Eingangswerte
+                </a> zu klein gewählt worden ist (oder
                 zu viele Eingangstelegramme ankommen).
               </li>
             </ul>
@@ -266,14 +270,18 @@
           </td>
           <td>
             <p>
-              Gibt die aktuelle Anzahl gespeicherter Eingangswerte aus.
+              Gibt die aktuelle Anzahl gespeicherter Eingangswerte aus. Dieser
+              Ausgang wird unabhängig von der Einstellung des Parameters
+              <a href="#firstval">Erste Werte ausgeben nach</a> aktualisiert.
             </p>
             <p>
               Hinweis:<br />
               Dieser Ausgabewert bezieht sich nur dann auf den gesamten
               Betrachtungszeitraum, wenn er kleiner ist als im Parameter
-              <a href="#maxstore">Maximale Anzahl zu speichernder
-              Eingangswerte</a> angegeben.
+              <a href="#maxstore">
+                Maximale Anzahl zu speichernder
+                Eingangswerte
+              </a> angegeben.
             </p>
           </td>
         </tr>
@@ -348,8 +356,45 @@
             </p>
           </td>
         </tr>
-        <tr>
+        <tr id="firstval">
           <td>
+            <p>Erste Werte ausgeben nach</p>
+          </td>
+          <td>
+            <p>Timespan</p>
+          </td>
+          <td>
+            <p>nein</p>
+          </td>
+          <td>
+            <p>
+              Wird dieser Wert auf den Vorgabewert von 0 gesetzt, dann werden
+              die Ausgänge sofort nach dem Empfang der ersten Daten gesetzt.
+            </p>
+            <p>
+              Steht hier eine Zeitspanne größer als 0 (bis maximal zum
+              <a href="#timespan">Betrachtungszeitraum</a>), so werden die
+              meisten Ausgabewerte erst dann gesetzt, wenn nach dem Ablauf der
+              gegebenen Zeitspanne eines der folgenden Ereignisse eintritt:
+              <ul>
+                <li>
+                  Der Eingang erhält weitere Daten
+                </li>
+                <li>
+                  Die Ausgangswerte werden aufgrund des Parameters
+                  <a href="#update">Zeitintervall für Aktualisierung</a>
+                  neu berechnet
+                </li>
+              </ul>
+              Dies ist immer dann sinnvoll, wenn die Momentanwerte am Eingang
+              so stark schwanken können, dass eine sinnvolle Weiterverarbeitung
+              nicht sofort möglich ist. Ein Beispiel ist die Berechnung der
+              Heizgrenze (Sommer/Winter-Umschaltung) für eine Heizungsanlage.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td id="update">
             <p>Zeitintervall für<br />Aktualisierung</p>
           </td>
           <td>
@@ -363,8 +408,8 @@
               Steht dieser Wert auf 0, so werden Ausgänge immer nur dann
               aktualisiert, wenn ein Eingangstelegramm eintrifft. Dabei spielt
               es keine Rolle ob der Eingangswert weiter verarbeitet wird oder
-              nicht (siehe Parameter <a href="#resol">Auflösung der
-              Eingangswerte</a>).
+              nicht (siehe Parameter
+              <a href="#resol"> Auflösung der Eingangswerte</a>).
             </p>
             <p>
               Ist dieser Wert größer als 0 (im Bereich 1s bis zur Hälfte
@@ -433,8 +478,10 @@
                   deutlich weniger Speicher verfügt als der X1.
                 </li>
                 <li>
-                  Der Ausgang <a href="#curstore">Anzahl gespeicherter
-                  Eingangswerte</a> dient im laufenden Betrieb zur
+                  Der Ausgang <a href="#curstore">
+                    Anzahl gespeicherter
+                    Eingangswerte
+                  </a> dient im laufenden Betrieb zur
                   Kontrolle einer sinnvollen Einstellung.
                 </li>
               </ul>
@@ -459,14 +506,21 @@
         Der verwendete Außentemperaturfühler sendet seine Temperaturwerte
         T<sub>a</sub> regelmäßig alle 3 Minuten. Daher wird auch der Ausgang
         "Mittelwert" alle 3 Minuten aktualisiert, ohne dass dazu ein
-        "Zeitintervall für Aktualisierung" angegeben werden müsste.
-        Über 6 Stunden treffen dadurch ca. 120 Telegramme ein. Um die Zahl
+        <a href="#update">Zeitintervall für Aktualisierung</a> angegeben
+        werden müsste. Über den <a href="#timespan">Betrachtungszeitraum</a>
+        von 6 Stunden treffen dadurch ca. 120 Telegramme ein. Um die Zahl
         der zu verarbeitenden Telegramme sinnvoll zu reduzieren, ist eine
-        "Auflösung der Eingangswerte" von "0,1" &deg;C eingestellt. Dadurch
-        werden von aufeinanderfolgenden fast gleichen Eingangstelegrammen
-        jeweils nur das erste und das letzte verarbeitet. In der Praxis
-        sind dies meist weniger als 50 Telegramme über die 6 Stunden
-        des Betrachtungszeitraums.
+        <a href="#resol">Auflösung der Eingangswerte</a> von 0,1 &deg;C 
+        ingestellt. Dadurch werden von aufeinanderfolgenden fast gleichen
+        Eingangstelegrammen jeweils nur das erste und das letzte verarbeitet.
+        In der Praxis sind dies fast immer weniger als 50 Telegramme in 6
+        Stunden.
+      </p>
+      <p>
+        Bei einem Neustart des Logikmoduls ist es sinnvoll, möglichst bald
+        mit der aktuellen Außentemperatur arbeiten zu können. Daher bleibt
+        der Parameter <a href="#firstval">Erste Werte ausgeben nach</a> auf
+        seinem Vorgabewert von 0.
       </p>
     </div>
   </section>
