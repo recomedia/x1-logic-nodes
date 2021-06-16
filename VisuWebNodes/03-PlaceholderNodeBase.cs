@@ -188,11 +188,11 @@ namespace Recomedia_de.Logic.VisuWeb
     protected abstract void updateOutputHelpers(int newCount, int oldCount);
 
     /// <summary>
-    /// This method has been added as a ValueSet handler to the template
-    /// parameters. It will therefore be called whenever a template string
-    /// is edited, in order to update the tokens and inputs.
+    /// This method is added as a ValueSet handler to the template (and
+    /// potentially other) parameters. It will therefore be called when
+    /// one of those is edited, in order to update the tokens and inputs.
     /// </summary>
-    private void updateTemplate(object sender = null,
+    protected void updateTemplate(object sender = null,
                  ValueChangedEventArgs evArgs = null)
     {
       // Validate the separators first to prevent throwing exceptions later

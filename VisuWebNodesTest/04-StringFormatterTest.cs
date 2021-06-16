@@ -356,12 +356,12 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     [Test]
     public void GoodCaseIncremental()
     {
-      // Customize the separators BEFORE changing templates
-      node.mCustomGroupSeparator.Value   = ".";
-      node.mCustomDecimalSeparator.Value = ",";
-
       // Set a simple valid template that uses one of each kind of placeholders
       node.mTemplates[0].Value = mAllTypesGoodTemplate;
+
+      // Customize the separators AFTER changing templates
+      node.mCustomGroupSeparator.Value = ".";
+      node.mCustomDecimalSeparator.Value = ",";
 
       ValidationResult result = node.Validate("de");
       Assert.IsFalse(result.HasError);        // expect no error

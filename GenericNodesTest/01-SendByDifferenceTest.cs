@@ -34,6 +34,8 @@ namespace Recomedia_de.Logic.Generic.Test
       // Check initial state
       Assert.IsTrue(node.mMinimumDifference.HasValue);
       Assert.AreEqual(1.0, node.mMinimumDifference.Value);
+      Assert.IsTrue(node.mMinUpwardsDifference.HasValue);
+      Assert.AreEqual(-1.0, node.mMinUpwardsDifference.Value);
       Assert.IsFalse(node.mOutput.HasValue); // no output value
 
       // First set value must be forwarded

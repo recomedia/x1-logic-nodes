@@ -280,6 +280,98 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     }
 
     [Test]
+    public void JsonPathSum()
+    {
+      node.mSelectInput.Value = "JSON";
+      node.mCount.Value = 2;
+      Assert.AreEqual(2, node.mPath.Count);
+      Assert.AreEqual(2, node.mOutput.Count);
+      node.mPath[0].Value = "//list//rain/three_hours";
+      node.mSelectOperation[0].Value = "MultiAddNumbers";
+      node.mPath[1].Value = "//list/item[position()<4]/rain/three_hours";
+      node.mSelectOperation[1].Value = "MultiAddNumbers";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the initial output states
+      for (int i = 0; i < node.mCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutput[i]);
+        Assert.AreEqual(PortTypes.Any, node.mOutput[i].PortType.Name);
+        Assert.IsFalse(node.mOutput[i].HasValue);  // no output value yet
+      }
+      Assert.IsNotNull(node.mError);
+      Assert.AreEqual(PortTypes.String, node.mError.PortType.Name);
+      Assert.IsFalse(node.mError.HasValue);       // no output value yet
+
+      // Set an input value and re-check the outputs
+      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);        // still no error
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.IsTrue(node.mOutput[0].HasValue);    // now has output values
+      Assert.AreEqual(28.625, node.mOutput[0].Value);
+      Assert.IsNotNull(node.mOutput[1]);
+      Assert.IsTrue(node.mOutput[1].HasValue);
+      Assert.AreEqual(0.0, node.mOutput[1].Value);
+    }
+
+    [Test]
+    public void JsonPathMinMax()
+    {
+      node.mSelectInput.Value = "JSON";
+      node.mCount.Value = 4;
+      Assert.AreEqual(4, node.mPath.Count);
+      Assert.AreEqual(4, node.mOutput.Count);
+      node.mPath[0].Value = "//list//humidity";
+      node.mSelectOperation[0].Value = "MultiMinNumber";
+      node.mPath[1].Value = "//list//humidity";
+      node.mSelectOperation[1].Value = "MultiMaxNumber";
+      node.mPath[2].Value = "//list//nonex";
+      node.mSelectOperation[2].Value = "MultiMinNumber";
+      node.mPath[3].Value = "//list//nonex";
+      node.mSelectOperation[3].Value = "MultiMaxNumber";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the initial output states
+      for (int i = 0; i < node.mCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutput[i]);
+        Assert.AreEqual(PortTypes.Any, node.mOutput[i].PortType.Name);
+        Assert.IsFalse(node.mOutput[i].HasValue);  // no output value yet
+      }
+      Assert.IsNotNull(node.mError);
+      Assert.AreEqual(PortTypes.String, node.mError.PortType.Name);
+      Assert.IsFalse(node.mError.HasValue);       // no output value yet
+
+      // Set an input value and re-check the outputs
+      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);        // still no error
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutput[0]);
+      Assert.IsTrue(node.mOutput[0].HasValue);    // now has output values
+      Assert.AreEqual(50.0, node.mOutput[0].Value);
+      Assert.IsNotNull(node.mOutput[1]);
+      Assert.IsTrue(node.mOutput[1].HasValue);
+      Assert.AreEqual(95.0, node.mOutput[1].Value);
+      Assert.IsNotNull(node.mOutput[2]);
+      Assert.IsTrue(node.mOutput[2].HasValue);
+      Assert.IsTrue(Double.IsNaN(Convert.ToDouble(node.mOutput[2].Value)));
+      Assert.IsNotNull(node.mOutput[3]);
+      Assert.IsTrue(node.mOutput[3].HasValue);
+      Assert.IsTrue(Double.IsNaN(Convert.ToDouble(node.mOutput[3].Value)));
+    }
+
+    [Test]
     public void XmlScalingError()
     {
       // Use just one path

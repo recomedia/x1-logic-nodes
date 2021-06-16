@@ -39,8 +39,8 @@ namespace Recomedia_de.Logic.VisuWeb.Test
 
       // Check the resulting inputs
       checkInputCounts(0, 0, 0, 2);
-      checkInputNames<BoolValueObject>  (new List<string> { }, node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string> { }, node.mIntInputs);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
       checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
       checkInputNames<StringValueObject>(new List<string> { "a", "b" },
                                                                node.mStrInputs);
@@ -92,7 +92,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       // Check the resulting inputs
       checkInputCounts(1, 0, 0, 0);
       checkInputNames<BoolValueObject>(new List<string> { "trig" }, node.mBinInputs);
-      checkInputNames<IntValueObject>(new List<string>    { }, node.mIntInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
       checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
       checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
       // Check the output states
@@ -239,11 +239,11 @@ namespace Recomedia_de.Logic.VisuWeb.Test
 
       // Check the resulting inputs
       checkInputCounts(4, 0, 0, 0);
-      checkInputNames<BoolValueObject>  (new List<string>{ "a", "b", "c", "d" },
+      checkInputNames<BoolValueObject>(new List<string> { "a", "b", "c", "d" },
                                                              node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string>{}, node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string>{}, node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string>{}, node.mStrInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be bool
@@ -326,11 +326,11 @@ namespace Recomedia_de.Logic.VisuWeb.Test
 
       // Check the resulting inputs
       checkInputCounts(0, 1, 0, 0);
-      checkInputNames<BoolValueObject>  (new List<string>{}, node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string>{ "rgb" },
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { "rgb" },
                                                              node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string>{}, node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string>{}, node.mStrInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be byte
@@ -352,6 +352,55 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     }
 
     [Test]
+    public void SimpleByteMultiply()
+    {
+      // Use the default template; don't set the number of templates
+      Assert.AreEqual(1, node.mTemplates.Count);
+
+      // Set and check the output type
+      node.mOutputTypes[0].Value = PortTypes.Integer;
+      Assert.AreEqual(PortTypes.Integer, node.mOutputs[0].PortType.Name);
+
+      // Set a simple valid template that uses a few placeholders
+      node.mTemplates[0].Value = "{m:I}*{s:I}";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 2, 0, 0);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { "m", "s" },
+                                                             node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
+
+      // Check the output state
+      Assert.IsNotNull(node.mOutputs[0]);         // should be byte
+      Assert.AreEqual(PortTypes.Integer, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set input values and re-check the output
+      node.mIntInputs[0].Value = 42;
+      node.mIntInputs[1].Value = 33;
+      node.Execute();
+      Assert.IsFalse(result.HasError);
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual(1386, node.mOutputs[0].Value);
+
+      // Change input values and re-check the output
+      node.mIntInputs[1].Value = 22;
+      node.Execute();
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.AreEqual(924, node.mOutputs[0].Value);
+    }
+
+    [Test]
     public void SimpleInteger()
     {
       // Use the default template; don't set the number of templates
@@ -369,12 +418,12 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(result.HasError);
       // Check the resulting inputs
       checkInputCounts(0, 1, 1, 0);
-      checkInputNames<BoolValueObject>  (new List<string>{}, node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string>{ "n" },
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { "n" },
                                                              node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string>{ "x" },
+      checkInputNames<DoubleValueObject>(new List<string> { "x" },
                                                              node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string>{}, node.mStrInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be int
@@ -415,11 +464,11 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(result.HasError);
       // Check the resulting inputs
       checkInputCounts(0, 4, 0, 0);
-      checkInputNames<BoolValueObject>  (new List<string>{}, node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string>{ "r", "g", "b", "w" },
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { "r", "g", "b", "w" },
                                                              node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string>{}, node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string>{}, node.mStrInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be long aka int64
@@ -474,11 +523,11 @@ namespace Recomedia_de.Logic.VisuWeb.Test
 
       // Check the resulting inputs
       checkInputCounts(0, 0, 1, 0);
-      checkInputNames<BoolValueObject>  (new List<string>{}, node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string>{}, node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string>{ "x" },
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "x" },
                                                              node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string>{}, node.mStrInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be double
@@ -515,11 +564,11 @@ namespace Recomedia_de.Logic.VisuWeb.Test
 
       // Check the resulting inputs
       checkInputCounts(0, 0, 1, 0);
-      checkInputNames<BoolValueObject>  (new List<string>{}, node.mBinInputs);
-      checkInputNames<IntValueObject>   (new List<string>{}, node.mIntInputs);
-      checkInputNames<DoubleValueObject>(new List<string>{ "T" },
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "T" },
                                                              node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string>{}, node.mStrInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
 
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be double
@@ -1104,6 +1153,70 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.AreEqual(4711 + 37, node.mOutputs[0].Value);
     }
 
+    struct ValueSet
+    {
+      public double input { get; }
+      public double expOut1 { get; }
+      public double expOut2 { get; }
+
+      public ValueSet(double i, double o1, double o2)
+      {
+        input = i; expOut1 = o1; expOut2 = o2;
+      }
+    }
+    [Test]
+    public void MultiNestedConditional()
+    {
+      // Use two valid expressions
+      node.mTemplateCount.Value = 2;
+      Assert.AreEqual(2, node.mTemplates.Count);
+      node.mOutputTypes[0].Value = PortTypes.Number;
+      node.mOutputTypes[1].Value = PortTypes.Number;
+      node.mTemplates[0].Value = "({a:N} > 0.0) ? {a} : (double?)null";
+      node.mTemplates[1].Value = "(Math.Abs(_out1_ - _previousOut2_) > 1.0) ? _out1_ : (double?)null";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 1, 0);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "a" }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
+
+      // Check the output states
+      Assert.IsNotNull(node.mOutputs[0]);         // should be double
+      Assert.AreEqual(PortTypes.Number, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+      Assert.IsNotNull(node.mOutputs[1]);         // should be double
+      Assert.AreEqual(PortTypes.Number, node.mOutputs[1].PortType.Name);
+      Assert.IsFalse(node.mOutputs[1].HasValue);  // no output value yet
+
+      // Input a series of values and check the output
+      ValueSet[] testValueSets = {
+        new ValueSet(3.14, 3.14, 3.14),
+        new ValueSet(4, 4, 3.14),
+        new ValueSet(4.2, 4.2, 4.2),
+        new ValueSet(3.5, 3.5, 4.2),
+        new ValueSet(3.2, 3.2, 4.2),
+        new ValueSet(3.199999, 3.199999, 3.199999),
+        new ValueSet(-1, 3.199999, 3.199999),
+        new ValueSet(3.1, 3.1, 3.199999),
+      };
+      foreach (var valueSet in testValueSets) {
+        node.mNumInputs[0].Value = valueSet.input;
+        node.Execute();
+        Assert.IsNotNull(node.mOutputs[0]);
+        Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+        Assert.AreEqual(valueSet.expOut1, node.mOutputs[0].Value);
+        Assert.IsNotNull(node.mOutputs[1]);
+        Assert.IsTrue(node.mOutputs[1].HasValue);   // now has an output value
+        Assert.AreEqual(valueSet.expOut2, node.mOutputs[1].Value);
+      }
+    }
+
     [Test]
     public void MultiCompare()
     {
@@ -1111,14 +1224,13 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.mTemplateCount.Value = 4;
       Assert.AreEqual(4, node.mTemplates.Count);
       node.mOutputTypes[0].Value = PortTypes.Bool;
+      node.mOutputTypes[1].Value = PortTypes.Bool;
+      node.mOutputTypes[2].Value = PortTypes.Bool;
+      node.mOutputTypes[3].Value = PortTypes.Bool;
       node.mTemplates[0].Value = "{a:I}=={b:I}";
       node.mTemplates[1].Value = "{a:I} != {b:I}";
       node.mTemplates[2].Value = "{a:I} >={b:I}";
       node.mTemplates[3].Value = "{a:I}<= {b:I}";
-      node.mOutputTypes[0].Value = PortTypes.Bool;
-      node.mOutputTypes[1].Value = PortTypes.Bool;
-      node.mOutputTypes[2].Value = PortTypes.Bool;
-      node.mOutputTypes[3].Value = PortTypes.Bool;
 
       // Expect no validation error
       var result = node.Validate("de");

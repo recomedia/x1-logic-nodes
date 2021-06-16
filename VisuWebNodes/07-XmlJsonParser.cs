@@ -350,6 +350,13 @@ namespace Recomedia_de.Logic.VisuWeb
                          ref double outVal, ref string outStr)
     {
       bool isNumber = isNumberOutput(i);
+
+      if ( isNumber && Double.IsNaN(outVal) &&
+           (OPERATION_ADDNUMBERS == mSelectOperation[i].Value) )
+      {
+        outVal = 0.0;
+      }
+
       bool success = true;  //until proven otherwise
       for (int j = 0; j < xmlNodes.Count; j++)
       {
@@ -367,27 +374,27 @@ namespace Recomedia_de.Logic.VisuWeb
       return success;
     }
 
-    bool processNodeListNumeric(ref double val, int i, string text)
+    bool processNodeListNumeric(ref double outVal, int i, string text)
     {
       double localVal;
       bool success = tryXmlConvertToDouble(i, text, out localVal);
 
-      if (Double.IsNaN(val))
+      if (Double.IsNaN(outVal))
       {
-        val = localVal;
+        outVal = localVal;
       }
       else
       {
         switch (mSelectOperation[i].Value)
         {
           case OPERATION_ADDNUMBERS:
-            val += localVal;
+            outVal += localVal;
             break;
           case OPERATION_MINNUMBER:
-            val = Math.Min(localVal, val);
+            outVal = Math.Min(localVal, outVal);
             break;
           case OPERATION_MAXNUMBER:
-            val = Math.Max(localVal, val);
+            outVal = Math.Max(localVal, outVal);
             break;
           default:
             System.Diagnostics.Trace.Fail("Unexpected numeric operation");

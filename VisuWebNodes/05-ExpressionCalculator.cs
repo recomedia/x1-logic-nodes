@@ -476,8 +476,12 @@ namespace Recomedia_de.Logic.VisuWeb
           else
           {
             // Issue compile error report on error output
-            mError.Value += mTemplates[i].Name + ": " +
-                            mEngineReport.ToString();
+            string errorText = mEngineReport.ToString();
+            if ( errorText.Length < 1 )
+            {
+              errorText = "Syntax error.";
+            }
+            mError.Value += mTemplates[i].Name + ": " + errorText;
           }
         }
         catch (Exception ex)
@@ -670,7 +674,7 @@ namespace Recomedia_de.Logic.VisuWeb
                                                          Environment.NewLine;
         return "";
       }
-      return expressionText;
+      return "(" + expressionText + ")";
     }
 
     private string getTypeString(IPortType type)

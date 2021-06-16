@@ -27,6 +27,9 @@ namespace Recomedia_de.Logic.VisuWeb
                                                                       /* defaultValue = */ ".");
       mCustomGroupSeparator = mTypeService.CreateString(PortTypes.String, "SeparatorGroup",
                                                                       /* defaultValue = */ "'");
+      mCustomDecimalSeparator.ValueSet += updateTemplate;
+      mCustomGroupSeparator.ValueSet += updateTemplate;
+
       // Initialize for default template count
       updateTemplateCount();
     }

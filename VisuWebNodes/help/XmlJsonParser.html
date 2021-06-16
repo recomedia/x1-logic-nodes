@@ -248,7 +248,7 @@
               nicht zulässig ist. Man verwendet daher besser XML-Daten, wie unten im
               <a href="#beispiel">Beispiel</a> gezeigt. Sind XML-Daten nicht verfügbar,
               behilft man sich mit einer Textersetzung der fehlerverursachenden Schlüssel
-              durch zulässige Schlüssel. (Diese lässt sich wahlweise mit deb Bausteinen
+              durch zulässige Schlüssel. (Diese lässt sich wahlweise mit den Bausteinen
               <a href="StringFormatter.html#textzuweisungen">Textformatierer</a> oder
               <a href="ExpressionCalculator.html#stringfunc">Formelberechnung</a>
               realisieren).
@@ -274,30 +274,36 @@
             <ul>
               <li>
                 <b>Erster Treffer als Text</b>: Der erste ausgewählte Eintrag wird als
-                Text ausgegeben.
+                Text ausgegeben. Wird kein passender Eintrag gefunden, wird nichts
+                ausgegeben und es kommt zu einem Laufzeitfehler.
               </li>
               <li>
                 <b>Erster Treffer als Zahl</b>: Der erste ausgewählte Eintrag wird als
-                XML-Zahl interpretiert und als Fließkommazahl ausgegeben.
+                XML-Zahl interpretiert und als Fließkommazahl ausgegeben. Wird kein
+                passender Eintrag gefunden, wird nichts ausgegeben und es kommt zu einem
+                Laufzeitfehler.
               </li>
               <li>
                 <b>Alle Treffer als verketteter Text</b>: Alle ausgewählten Einträge werden
-                verkettet und als Text ausgegeben.
+                verkettet und als Text ausgegeben. Wird kein passender Eintrag gefunden,
+                wird ein leerer Text ausgegeben.
               </li>
               <li>
                 <b>Alle Treffer als summierte Zahl</b>: Alle ausgewählten Einträge werden
                 als XML-Zahlen interpretiert, aufsummiert und die Summe als Fließkommazahl
-                ausgegeben.
+                ausgegeben. Wird kein passender Eintrag gefunden, wird Null ausgegeben.
               </li>
               <li>
                 <b>Minimum aller Treffer als Zahl</b>: Alle ausgewählten Einträge werden
                 als XML-Zahlen interpretiert. Die niedrigste davon wird als Fließkommazahl
-                ausgegeben.
+                ausgegeben. Wird kein passender Eintrag gefunden, wird NaN ("not a number";
+                keine Zahl) ausgegeben.
               </li>
               <li>
                 <b>Maximum aller Treffer als Zahl</b>: Alle ausgewählten Einträge werden
                 als XML-Zahlen interpretiert. Die höchste davon wird als Fließkommazahl
-                ausgegeben.
+                ausgegeben. Wird kein passender Eintrag gefunden, wird NaN ("not a number";
+                keine Zahl) ausgegeben.
               </li>
             </ul>
             <p>
