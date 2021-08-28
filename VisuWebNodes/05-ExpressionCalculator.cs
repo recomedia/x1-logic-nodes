@@ -181,9 +181,9 @@ namespace Recomedia_de.Logic.VisuWeb
     /// by error tokens. Everything else we leav to the interpreter to check
     /// in Execute().
     /// </summary>
-    protected override ValidationResult validateTokens(string language,
-                                                       string templateName,
-                                          ref List<TokenBase> templateTokens)
+    protected override ValidationResult validateTokens(string templateName,
+                                          ref List<TokenBase> templateTokens,
+                                                       string language)
     {
       for ( int i = 0; i < templateTokens.Count; i++ )
       {
@@ -252,24 +252,77 @@ namespace Recomedia_de.Logic.VisuWeb
       return false;
     }
 
-    private bool isStringDelimiter(string text, int i)
+    protected override List<SplitElement> SplitNonTokenizedElements(string templateText)
     {
-      if (text[i] != '"')
-      {
-        return false;
-      }
+      List<SplitElement> elements = new List<SplitElement>();
 
-      if (i > 0)
+      int maxI = templateText.Length - 1;
+      System.Diagnostics.Trace.Assert(maxI >= 0);
+      int lastI = 0;
+      for (int i = 0; i <= maxI; i++)
       {
-        switch (text[i - 1])
+        // Comments and string literals are exempted from tokenization
+        int newI = skipEnclosed(templateText, i, "/*", "*/");
+        newI = skipStringLiteral(templateText, newI);
+
+        if ( newI > i )
         {
-          case '\\':
-            return false;
-          default:
-            break;
+          // Found next fixed token 
+          if ( i > lastI )
+          {
+            // Add element for text between this and previous fixed token
+            elements.Add( new SplitElement
+            { text = templateText.Substring(lastI, i - lastI), isFixedToken = false } );
+            lastI = i;
+          }
+          // Add element for current fixed token 
+          elements.Add( new SplitElement
+          { text = templateText.Substring(i, newI - lastI),  isFixedToken = true } );
+          lastI = newI;
+
+          // Continue after found fixed token
+          i = newI;
         }
       }
-      return true;
+      if (templateText.Length > lastI)
+      {
+        // Add element for text after last fixed token
+        elements.Add(new SplitElement
+        { text = templateText.Substring(lastI), isFixedToken = false });
+      }
+      return elements;
+    }
+
+    private int skipEnclosed(string text, int i, string begin, string end)
+    {
+      int newI = skipTextSnippet(text, i, begin);
+      if ( newI > i)
+      {
+        while ( newI < text.Length )
+        {
+          int closedI = skipTextSnippet(text, newI, end);
+          if ( closedI > newI )
+          {
+            return closedI;
+          }
+          else
+          {
+            ++newI;
+          }
+        }
+        return i;
+      }
+      return i;
+    }
+
+    private int skipTextSnippet(string text, int i, string snippet)
+    {
+      int sLength = snippet.Length;
+      if ((i < (text.Length - sLength + 1)) && (text.Substring(i, sLength) == snippet))
+      {
+        return i + 2;
+      }
+      return i;
     }
 
     private int skipStringLiteral(string text, int i)
@@ -288,9 +341,9 @@ namespace Recomedia_de.Logic.VisuWeb
       return i;
     }
 
-    private bool isCommentOpening(string text, int i)
+    private bool isStringDelimiter(string text, int i)
     {
-      if (text[i] != '*')
+      if ( (i < text.Length) && (text[i] != '"') )
       {
         return false;
       }
@@ -299,72 +352,20 @@ namespace Recomedia_de.Logic.VisuWeb
       {
         switch (text[i - 1])
         {
-          case '/':
-            return true;
+          case '\\':
+            return false;
           default:
             break;
         }
       }
-      return false;
-    }
-
-    private bool isCommentClosing(string text, int i)
-    {
-      if (text[i] != '/')
-      {
-        return false;
-      }
-
-      if (i > 0)
-      {
-        switch (text[i - 1])
-        {
-          case '*':
-            return true;
-          default:
-            break;
-        }
-      }
-      return false;
-    }
-
-    private int skipComment(string text, int i)
-    {
-      if (isCommentOpening(text, i))
-      {
-        int maxI = text.Length - 1;
-        if (i < maxI)
-        {
-          do
-          {
-            i++;
-          } while ((i < maxI) && !isCommentClosing(text, i));
-        }
-      }
-      return i;
-    }
-
-    private int skipPlaceholder(string text, int i)
-    {
-      if (PLACEHOLDER_OPENING == text[i])
-      {
-        int maxI = text.Length - 1;
-        if (i < maxI)
-        {
-          do
-          {
-            i++;
-          } while ((i < maxI) && (PLACEHOLDER_CLOSING != text[i]));
-        }
-      }
-      return i;
+      return true;
     }
 
     private bool isAssignment(string text, int i)
     {
       int maxI = text.Length - 1;
 
-      if (text[i] != '=')
+      if ( (i > maxI) || (text[i] != '=') )
       {
         return false;
       }
@@ -402,9 +403,12 @@ namespace Recomedia_de.Logic.VisuWeb
       System.Diagnostics.Trace.Assert(maxI >= 0);
       for ( int i = 0; i <= maxI; i++ )
       {
-        i = skipComment(text, i);
-        i = skipPlaceholder(text, i); // assignments in placeholders will be checked later
+        // Assignments in comments and string literals are allowed
+        i = skipEnclosed(text, i, "/*", "*/");
         i = skipStringLiteral(text, i);
+
+        // Assignments in placeholders will be checked later
+        i = skipEnclosed(text, i, "{", "}");
 
         if ( isAssignment(text, i))
         {
@@ -571,7 +575,7 @@ namespace Recomedia_de.Logic.VisuWeb
       System.Diagnostics.Trace.Assert(input.HasValue);
       string initStr = getInitString(input.PortType, input.Value);
       input.WasSet = false; // Value has been used
-      return typeStr + " " + input.Name + initStr + "; ";
+      return typeStr + " " + createVariableIdentifier(input.Name) + initStr + "; ";
     }
 
     private string getOutputDeclarations(int i)
@@ -587,16 +591,22 @@ namespace Recomedia_de.Logic.VisuWeb
       return declarations;
     }
 
+    private string createVariableIdentifier(string name)
+    {
+      string identifier = "_in_" + name + "_";
+      return identifier;
+    }
+
     private string createOutIdentifier(int i)
     {
-      string outIdentifier = "_out" + (i + 1).ToString() + "_";
-      return outIdentifier;
+      string identifier = "_out" + (i + 1).ToString() + "_";
+      return identifier;
     }
 
     private string createPreviousOutIdentifier(int i)
     {
-      string outIdentifier = "_previousOut" + (i + 1).ToString() + "_";
-      return outIdentifier;
+      string identifier = "_previousOut" + (i + 1).ToString() + "_";
+      return identifier;
     }
 
     private void updateVariableFields()
@@ -624,7 +634,7 @@ namespace Recomedia_de.Logic.VisuWeb
       if ( var.WasSet )
       {
         System.Diagnostics.Trace.Assert(var.Value != null);
-        updateField(var.Name, var.Value);
+        updateField(createVariableIdentifier(var.Name), var.Value);
       }
     }
 
@@ -661,7 +671,7 @@ namespace Recomedia_de.Logic.VisuWeb
       {
         if (token is VarTokenBase varToken)
         {
-          expressionText += varToken.getName();
+          expressionText += createVariableIdentifier(varToken.getName());
         }
         else if (token is ConstStringToken csToken)
         {

@@ -945,6 +945,14 @@
         <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/#operator-precedence">Operatorrangfolge</a>
         der C#-Sprachreferenz.
       </p>
+      <p>
+        Obwohl Variablendeklarationen und Zuweisungen in Formeln generell
+        nicht erlaubt sind, können dennoch temporäre Objekte mit dem
+        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/new-operator"><tt>new</tt>-Operator</a>
+        erzeugt und innerhalb einer Formel verwendet werden. Das Beispiel
+        <a href="#newbeispiel">UNIX-UTC-Zeitstempel umwandeln</a>
+        zeigt eine nützliche Anwendung.
+      </p>
       <h2 id="funktionen">Funktionen</h2>
       <p>
         Soweit ihre Parameter- und Rückgabetypen sinnvoll verwendbar sind,
@@ -1341,17 +1349,18 @@
         <tr>
           <td colspan="3">
             <p>
-              Da exakte Berechnungsverfahren nicht existieren, liefern beide Funktionen
-              gute Näherungswerte auf der Grundlage der
+              Da exakte Berechnungsverfahren nicht existieren, liefern beide
+              Funktionen gute Näherungswerte auf der Grundlage der
               <a href="http://www.wetterochs.de/wetter/feuchte.html">Magnusformel</a>.
             </p>
             <p>
-              Sie können beispielsweise dazu dienen, eine Lüftungsanlage (von der wir
-              annehmen wollen, dass sie keinen Luftentfeuchter hat) bedarfsgerecht (also
-              nicht unnötig) und zielorientiert (also nicht kontraproduktiv) zu steuern.
-              So hat es z. B. keinen Sinn, einem Raum absolut feuchtere Außenluft
-              zuzuführen, wenn Luftfeuchtigkeit und Taupunkt-Temperatur ohnehin schon
-              höher sind als gewünscht.
+              Sie können beispielsweise dazu dienen, eine Lüftungsanlage (von
+              der wir annehmen wollen, dass sie keinen Luftentfeuchter hat)
+              bedarfsgerecht (also nicht unnötig) und zielorientiert (also
+              nicht kontraproduktiv) zu steuern. So hat es z. B. keinen Sinn,
+              einem Raum absolut feuchtere Außenluft zuzuführen, wenn
+              Luftfeuchtigkeit und Taupunkt-Temperatur ohnehin schon höher
+              sind als gewünscht.
             </p>
           </td>
         </tr>
@@ -1359,23 +1368,23 @@
       <h2 id="kommentare">Kommentare</h2>
       <p>
         Die Formeln können mit Kommentaren in der Form
-        <span class="box-noscroll"> <tt>/* ... */</tt> </span> dokumentiert werden.
-        Darin kann anstelle von <tt>...</tt>
-        nahezu beliebiger Text stehen. Solche Kommentare &ndash; auch mehrere davon
-        &ndash; können am Anfang, am Ende oder an anderen Stellen der Formel stehen.
+        <span class="box-noscroll"> <tt>/* ... */</tt> </span> dokumentiert
+        werden. Darin kann anstelle von <tt>...</tt> nahezu beliebiger Text
+        stehen. Solche Kommentare &ndash; auch mehrere davon &ndash; können
+        am Anfang, am Ende oder an anderen Stellen der Formel stehen.
       </p>
       <h2>Beispiele</h2>
       <p>
-        Das
-        <a href="HeatingCurve.html#heizbeispiel">Anwendungsbeispiel "Bedarfsgeführte Heizungsregelung"</a>
-        findet sich bei der
+        Das <a href="HeatingCurve.html#heizbeispiel">Anwendungsbeispiel
+        "Bedarfsgeführte Heizungsregelung"</a> findet sich bei der
         <a href="HeatingCurve.html">Beschreibung der Funktion HeatingCurve</a>.
       </p>
       <h3 id="feiertagbeispiel">Feiertage</h3>
       <p>
-        An Feiertagen und ihren Vortagen sollen bestimmte Automatisierungsfunktionen
-        anders ablaufen als an normalen Werktagen. Die folgende Formel berechnet dazu
-        zunächst das morgige Datum als STRING:<br />
+        An Feiertagen und ihren Vortagen sollen bestimmte
+        Automatisierungsfunktionen anders ablaufen als an normalen
+        Werktagen. Die folgende Formel berechnet dazu zunächst das
+        morgige Datum als STRING:<br />
         <span class="box-noscroll"> <tt>DateTime.Today.AddDays(1).ToString("d") /* Datum für Morgen errechnen */</tt> </span><br />
       </p>
       <p>
@@ -1384,11 +1393,11 @@
         <a href="http://service.knx-user-forum.de/?comm=download&id=20000065">HTTP GET Request</a>.
         Der Request-Baustein wird mit folgender URL parametriert:<br />
         <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW&datum={Morgen}</tt> </span><br />
-        Ein zweiter Request-Baustein verwendet fast die gleiche URL, aber ohne
-        den Datumsparameter (was implizit "heute" bedeutet):
+        Ein zweiter Request-Baustein verwendet fast die gleiche URL, aber
+        ohne den Datumsparameter (was implizit "heute" bedeutet):
         <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW</tt> </span><br />
-        In beiden steht <tt>BW</tt> für das Bundesland Baden-Württemberg; die Kürzel
-        für andere Bundesländer entnimmt man der
+        In beiden steht <tt>BW</tt> für das Bundesland Baden-Württemberg;
+        die Kürzel für andere Bundesländer entnimmt man der
         <a href="http://ipty.de/feiertag/">Online-Dokumentation</a>
         des Webservices.
       </p>
@@ -1405,6 +1414,42 @@
         Eingangswert ändert: Die Datumsberechnung hat <i>gar keinen</i>
         Eingangswert, wird aber dennoch angestoßen, sobald ein Trigger
         eintrifft.
+      </p>
+      <h3 id="newbeispiel">UNIX-UTC-Zeitstempel umwandeln</h3>
+      <p>
+        Viele Webservices verwenden für Datums- und Zeitangaben Ganzzahlen als
+        Zeitstempel. Inhalt ist die Anzahl der Sekunden seit dem 1.1.1970, 0:00
+        Uhr. Meist sind diese nicht in lokaler Zeit, sondern in "Koordinierter
+        Weltzeit" (französisch "Temps universel coordonné", Abkürzung UTC)
+        angegeben. Um solche Zeitangaben in einer Visualisierung verwenden zu
+        können, muss man sie zu einem Text in lokaler Zeit wandeln. Das tut die
+        folgende Formel:<br />
+        <span class="box-noscroll"> <tt>(new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc)).AddSeconds({unixUtcTimestamp:I}).ToLocalTime().ToString()</tt> </span><br />
+        Der <tt>new</tt>-Operator erzeugt zunächst ein <tt>DateTime</tt>-Objekt
+        mit dem richtigen Startzeitpunkt. Nach dem Addieren der Sekunden des
+        UTC-Zeitstempels wandeln zwei weitere Funktionen das Objekt in den
+        gewünschten Text um.
+      </p>
+      <p>
+        Da dieser kombinierte Datums- und Zeit-Text länger als 14 Zeichen ist,
+        kann er nicht auf dem KNX-Bus versendet, sondern nur innerhalb des L1/X1
+        verwendet werden. Abhilfe schaffen im Bedarfsfall z. B.
+        <ul>
+          <li>
+            die Funktionen <tt>DateTime.ToShortDateString</tt> und
+            <tt>DateTime.ToShortTimeString</tt>, die kürzere Texte
+            getrennt nach Datum und Uhrzeit erzeugen
+          </li>
+          <li>
+            ein Typ-Konverter, der aus Text einen Datenpunkt vom Typ
+            "Datum und Uhrzeit" erzeugen kann. Dazu verwendet man
+            zweckmäßig folgenden Parameter im letzten Funktionsaufruf
+            der Formel:
+            <span class="box-noscroll"> <tt>...ToString(<b>"s"</b>)</tt> </span>.
+            (Ohne diesen werden evtl. Tag und Monat vertauscht, weil der
+            Gira-Typ-Konverter das Textformat nicht richtig erkennt.)
+          </li>
+        </ul>
       </p>
       <h3 id="hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</h3>
       <p>

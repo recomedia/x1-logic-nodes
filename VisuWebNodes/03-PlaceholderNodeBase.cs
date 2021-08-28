@@ -378,6 +378,12 @@ namespace Recomedia_de.Logic.VisuWeb
       return new ValidationResult { HasError = false };
     }
 
+    protected struct SplitElement
+    {
+      public string text;
+      public bool isFixedToken;
+    }
+
     private ValidationResult validateInternal(StringValueObject template,
                                             ref List<TokenBase> templateTokens,
                                                         ref int binCount,
@@ -387,40 +393,85 @@ namespace Recomedia_de.Logic.VisuWeb
                                                          string language)
     {
       System.Diagnostics.Trace.Assert(template.HasValue && (template.Value.Length > 0));
-      TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
 
-      for (int curPos = 0; curPos < template.Value.Length;)
-      {
-        Match curMatch = PLACEHOLDER_REGEX.Match(template.Value, curPos);
-        if (curMatch.Success && (curMatch.Length >= 2))
-        {
-          // constant string before placeholder
-          templateTokens.Add(ttf.createConstStringToken(
-            template.Value.Substring(curPos, curMatch.Index - curPos)));
-          // placeholder string between delimiters
-          templateTokens.Add(
-            ttf.createPlaceholderToken(
-              template.Value.Substring(curMatch.Index + 1, curMatch.Length - 2),
-              getGroupSeparator(), getDecimalSeparator()
-            )
-          );
-          curPos = curMatch.Index + curMatch.Length;
-        }
-        else
-        {
-          // constant string after last placeholder
-          templateTokens.Add(ttf.createConstStringToken(
-            template.Value.Substring(curPos)));
+      splitTokens(template, ref templateTokens);
 
-          curPos = template.Value.Length;
-        }
-      }
-      ValidationResult result = validateNumberOfTokens(language, ref templateTokens);
+      ValidationResult result = validateTotalNumberOfTokens(ref templateTokens, language);
       if (result.HasError)
       {
         return result;
       }
 
+      result = countTokenTypes(template.Name, ref templateTokens,
+        ref binCount, ref intCount, ref numCount, ref strCount, language);
+      if (result.HasError)
+      {
+        return result;
+      }
+
+      return validateTokens(template.Name, ref templateTokens, language);
+    }
+
+    private void splitTokens(StringValueObject template,
+                           ref List<TokenBase> templateTokens)
+    {
+      TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
+
+      List<SplitElement> splitElements = SplitNonTokenizedElements(template.Value);
+
+      foreach (SplitElement elem in splitElements)
+      {
+        if (elem.isFixedToken)
+        {
+          // Treat fixed tokens like constant strings between placeholders
+          templateTokens.Add(ttf.createConstStringToken(elem.text));
+        }
+        else
+        {
+          for (int curPos = 0; curPos < elem.text.Length;)
+          {
+            Match curMatch = PLACEHOLDER_REGEX.Match(elem.text, curPos);
+            if (curMatch.Success && (curMatch.Length >= 2))
+            {
+              // Constant string before placeholder
+              templateTokens.Add(ttf.createConstStringToken(
+                elem.text.Substring(curPos, curMatch.Index - curPos)));
+              // Placeholder string between delimiters
+              templateTokens.Add(
+                ttf.createPlaceholderToken(
+                  elem.text.Substring(curMatch.Index + 1, curMatch.Length - 2),
+                  getGroupSeparator(), getDecimalSeparator()
+                )
+              );
+              curPos = curMatch.Index + curMatch.Length;
+            }
+            else
+            {
+              // Constant string after last placeholder
+              templateTokens.Add(ttf.createConstStringToken(
+                elem.text.Substring(curPos)));
+              curPos = elem.text.Length;
+            }
+          }
+        }
+      }
+    }
+
+    protected virtual List<SplitElement> SplitNonTokenizedElements(string templateText)
+    {
+      // Base implementation has no elements which are exempted from tokenization
+      SplitElement singleElem = new SplitElement { text = templateText, isFixedToken = false };
+      return new List<SplitElement>() { singleElem };
+    }
+
+    private ValidationResult countTokenTypes(string templateName,
+                                ref List<TokenBase> templateTokens,
+                                            ref int binCount,
+                                            ref int intCount,
+                                            ref int numCount,
+                                            ref int strCount,
+                                             string language)
+    {
       foreach (TokenBase token in templateTokens)
       {
         switch (token.getType())
@@ -443,7 +494,7 @@ namespace Recomedia_de.Logic.VisuWeb
             break;
           case TokenType.Error:
           default:
-            return createTokenError(language, template.Name, token);
+            return createTokenError(language, templateName, token);
         }
       }
       if (binCount > MAX_INPUTS)
@@ -478,7 +529,7 @@ namespace Recomedia_de.Logic.VisuWeb
           Message = Localize(language, "TooManyStrPlaceholders")
         };
       }
-      return validateTokens(language, template.Name, ref templateTokens);
+      return new ValidationResult { HasError = false };
     }
 
     protected ValidationResult createTokenError(string language,
@@ -507,12 +558,13 @@ namespace Recomedia_de.Logic.VisuWeb
       };
     }
 
-    protected abstract ValidationResult validateTokens(string language,
-                                                       string templateName,
-                                          ref List<TokenBase> templateTokens);
+    protected abstract ValidationResult validateTokens(string templateName,
+                                          ref List<TokenBase> templateTokens,
+                                                       string language);
 
-    private ValidationResult validateNumberOfTokens(string language,
-                                          ref List<TokenBase> templateTokens)
+    private ValidationResult validateTotalNumberOfTokens(
+                                          ref List<TokenBase> templateTokens,
+                                                       string language)
     {
       if (templateTokens.Count < (isPlaceholderEnforced() ? 2 : 1))
       {

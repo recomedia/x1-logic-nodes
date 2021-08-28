@@ -130,8 +130,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.mOutputTypes[0].Value = PortTypes.String;
       Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
 
-      // Set a simple valid template that uses a few string placeholders
-      node.mTemplates[0].Value = "{a:S} + {b:S}";
+      // Set a simple valid template that uses a few string placeholders.
+      // Intentionally using reserved words as input names.
+      node.mTemplates[0].Value = "{string:S} + {Uri:S}";
 
       // Expect no validation error
       var result = node.Validate("de");
@@ -142,7 +143,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
       checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
       checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
-      checkInputNames<StringValueObject>(new List<string> { "a", "b" },
+      checkInputNames<StringValueObject>(new List<string> { "string", "Uri" },
                                                                node.mStrInputs);
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // should be string
@@ -2145,7 +2146,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.AreEqual("", node.mError.Value);
       Assert.IsNotNull(node.mOutputs[0]);
       Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
-      Assert.AreEqual("text.Length = less than 4", node.mOutputs[0].Value);
+      Assert.AreEqual("{text:S}.Length = less than 4", node.mOutputs[0].Value);
     }
 
     public class ExpressionCalculatorErrorTestCaseData
