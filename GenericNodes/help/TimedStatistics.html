@@ -15,7 +15,7 @@
     <div class="contentholder">
       <div class="navlinks-top">
         <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
-        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Paketinhalt</a>
       </div>
       <h1>Statistik für Zeitreihen</h1>
       <h2>Beschreibung</h2>
@@ -52,15 +52,9 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -130,15 +124,9 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -241,7 +229,7 @@
             </p>
             <ul>
               <li>
-                Wenn der <a href="#timespan">Betrachtungszeitraum</a> <tt>0</tt>
+                Wenn der <a href="#timespan">Betrachtungszeitraum</a> <code>0</code>
                 (unbegrenzt) ist und keine anderen Ausgänge benötigt werden, kann
                 dieselbe Funktinonalität effizienter mit einer "Formelberechnung"
                 aus dem Paket "Recomedia Visu-& Web-Logikbausteine"
@@ -249,7 +237,7 @@
                 Beispiel "Summenzähler").
               </li>
               <li>
-                Wenn der <a href="#timespan">Betrachtungszeitraum</a> &gt;<tt>0</tt>
+                Wenn der <a href="#timespan">Betrachtungszeitraum</a> &gt;<code>0</code>
                 (also begrenzt) ist, dann kann dieser Ausgabewert nicht in allen
                 Fällen korrekt berechnet werden. Er wird zu niedrig berechnet,
                 wenn Eingabewerte vor Ablauf des Betrachtungszeitraums verworfen
@@ -296,18 +284,10 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Als Eingang zuschaltbar?</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Als Eingang zuschaltbar?</th>
+          <th>Beschreibung</th>
         </tr>
         <tr id="resol">
           <td>
@@ -377,16 +357,18 @@
               <a href="#timespan">Betrachtungszeitraum</a>), so werden die
               meisten Ausgabewerte erst dann gesetzt, wenn nach dem Ablauf der
               gegebenen Zeitspanne eines der folgenden Ereignisse eintritt:
-              <ul>
-                <li>
-                  Der Eingang erhält weitere Daten
-                </li>
-                <li>
-                  Die Ausgangswerte werden aufgrund des Parameters
-                  <a href="#update">Zeitintervall für Aktualisierung</a>
-                  neu berechnet
-                </li>
-              </ul>
+            </p>
+            <ul>
+              <li>
+                Der Eingang erhält weitere Daten
+              </li>
+              <li>
+                Die Ausgangswerte werden aufgrund des Parameters
+                <a href="#update">Zeitintervall für Aktualisierung</a>
+                neu berechnet
+              </li>
+            </ul>
+            <p>
               Dies ist immer dann sinnvoll, wenn die Momentanwerte am Eingang
               so stark schwanken können, dass eine sinnvolle Weiterverarbeitung
               nicht sofort möglich ist. Ein Beispiel ist die Berechnung der
@@ -456,37 +438,37 @@
             </ul>
             <p>
               Hinweise:
-              <ul>
-                <li>
-                  Ist dieser Parameter zu klein gewählt, dann müssen
-                  innerhalb des Betrachtungszeitraums &ndash; oder
-                  zwischen zwei Neustarts &ndash; mehr Eingangswerte
-                  verarbeitet werden, als gespeichert werden können.
-                  In diesem Fall werden ältere Werte gelöscht und
-                  zwischen den verbleibenden linear interpoliert.
-                  Die ausgegebene <a href="#sum">Summe</a> wird dann
-                  &ndash; außer bei unbegrenztem Betrachtungszeitraum
-                  &ndash; wegen fehlender Werte zu klein. Andere
-                  Ausgabewerte können durch Rundungsfehler ungenauer
-                  werden.
-                </li>
-                <li>
-                  Andererseits bedeutet ein zu hoher Wert unnötigen
-                  Speicherverbrauch. Dies kann bei stark ausgelastetem
-                  Systemspeicher (RAM) zu Fehlfunktionen &ndash; z. B.
-                  unerwarteten Neustarts der Logik &ndash; führen. Zu
-                  beachten ist dies insbesondere beim L1, der über
-                  deutlich weniger Speicher verfügt als der X1.
-                </li>
-                <li>
-                  Der Ausgang <a href="#curstore">
-                    Anzahl gespeicherter
-                    Eingangswerte
-                  </a> dient im laufenden Betrieb zur
-                  Kontrolle einer sinnvollen Einstellung.
-                </li>
-              </ul>
             </p>
+            <ul>
+              <li>
+                Ist dieser Parameter zu klein gewählt, dann müssen
+                innerhalb des Betrachtungszeitraums &ndash; oder
+                zwischen zwei Neustarts &ndash; mehr Eingangswerte
+                verarbeitet werden, als gespeichert werden können.
+                In diesem Fall werden ältere Werte gelöscht und
+                zwischen den verbleibenden linear interpoliert.
+                Die ausgegebene <a href="#sum">Summe</a> wird dann
+                &ndash; außer bei unbegrenztem Betrachtungszeitraum
+                &ndash; wegen fehlender Werte zu klein. Andere
+                Ausgabewerte können durch Rundungsfehler ungenauer
+                werden.
+              </li>
+              <li>
+                Andererseits bedeutet ein zu hoher Wert unnötigen
+                Speicherverbrauch. Dies kann bei stark ausgelastetem
+                Systemspeicher (RAM) zu Fehlfunktionen &ndash; z. B.
+                unerwarteten Neustarts der Logik &ndash; führen. Zu
+                beachten ist dies insbesondere beim L1, der über
+                deutlich weniger Speicher verfügt als der X1.
+              </li>
+              <li>
+                Der Ausgang <a href="#curstore">
+                  Anzahl gespeicherter
+                  Eingangswerte
+                </a> dient im laufenden Betrieb zur
+                Kontrolle einer sinnvollen Einstellung.
+              </li>
+            </ul>
           </td>
         </tr>
       </table>

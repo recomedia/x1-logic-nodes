@@ -29,28 +29,22 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h4>Funktion</h4>
-          </th>
-          <th>
-            <h4>Datentyp</h4>
-          </th>
-          <th>
-            <h4>Beschreibung</h4>
-          </th>
+          <th class="small">Funktion</th>
+          <th class="small">Datentyp</th>
+          <th class="small">Beschreibung</th>
         </tr>
         <tr>
           <td class="group">
             <p>
-              <tt>
+              <code>
                 Hlk.HeatingCurve(<br />
-              </tt><i>TaAvg</i><tt>, </tt><i>Tg</i><tt>, </tt><i>TaMin</i><tt>, 
+              </code><i>TaAvg</i><code>, </code><i>Tg</i><code>, </code><i>TaMin</i><code>, 
               <br />
-              </tt><i>TSoll</i><tt>, </tt><i>TvMax</i><tt>, </tt><i>k</i><tt>)</tt>
+              </code><i>TSoll</i><code>, </code><i>TvMax</i><code>, </code><i>k</i><code>)</code>
             </p>
           </td>
           <td class="group">
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td class="group">
             <p>
@@ -268,16 +262,16 @@
         </dl>
       </p>
       <p>
-        Formel 1: <span class="box-noscroll"> <tt>/* Heizkurve */ Hlk.HeatingCurve({TaAvg:N}, 17, -10, {TSoll:N}, 70, 1.33)</tt></span>
+        Formel 1: <span class="box-noscroll"> <code>/* Heizkurve */ Hlk.HeatingCurve({TaAvg:N}, 17, -10, {TSoll:N}, 70, 1.33)</code></span>
       </p>
       <p>
         Dieses Zwischenergebnis vom Typ NUMBER wird nur für die Visualisierung verwendet.
       </p>
       <p><b>Bedarfsführung</b></p>
       <p>
-        Der tatsächliche Wärmebedarf ist als prozentualer <tt>Bedarf</tt> gegeben. Er senkt
+        Der tatsächliche Wärmebedarf ist als prozentualer <code>Bedarf</code> gegeben. Er senkt
         die Vorlauftemperatur aus Formel 1 wie folgt ab:<br />
-        Formel 2: <span class="box-noscroll"> <tt>/* Bedarfsführung */ ({Bedarf:N} / 100) * (_out1_ - {TSoll}) + {TSoll}</tt> </span><br />
+        Formel 2: <span class="box-noscroll"> <code>/* Bedarfsführung */ ({Bedarf:N} / 100) * (_out1_ - {TSoll}) + {TSoll}</code> </span><br />
         Dieses Endergebnis vom Typ NUMBER wird als Soll-Vorlauftemperatur an den
         Heizungsregler weiter gegeben.
       </p>

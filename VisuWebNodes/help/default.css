@@ -117,7 +117,7 @@ h3 {
 
 h4 {
   font-family: Arial;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 15px;
   margin: 2px 0 4px 0;
   padding: 2px 0 3px 0;
@@ -199,16 +199,24 @@ td {
 table.Tabelle_Logicnode {
   width: 100%;
   max-width: 900px;
-  margin: 0 0 8px 0;
+  margin: 8px 0 8px 0;
 }
 
   table.Tabelle_Logicnode th {
+    font-family: Arial;
+    font-size: 15px;
+    line-height: 20px;
     text-align: left;
-    vertical-align: top;
-    padding: 0 4px 2px 4px;
+    vertical-align: baseline;
+    padding: 6px 4px 8px 4px;
     border-bottom: 1px solid #cccccc;
     border-right: none;
   }
+
+    table.Tabelle_Logicnode th.small {
+      font-size: 13px;
+      line-height: 16px;
+    }
 
   table.Tabelle_Logicnode td {
     vertical-align: top;
@@ -218,10 +226,12 @@ table.Tabelle_Logicnode {
   }
 
     table.Tabelle_Logicnode td.group {
-      vertical-align: top;
-      padding: 0 4px 0 4px;
       border-bottom: none;
     }
+
+      table.Tabelle_Logicnode td.group p {
+        margin: 6px 0 2px 0;
+      }
 
 img {
   border: none;

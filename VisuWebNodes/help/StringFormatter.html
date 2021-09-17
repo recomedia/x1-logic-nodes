@@ -15,19 +15,11 @@
     <div class="contentholder">
       <div class="navlinks-top">
         <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
-        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Paketinhalt</a>
       </div>
       <h1><img src="../icons/StringFormatterNode.png" alt="" />&nbsp;Textformatierer</h1>
-      <h2>ACHTUNG &ndash; Neue Versionen sind inkompatibel zu Versionen vor 0.9.x</h2>
-      <p>
-        Benutzer, die bisher eine Version vor 0.9.x verwendet haben, müssen
-        unbedingt die <a href="update.html">Update-Anleitung</a> beachten!
-        Ansonsten kann es zu Fehlern im GPA kommen, die sich nur durch Löschen
-        ganzer Logikblätter &ndash; oder im schlimmsten Fall Neuanlegen des
-        Projekts &ndash; beheben lassen.
-      </p>
       <h2>Beschreibung</h2>
-      <img src="StringFormatter.png" class="description" />
+      <img src="StringFormatter.png" alt="" class="description" />
       <p>
         Dieser Baustein setzt einen oder mehrere Ausgabetexte aus Formatvorlagen
         und den darin referenzierten Eingangswerten zusammen. Formatvorlagen
@@ -63,7 +55,7 @@
       <p>
         Solange keine gültige(n) <a href="#parameter">Formatvorlage</a>(n) festgelegt
         wurde(n), hat der Baustein keine Eingänge.
-        <b><i>Eingänge werden nur durch gültige Platzhalter in den Formatvorlagen angelegt.</b></i>
+        <b><i>Eingänge werden nur durch gültige Platzhalter in den Formatvorlagen angelegt.</i></b>
         Ihre Reihenfolge ergibt sich &ndash; für jeden Porttyp getrennt &ndash; aus
         der Reihenfolge der entsprechenden Platzhalter in den Formatvorlagen. In der
         Tabelle sind die automatisch vergebenen Eingangsnamen genannt. Diese werden
@@ -76,15 +68,9 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -147,15 +133,9 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -200,18 +180,10 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Als Eingang zuschaltbar?</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Als Eingang zuschaltbar?</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -383,12 +355,12 @@
         <li>
           <b>Definition</b> &ndash; definiert erstmals einen Eingang
           mit Namen und Typ und hat die folgende Form:<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<tt>{</tt>[<i>Eingangsname</i>]<tt>:</tt><i>T</i>[<i>Format</i>]<tt>}</tt>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>{</code>[<i>Eingangsname</i>]<code>:</code><i>T</i>[<i>Format</i>]<code>}</code>
         </li>
         <li>
           <b>Referenz</b> &ndash; bezieht sich auf einen vorher definierten
           Eingang, dessen Typ bereits festgelegt ist:<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<tt>{</tt><i>Eingangsname</i>[<tt>:</tt><i>T</i>[<i>Format</i>]]<tt>}</tt>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>{</code><i>Eingangsname</i>[<code>:</code><i>T</i>[<i>Format</i>]]<code>}</code>
         </li>
       </ul>
       <p>
@@ -409,8 +381,8 @@
       <p>
         <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter kann
         er auch Ziffern, Leer- und Interpunktionszeichen enthalten, mit
-        Ausnahme von geschweiften Klammern (<tt>{</tt> und <tt>}</tt>) und
-        Doppelpunkt (<tt>:</tt>). Leerzeichen am Anfang oder am Ende
+        Ausnahme von geschweiften Klammern (<code>{</code> und <code>}</code>) und
+        Doppelpunkt (<code>:</code>). Leerzeichen am Anfang oder am Ende
         werden nicht in den Namen übernommen.
       </p>
       <h3>Datentyp und Formatierung</h3>
@@ -424,42 +396,42 @@
       </p>
       <ul>
         <li>
-          <tt>B</tt> &ndash; Wahrheitswert (Bool)
+          <code>B</code> &ndash; Wahrheitswert (Bool)
           <ul>
             <li>
-              Ohne <i>Format</i>parameter wird <tt>false</tt>
-              als 0, <tt>true</tt> als 1 dargestellt.
+              Ohne <i>Format</i>parameter wird <code>false</code>
+              als 0, <code>true</code> als 1 dargestellt.
             </li>
             <li>
               Mit zwei ASCII- oder
               <a href="https://unicode-suche.de/">Unicode-Zeichen</a>
-              als <i>Format</i>parameter (z. B. <tt>B</tt>&#9729;&#9728;)
-              wird <tt>false</tt> als das erste (im Beispiel &#9729;),
-              <tt>true</tt> als das zweite Zeichen (im Beispiel &#9728;)
+              als <i>Format</i>parameter (z. B. <code>B</code>&#9729;&#9728;)
+              wird <code>false</code> als das erste (im Beispiel &#9729;),
+              <code>true</code> als das zweite Zeichen (im Beispiel &#9728;)
               dargestellt. (Manche Unicode-Zeichen führen zu Fehlern; man
               kann sie &ndash; wie im nächsten Punkt beschrieben &ndash;
               als Text-Parameter meist dennoch verwenden.)
             </li>
             <li>
               Mit zwei Unicode-Texten als <i>Format</i>parameter (z. B.
-              <tt>B|Aus|Ein</tt>) wird <tt>false</tt> als der erste
-              (im Beispiel "Aus"), <tt>true</tt> als der zweite Text
+              <code>B|Aus|Ein</code>) wird <code>false</code> als der erste
+              (im Beispiel "Aus"), <code>true</code> als der zweite Text
               (im Beispiel "Ein") dargestellt. Die Texte dürfen alle
               Sonderzeichen mit Ausnahme von geschweiften Klammern
-              (<tt>{</tt> und <tt>}</tt>), Doppelpunkt (<tt>:</tt>),
-              Gleichheitszeichen (<tt>=</tt>) und senkrechtem Strich
-              (<tt>|</tt>) enthalten, also auch Leerzeichen.
+              (<code>{</code> und <code>}</code>), Doppelpunkt (<code>:</code>),
+              Gleichheitszeichen (<code>=</code>) und senkrechtem Strich
+              (<code>|</code>) enthalten, also auch Leerzeichen.
             </li>
           </ul>
         </li>
         <li>
-          <tt>I</tt> &ndash; Ganzzahl (Integer). Zu möglichen
+          <code>I</code> &ndash; Ganzzahl (Integer). Zu möglichen
           <i>Format</i>parametern siehe im Abschnitt
           <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
           weiter unten.
         </li>
         <li>
-          <tt>F</tt> &ndash; Fließkommazahl (Number), <em>ohne</em>
+          <code>F</code> &ndash; Fließkommazahl (Number), <em>ohne</em>
           Gruppentrennzeichen (Tausendertrennzeichen) formatiert
           <ul>
             <li>
@@ -480,13 +452,13 @@
           </ul>
         </li>
         <li>
-          <tt>N</tt> &ndash; Fließkommazahl (Number), <em>mit</em> dem
+          <code>N</code> &ndash; Fließkommazahl (Number), <em>mit</em> dem
           <a href="#parameter">parametrierten</a> Gruppentrennzeichen
-          (Tausendertrennzeichen) formatiert. Ansonsten wie <tt>F</tt>.
+          (Tausendertrennzeichen) formatiert. Ansonsten wie <code>F</code>.
         </li>
         <li>
-          <tt>G</tt> &ndash; Fließkommazahl, formatiert ähnlich wie
-          <tt>F</tt>, jedoch mit zwei Abweichungen:
+          <code>G</code> &ndash; Fließkommazahl, formatiert ähnlich wie
+          <code>F</code>, jedoch mit zwei Abweichungen:
           <ul>
             <li>
               Die <i>Format</i>-Ziffer gibt nicht die Zahl der
@@ -503,7 +475,7 @@
           dargestellt.
         </li>
         <li>
-          <tt>P</tt> &ndash; Fließkommazahl, als Prozentwert formatiert:
+          <code>P</code> &ndash; Fließkommazahl, als Prozentwert formatiert:
           1.0 wird z. B. als "100.00%" dargestellt.
           <ul>
             <li>
@@ -522,7 +494,7 @@
           </ul>
         </li>
         <li>
-          <tt>S</tt> - Variabler Text. Zu möglichen <i>Format</i>parametern
+          <code>S</code> - Variabler Text. Zu möglichen <i>Format</i>parametern
           siehe den Abschnitt
           <a href="#textersetzungen">Textersetzungen in Text-Platzhaltern</a>
           weiter unten.
@@ -538,7 +510,7 @@
       <p>
         Soll ein <b>einzelner Zahlenwert</b> auf einen Text
         abgebildet werden so folgt die Zuweisung dieser Form:<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;[<i>Wert</i><tt>=</tt>][<i>Text</i>]<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;[<i>Wert</i><code>=</code>][<i>Text</i>]<br />
         Darin ist <i>Wert</i> eine Dezimalzahl, bei der ggf. als
         Dezimaltrennzeichen ein Komma (,) vor den Nachkommastellen
         steht. Gruppentrennzeichen (Tausendertrennzeichen) dürfen
@@ -549,12 +521,12 @@
       <p>
         Um einen <b>Wertebereich</b> (Intervall) auf einen Text
         abzubilden, folgt die Zuweisung dieser Form:<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;[[<tt>&gt;</tt>]<i>Wert</i>]<tt>..</tt>[[<tt>&lt;</tt>]<i>Wert</i>]<tt>=</tt>[<i>Text</i>]<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;[[<code>&gt;</code>]<i>Wert</i>]<code>..</code>[[<code>&lt;</code>]<i>Wert</i>]<code>=</code>[<i>Text</i>]<br />
         Dabei ist der erste Wert der untere Grenzwert des Intervalls,
         der zweite der obere.
       </p>
       <p>
-        Die optionalen Zeichen <tt>&gt;</tt> bzw. <tt>&lt;</tt>
+        Die optionalen Zeichen <code>&gt;</code> bzw. <code>&lt;</code>
         geben an, dass der Grenzwert selbst ausgeschlossen ist (also
         ein offenes Intervall festgelegt werden soll). Ohne sie ist
         der Grenzwert jeweils enthalten (geschlossenes Intervall).
@@ -573,9 +545,9 @@
       <p>
         <i>Text</i> darf &ndash; wie schon bei Wahrheitswerten &ndash;
         alle Sonderzeichen mit Ausnahme von geschweiften Klammern
-        (<tt>{</tt> und <tt>}</tt>), Doppelpunkt (<tt>:</tt>),
-        Gleichheitszeichen (<tt>=</tt>) und senkrechtem Strich
-        (<tt>|</tt>) enthalten, also auch Leerzeichen. Wenn ein Wert
+        (<code>{</code> und <code>}</code>), Doppelpunkt (<code>:</code>),
+        Gleichheitszeichen (<code>=</code>) und senkrechtem Strich
+        (<code>|</code>) enthalten, also auch Leerzeichen. Wenn ein Wert
         oder Bereich angegeben ist, darf der Text auch leer sein, um
         die Ausgabe zu unterdrücken.
       </p>
@@ -584,22 +556,22 @@
         <li>
           Den HVAC-Modus eines Raumtemperaturreglers (1 Byte, DPT
           20.102) als Text ausgeben:<br />
-          <div class="box-noscroll"> <tt>{HVAC-Modus:I|Auto|Komfort|Bereitschaft|Eco|Gebäudeschutz} </tt></div>
+          <div class="box-noscroll"> <code>{HVAC-Modus:I|Auto|Komfort|Bereitschaft|Eco|Gebäudeschutz} </code></div>
         </li>
         <li>
           Die ganzzahlig in Grad gegebene meteorologische Windrichtung als
           Pfeilrichtung in 45°-Schritten ausgeben (0 Grad entspricht Nord;
           Werte steigen im Uhrzeigersinn, -1 bedeutet "unbestimmt, wechselnd"):<br />
-          <div class="box-noscroll"> <tt>{Windrichtung(Grad):I|-1=↻|0..22=↓|23..67=↙|68..112=←|113..157=↖|158..202=↑|203..247=↗|248..292=→|293..337=↘|338..360=↓} </tt></div>
+          <div class="box-noscroll"> <code>{Windrichtung:I|-1=↻|0..22=↓|23..67=↙|68..112=←|113..157=↖|158..202=↑|203..247=↗|248..292=→|293..337=↘|338..360=↓} </code></div>
         </li>
         <li>
           Eine in m/s als Fließkommazahl gegebene Windgeschwindigkeit
           umgerechnet nach Beaufort ausgeben:<br />
-          <div class="box-scroll-x"> <tt>{Windgeschwindigkeit(m/s):F|..&lt;0,3=0|0,3..&lt;1,54=1|1,54..&lt;3,3=2|3,3..&lt;5,47=3|5,47..&lt;8=4|8..&lt;10,8=5|10,8..&lt;13,86=6|13,86..&lt;17,17=7|17,17..&lt;20,72=8|20,72..&lt;24,48=9|24,48..&lt;28,44=10|28,44..&lt;32,6=11|32,6..=12} </tt></div>
+          <div class="box-scroll-x"> <code>{Windgeschwindigkeit(m/s):F|..&lt;0,3=0|0,3..&lt;1,54=1|1,54..&lt;3,3=2|3,3..&lt;5,47=3|5,47..&lt;8=4|8..&lt;10,8=5|10,8..&lt;13,86=6|13,86..&lt;17,17=7|17,17..&lt;20,72=8|20,72..&lt;24,48=9|24,48..&lt;28,44=10|28,44..&lt;32,6=11|32,6..=12} </code></div>
         </li>
         <li>
           <a href="https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2">OpenWeather-Wettercode</a> als Unicode-Piktogramm ausgeben:<br />
-          <div class="box-scroll-x"> <tt>{Wettercode:I|210..211=🌩|200..299=⛈|500..504=🌦|300..599=🌧|600..699=🌨|771..781=🌪|700..799=🌫|800=☼|801=🌤|802=⛅|803=🌥|804=☁} </tt></div>
+          <div class="box-scroll-x"> <code>{Wettercode:I|210..211=🌩|200..299=⛈|500..504=🌦|300..599=🌧|600..699=🌨|771..781=🌪|700..799=🌫|800=☼|801=🌤|802=⛅|803=🌥|804=☁} </code></div>
           Die Bereichsüberschneidungen sind beabsichtigt: Kleinere Bereiche
           für spezielle Piktogramme stehen vor größeren Bereichen mit
           allgemeineren Piktogrammen. Die Spezialfälle haben dadurch Vorrang,
@@ -618,10 +590,10 @@
       </p>
       <p>
         Die einzelnen Textersetzungen haben dabei folgende Form:<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;<i>Originaltext</i><tt>=</tt>[<i>Ersetzungstext</i>]<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;<i>Originaltext</i><code>=</code>[<i>Ersetzungstext</i>]<br />
         Die Texte dürfen alle Sonderzeichen mit Ausnahme von geschweiften
-        Klammern (<tt>{</tt> und <tt>}</tt>), Doppelpunkt (<tt>:</tt>),
-        Gleichheitszeichen (<tt>=</tt>) und senkrechtem Strich (<tt>|</tt>)
+        Klammern (<code>{</code> und <code>}</code>), Doppelpunkt (<code>:</code>),
+        Gleichheitszeichen (<code>=</code>) und senkrechtem Strich (<code>|</code>)
         enthalten, also auch Leerzeichen und Unicode-Zeichen. Der Originaltext
         muss mindestens ein Zeichen umfassen. Der Ersetzungstext darf auch
         leer sein.
@@ -637,8 +609,10 @@
       <h4>Beispiel</h4>
       <p>
         Den Wetterkurztext eines Internet-Wetterdienstes als Unicode-Piktogramm
-        ausgeben:<br />
-        <div class="box-noscroll"> <tt>{cond:S|sunny=☀️|partly cloudy=⛅|cloudy=☁️|rainy=🌧|snowy=❄️|thunderstorm=🌩️} </tt></div>
+        ausgeben:
+      </p>
+      <div class="box-noscroll"> <code>{cond:S|sunny=☀️|partly cloudy=⛅|cloudy=☁️|rainy=🌧|snowy=❄️|thunderstorm=🌩️} </code></div>
+      <p>
         Für das gewünschte Verhalten ist es wichtig, dass die Ersetzung von
         "partly cloudy" <em>vor</em> der für "cloudy" steht.
       </p>
@@ -654,13 +628,13 @@
       </p>
       <p>
         Die verwendete Formatvorlage ist:
-        <div class="box-noscroll" style="width: 716px"> <tt>{Bedarf:B|⚪|🔴} ({BedarfSeit:S}) | {Pumpe:B⋅✇} | ▲{TvsIst:N0}/{TvsSoll:N0}°C | ▽{TrsIst:N0}°C </tt></div>
       </p>
+      <div class="box-noscroll" style="width: 716px"> <code>{Bedarf:B|⚪|🔴} ({BedarfSeit:S}) | {Pumpe:B⋅✇} | ▲{TvsIst:N0}/{TvsSoll:N0}°C | ▽{TrsIst:N0}°C </code></div>
       <p>
         Sechs Eingangsgrößen verschiedener Typen und (sehr wenig) Festtext
         setzen den Ausgabetext zusammen. Dieser zeigt &ndash; durch senkrechte
         Striche <span class="manhyphens">getrennt</span> &ndash; die folgenden Daten:
-</p>
+      </p>
       <ul>
         <li>
           Ob Heizwärmebedarf vorliegt (🔴) oder nicht (⚪) und seit wann
@@ -679,8 +653,8 @@
       </ul>
       <p>
         Der fertig formatierte Ausgabetext sieht dann z. B. so aus:
-        <div class="box-noscroll" style="width: 230px">  🔴 (6:35) | ✇ | ▲42/43°C | ▽38°C</div>
       </p>
+      <div class="box-noscroll" style="width: 230px">  🔴 (6:35) | ✇ | ▲42/43°C | ▽38°C</div>
       <p>
         Eine Kachel (Statusanzeige Text) der X1-Visualisierung kann so kompakt
         und übersichtlich alle Kenngrößen des Heizkreises anzeigen.

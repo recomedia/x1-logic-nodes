@@ -15,40 +15,55 @@
     <div class="contentholder">
       <div class="navlinks-top">
         <a href="#footerHead">↓ Andere Logikbausteine in diesem Paket</a>
-        &nbsp; | &nbsp; <a href="Index.html">← Inhalt</a>
+        &nbsp; | &nbsp; <a href="Index.html">← Paketinhalt</a>
       </div>
       <h1>
         <img src="../icons/ExpressionCalculatorNode.png" alt="" />&nbsp;
         Formelberechnung
       </h1>
-      <h2>Beschreibung</h2>
-      <img src="ExpressionCalculator.png" class="description" />
+      <h2>Inhaltsverzeichnis</h2>
+      <img src="ExpressionCalculator.png" alt="" class="description" />
+      <ul>
+        <li><a href="#beschreibung">Beschreibung</a></li>
+        <li><a href="#eingaenge">Eingänge</a></li>
+        <li><a href="#ausgaenge">Ausgänge</a></li>
+        <li><a href="#parameter">Parameter</a></li>
+        <li><a href="#variablen">Ausgangswerte als Variablen</a></li>
+        <li><a href="#platzhalter">Platzhalter für Variablen</a></li>
+        <li><a href="#konstanten">Literale Konstanten</a></li>
+        <li><a href="#operatoren">Operatoren</a></li>
+        <li><a href="#funktionen">Funktionen</a></li>
+        <li><a href="#kommentare">Kommentare</a></li>
+        <li><a href="#beispiele">Beispiele</a></li>
+      </ul>
+      <h2 id="beschreibung">Beschreibung</h2>
       <p>
         Dieser Baustein errechnet aus einer oder mehreren mathematischen Formeln
-        entsprechende Ausgabewerte. Die Formeln sind frei konfigurierbar. Sie
-        können aus Konstanten, Platzhaltern für variable Eingangswerte,
-        Rechenoperationen, Funktionsaufrufen und Kommentaren bestehen. Die
-        Platzhalter bestimmen Anzahl, Namen und Port&shy;typen der Eingänge.
+        entsprechende Ausgabewerte. Die Formeln sind frei festlegbar. Sie können
+        aus Konstanten, Platzhaltern für variable Eingangswerte, Rechenoperationen,
+        Funktionsaufrufen und Kommentaren bestehen. Die Platzhalter bestimmen Anzahl,
+        Namen und Porttypen der Eingänge.
       </p>
       <p>
         Folgende Arten von Eingangs- und Ausgabewerten können verarbeitet werden:
       </p>
       <ul>
         <li>
-          Wahrheitswerte (<tt>bool</tt>)
+          Wahrheitswerte (<code>bool</code>)
         </li>
         <li>
-          Numerische Werte (Ganzzahlen <tt>byte</tt>, <tt>int</tt>, <tt>long</tt> und
-          Fließkommazahlen <span class="manhyphens"><tt>double</tt></span>)
+          Numerische Werte (Ganzzahlen <code>byte</code>, <code>int</code>, <code>long</code> und
+          Fließkommazahlen <span class="manhyphens"><code>double</code></span>)
         </li>
         <li>
-          Texte (<tt>string</tt>)
+          Texte (<code>string</code>)
         </li>
       </ul>
       <p>
-        In den Formeln stehen nicht nur die üblichen Rechenoperationen, sondern
-        darüber hinaus Vieles aus dem
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0">.NET 4.0 API</a>
+        In den Formeln können die üblichen
+        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/">Rechenoperationen (der Programmiersprache C#)</a>
+        verwendet werden. Darüber hinaus stehen auch viele nützliche Methoden des
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0">.NET 4.0 API</a>s
         zur Verfügung.
       </p>
       <h3>Implementierung und Lizenzen</h3>
@@ -83,15 +98,9 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -146,7 +155,7 @@
           </td>
         </tr>
       </table>
-      <h2>Ausgänge</h2>
+      <h2 id="ausgaenge">Ausgänge</h2>
       <table class="Tabelle_Logicnode">
         <colgroup>
           <col style="width: 115px">
@@ -154,15 +163,9 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -213,10 +216,10 @@
             </p>
             <p>
               Beispiel: Der Fehler<br />
-              <tt>&nbsp;&nbsp;&nbsp;...: error CS1026: Unexpected symbol ',', expecting ')'</tt><br />
+              <code>&nbsp;&nbsp;&nbsp;...: error CS1026: Unexpected symbol ',', expecting ')'</code><br />
               weist sehr wahrscheinlich darauf hin, dass in einer Fließkommazahl  Komma
               (<b>,</b>) statt Punkt (<b>.</b>) vor den Nach&shy;komma&shy;stellen steht.
-              Anstelle von <tt>...</tt> steht, wo der Fehler zu suchen ist: In welcher
+              Anstelle von <code>...</code> steht, wo der Fehler zu suchen ist: In welcher
               Formel, in welcher Zeile (meist 1) und Zeichenposition.
             </p>
             <p>
@@ -235,18 +238,10 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Porttyp</h3>
-          </th>
-          <th>
-            <h3>Als Eingang zuschaltbar?</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Bezeichnung</th>
+          <th>Porttyp</th>
+          <th>Als Eingang zuschaltbar?</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
@@ -281,21 +276,21 @@
               Diese Parameter legen fest, welchen Porttyp der entsprechende
               Ausgangswert jeweils haben soll. Möglich sind die folgenden
               Typen (mit ihren C#-Entsprechungen):
-              <dl>
-                <dt>NUMBER</dt>
-                <dd>Fließkommazahl (<tt>double</tt>)</dd>
-                <dt>INT64</dt>
-                <dd>64-Bit-Ganzzahl mit Vorzeichen (<tt>long</tt>)</dd>
-                <dt>INTEGER</dt>
-                <dd>32-Bit-Ganzzahl mit Vorzeichen (<tt>int</tt>)</dd>
-                <dt>BYTE</dt>
-                <dd>8-Bit-Ganzzahl ohne Vorzeichen (<tt>byte</tt>)</dd>
-                <dt>BOOL</dt>
-                <dd>Wahrheitswert (<tt>bool</tt>)</dd>
-                <dt>STRING</dt>
-                <dd>Text (<tt>string</tt>)</dd>
-              </dl>
             </p>
+            <dl>
+              <dt>NUMBER</dt>
+              <dd>Fließkommazahl (<code>double</code>)</dd>
+              <dt>INT64</dt>
+              <dd>64-Bit-Ganzzahl mit Vorzeichen (<code>long</code>)</dd>
+              <dt>INTEGER</dt>
+              <dd>32-Bit-Ganzzahl mit Vorzeichen (<code>int</code>)</dd>
+              <dt>BYTE</dt>
+              <dd>8-Bit-Ganzzahl ohne Vorzeichen (<code>byte</code>)</dd>
+              <dt>BOOL</dt>
+              <dd>Wahrheitswert (<code>bool</code>)</dd>
+              <dt>STRING</dt>
+              <dd>Text (<code>string</code>)</dd>
+            </dl>
             <p>
               In Klammern ist jeweils der C#-Typ angegeben, wie er in
               <a href="#operatoren">Typumwandlungsoperatoren</a>
@@ -330,9 +325,9 @@
       <h2 id="variablen">Ausgangswerte als Variablen</h2>
       <p>
         Aktuelle und vorherige Ausgabewerte können in den Formeln als Variablen
-        verwendet werden. Diese Variablen haben die Namen <tt>_out1_</tt> ..
-        <tt>_out49_</tt> (für aktuelle Werte) bzw. <tt>_previousOut1_</tt> ..
-        <tt>_previousOut50_</tt> (für vorherige Werte). Sie dürfen überall stehen,
+        verwendet werden. Diese Variablen haben die Namen <code>_out1_</code> ..
+        <code>_out49_</code> (für aktuelle Werte) bzw. <code>_previousOut1_</code> ..
+        <code>_previousOut50_</code> (für vorherige Werte). Sie dürfen überall stehen,
         wo auch eine Konstante des gleichen Typs stehen dürfte.
       </p>
       <p>
@@ -363,14 +358,14 @@
       <ul>
         <li>
           <em>Aktuelle</em> Werte können nur aus Formeln mit <em>niedrigeren</em>
-          Nummern (<tt>_out1_</tt> .. <tt>_out&lt;<i>n</i>-1&gt;_</tt>) verwendet
+          Nummern (<code>_out1_</code> .. <code>_out&lt;<i>n</i>-1&gt;_</code>) verwendet
           werden. Sie stehen also nur zur Verfügung, wenn es mehrere Formeln gibt.
           Dies vermeidet zyklische Abhängigkeiten.
         </li>
         <li>
           <em>Vorherige</em> Werte können aus <em>allen</em> Formeln verwendet
           werden. Das schließt die eigene und höhere Nummern
-          (<tt>_previousOut&lt;<i>n</i>&gt;_</tt> ..) ein. (Zu zyklischen
+          (<code>_previousOut&lt;<i>n</i>&gt;_</code> ..) ein. (Zu zyklischen
           Abhängigkeiten führt das nicht, weil diese Werte erst wieder vor den
           Berechnungen für die <em>nächste</em> Änderung aktualisiert werden.)
         </li>
@@ -379,17 +374,17 @@
         Nach einer Inbetriebnahme oder einem Neustart des Logikmoduls gibt es
         zunächst keine Werte aus vorherigen Berechnungen. Je nach Typ werden
         bis zum ersten Setzen eines Ausgangs <i>n</i> die folgenden Werte für
-        <tt>_previousOut&lt;<i>n</i>&gt;_</tt> verwendet:
+        <code>_previousOut&lt;<i>n</i>&gt;_</code> verwendet:
       </p>
       <dl>
         <dt>NUMBER</dt>
-        <dd><tt>0.0</tt></dd>
+        <dd><code>0.0</code></dd>
         <dt>INT64, INTEGER, BYTE</dt>
-        <dd><tt>0</tt></dd>
+        <dd><code>0</code></dd>
         <dt>BOOL</dt>
-        <dd><tt>false</tt></dd>
+        <dd><code>false</code></dd>
         <dt>STRING</dt>
-        <dd><tt>""</tt> (Leerstring)</dd>
+        <dd><code>""</code> (Leerstring)</dd>
       </dl>
       <h2 id="platzhalter">Platzhalter für Variablen</h2>
       <p>
@@ -404,11 +399,11 @@
         <li>
           <b>Definition</b> &ndash; definiert erstmals einen Eingang
           mit Namen und Typ und hat die folgende Form:<br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<tt>{</tt><i>Eingangsname</i><tt>:</tt><i>T</i><tt>}</tt>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>{</code><i>Eingangsname</i><code>:</code><i>T</i><code>}</code>
         </li>
         <li>
           <b>Referenz</b> &ndash; bezieht sich auf einen vorher definierten
-          Eingang. Sie folgt der gleichen Form, wobei <tt>:</tt><i>T</i>
+          Eingang. Sie folgt der gleichen Form, wobei <code>:</code><i>T</i>
           weg gelassen werden darf.
         </li>
       </ul>
@@ -423,7 +418,7 @@
       </p>
       <p>
         <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter kann
-        er auch Ziffern (0..9) und Unterstriche (<tt>_</tt>) enthalten.
+        er auch Ziffern (0..9) und Unterstriche (<code>_</code>) enthalten.
         Leerzeichen und andere Sonderzeichen sind nicht zulässig. Leerzeichen
         am Anfang oder am Ende sind erlaubt, werden aber nicht in den Namen
         übernommen.
@@ -435,23 +430,23 @@
         Bedeutung &ndash; sind möglich:
       </p>
       <dl>
-        <dt><tt>B</tt></dt>
+        <dt><code>B</code></dt>
         <dd>
-          Wahrheitswert (<tt>bool</tt>) &ndash; Mögliche Werte: <tt>true</tt>, <tt>false</tt>
+          Wahrheitswert (<code>bool</code>) &ndash; Mögliche Werte: <code>true</code>, <code>false</code>
         </dd>
-        <dt><tt>I</tt></dt>
+        <dt><code>I</code></dt>
         <dd>
-          Ganzzahl (<tt>int</tt>) &ndash; Wertebereich -2 147 483 648 .. 2 147 483 647
+          Ganzzahl (<code>int</code>) &ndash; Wertebereich -2 147 483 648 .. 2 147 483 647
         </dd>
-        <dt><tt>F</tt>, <tt>N</tt>, <tt>G</tt> oder<sup> </sup><tt>P</tt></dt>
+        <dt><code>F</code>, <code>N</code>, <code>G</code> oder<sup> </sup><code>P</code></dt>
         <dd>
-          Fließkommazahl (<tt>double</tt>) &ndash; Wertebereich etwa
+          Fließkommazahl (<code>double</code>) &ndash; Wertebereich etwa
           -1.7 × 10<sup>308</sup> .. 1.7 × 10<sup>308</sup>&nbsp;mit
           einer Genauigkeit von mindestens 15 geltenden Ziffern
         </dd>
-        <dt><tt>S</tt></dt>
+        <dt><code>S</code></dt>
         <dd>
-          Text (<tt>string</tt>) &ndash; ASCII-, ISO-8859-1- oder Unicode-Text
+          Text (<code>string</code>) &ndash; ASCII-, ISO-8859-1- oder Unicode-Text
         </dd>
       </dl>
       <p>
@@ -460,7 +455,7 @@
         Werden sie in irgend einem Teil der Formel überschritten, kommt es zu
         falschen Ergebnissen.
       </p>
-      <h2 id="konstanten">Literale Konstanten in Formeln</h2>
+      <h2 id="konstanten">Literale Konstanten</h2>
       <table class="Tabelle_Logicnode">
         <colgroup>
           <col style="width: 100px">
@@ -468,40 +463,34 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Konstante</h3>
-          </th>
-          <th>
-            <h3>Datentyp</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Konstante</th>
+          <th>Datentyp</th>
+          <th>Beschreibung</th>
         </tr>
         <tr>
           <td>
             <p><i>Zahl</i></p>
           </td>
           <td>
-            <p><tt>byte<br />integer<br />long<br />double</tt></p>
+            <p><code>byte<br />integer<br />long<br />double</code></p>
           </td>
           <td>
             <p>
               Zahlen, die ohne Dezimaltrennzeichen angegeben werden, also nur aus
-              Ziffern bestehen, sind Ganzzahlen (<tt>int</tt>). Dies ist insbesondere
+              Ziffern bestehen, sind Ganzzahlen (<code>int</code>). Dies ist insbesondere
               beim Dividieren zu beachten (siehe Divisions-Operator).
             </p>
             <p>
               Ganzzahlen können auch in hexadezimaler Schreibweise angegeben werden,
-              indem man ihnen <tt>0x</tt>... voran stellt. Weitere Details finden sich
+              indem man ihnen <code>0x</code>... voran stellt. Weitere Details finden sich
               im Abschnitt
               <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/builtin-types/integral-numeric-types#integer-literals">Ganzzahlenliterale</a>
               der C#-Sprachreferenz von Microsoft.
             </p>
             <p>
-              Fließkommazahlen (<tt>double</tt>) können auch in Exponentialschreibweise
-              angegeben werden. Z. B. bedeutet <tt>1.2E6</tt> dasselbe wie
-              <tt>1200000.0</tt> und <tt>-3.45E-3</tt> dasselbe wie <tt>-0.00345</tt>.
+              Fließkommazahlen (<code>double</code>) können auch in Exponentialschreibweise
+              angegeben werden. Z. B. bedeutet <code>1.2E6</code> dasselbe wie
+              <code>1200000.0</code> und <code>-3.45E-3</code> dasselbe wie <code>-0.00345</code>.
               Als Dezimaltrenzeichen für Fließkomazahlen ist in Formeln &ndash;
               anders als in sonstigen Eingabefeldern &ndash; immer Punkt (<b>.</b>)
               zu verwenden. Gruppentrennzeichen (Tausendertrennzeichen) sind nicht
@@ -511,10 +500,10 @@
         </tr>
         <tr>
           <td>
-            <p><tt>true<br />false</tt></p>
+            <p><code>true<br />false</code></p>
           </td>
           <td>
-            <p><tt>bool</tt></p>
+            <p><code>bool</code></p>
           </td>
           <td>
             <p>Logische Wahrheitswerte.</p>
@@ -522,53 +511,53 @@
         </tr>
         <tr>
           <td>
-            <p><tt>Math.PI</tt></p>
+            <p><code>Math.PI</code></p>
           </td>
           <td>
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td>
             <p>
               Die Kreiszahl
-              (<font style="font-family: 'Times New Roman', Times, serif; font-size:larger;">&pi;</font>
+              (<span style="font-family: 'Times New Roman', Times, serif; font-size:larger;">&pi;</span>
               = 3.141...)
             </p>
           </td>
         </tr>
         <tr>
           <td>
-            <p><tt>Math.E</tt></p>
+            <p><code>Math.E</code></p>
           </td>
           <td>
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td>
             <p>
               Die Eulersche Zahl
-              (<font style="font-family: 'Times New Roman', Times, serif; font-size:larger;">e</font>
+              (<span style="font-family: 'Times New Roman', Times, serif; font-size:larger;">e</span>
               = 2.718...)
             </p>
           </td>
         </tr>
         <tr>
           <td>
-            <p><tt>DateTime.<br />&nbsp;&nbsp;Today<br />&nbsp;&nbsp;Now</tt></p>
+            <p><code>DateTime.<br />&nbsp;&nbsp;Today<br />&nbsp;&nbsp;Now</code></p>
           </td>
           <td>
-            <p><tt>DateTime</tt></p>
+            <p><code>DateTime</code></p>
           </td>
           <td>
             <p>
               Nicht wirklich Konstanten, da die Werte vom Zeitpunkt des Aufrufs abhängen:<br />
-              Aktuelles Datum (<tt>Today</tt> mit Uhrzeit 0:00 Uhr; <tt>Now</tt> mit aktueller
+              Aktuelles Datum (<code>Today</code> mit Uhrzeit 0:00 Uhr; <code>Now</code> mit aktueller
               Uhrzeit)
             </p>
             <p>
-              Hinweis: Objekte vom Typ <tt>DateTime</tt> sind nicht direkt als Ausgabewerte
+              Hinweis: Objekte vom Typ <code>DateTime</code> sind nicht direkt als Ausgabewerte
               verwendbar. Nützlich sind sie für Berechnungen mit Daten und Uhrzeiten, die
               anders nicht ohne Weiteres möglich wären. Sie lassen sich auch in gültige
               Ausgabetypen (Zahlen oder Texte) umwandeln. Siehe dazu die
-              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0">Dokumentation der <tt>DateTime</tt>-Klasse</a>
+              <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0">Dokumentation der <code>DateTime</code>-Klasse</a>
               und das <a href="#feiertagbeispiel">Anwendungsbeispiel "Feiertag"</a>.
               Korrekt formatierte Texte kann der Gira-Typumwandler auch wieder
               in DateTime-Datenpunkte umwandeln.
@@ -577,10 +566,10 @@
         </tr>
         <tr>
           <td>
-            <p><tt>"</tt><i>Text</i><tt>"</tt></p>
+            <p><code>"</code><i>Text</i><code>"</code></p>
           </td>
           <td>
-            <p><tt>string</tt></p>
+            <p><code>string</code></p>
           </td>
           <td>
             <p>
@@ -590,7 +579,7 @@
         </tr>
         <tr>
           <td>
-            <p><tt>null</tt></p>
+            <p><code>null</code></p>
           </td>
           <td>
             <p>&mdash;</p>
@@ -618,32 +607,20 @@
       Die wichtigsten davon sind:
       <table class="Tabelle_Logicnode">
         <colgroup>
-          <col style="width:  60px">
-          <col style="width:  90px">
-          <col style="width: 115px">
-          <col style="width: 115px">
+          <col style="width:  55px">
+          <col style="width:  85px">
           <col style="width: 100px">
+          <col style="width: 108px">
+          <col style="width:  95px">
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h3>Rang-folge</h3>
-          </th>
-          <th>
-            <h3>Assozia-tivität</h3>
-          </th>
-          <th>
-            <h3>Operator</h3>
-          </th>
-          <th>
-            <h3>Bezeichnung</h3>
-          </th>
-          <th>
-            <h3>Datentypen</h3>
-          </th>
-          <th>
-            <h3>Beschreibung</h3>
-          </th>
+          <th>Rang-folge</th>
+          <th>Assozia-tivität</th>
+          <th>Operator</th>
+          <th>Bezeichnung</th>
+          <th>Datentypen</th>
+          <th>Beschreibung und Beispiel</th>
         </tr>
         <tr>
           <td rowspan="2">
@@ -653,7 +630,7 @@
             <p style="margin-top:34px;">Von rechts nach links </p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>+ &nbsp; -</tt></p>
+            <p style="margin-top:16px;"><code>+ &nbsp; -</code></p>
           </td>
           <td>
             <p style="margin-top:16px;">Vorzeichen</p>
@@ -663,25 +640,26 @@
           </td>
           <td>
             <p>
-              Kein Vorzeichen oder <tt>+</tt> wertet den nachfolgenden Ausdruck<br />
-              positiv, <tt>-</tt> negativ.
+              Kein Vorzeichen oder <code>+</code> wertet den nachfolgenden Ausdruck
+              positiv, <code>-</code> negativ. Beispiel: <code>-1.6</code>
             </p>
           </td>
         </tr>
         <tr>
           <td>
-            <p style="margin-top:16px;"><tt>!</tt></p>
+            <p style="margin-top:16px;"><code>!</code></p>
           </td>
           <td>
             <p style="margin-top:16px;">NICHT</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>bool</tt></p>
+            <p style="margin-top:16px;"><code>bool</code></p>
           </td>
           <td>
             <p>
-              Invertiert den nachfolgenden booleschen Ausdruck<br />(<tt>true</tt>
-              &rarr; <tt>false</tt>; <tt>false</tt> &rarr; <tt>true</tt>).
+              Invertiert den nachfolgenden booleschen Ausdruck (<code>true</code>
+              &rarr; <code>false</code>; <code>false</code> &rarr; <code>true</code>).
+              Beispiel: <code>!{offen:B}</code>
             </p>
           </td>
         </tr>
@@ -693,7 +671,7 @@
             <p>Von rechts nach links</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>(</tt><i>T</i><tt>)</tt></p>
+            <p style="margin-top:16px;"><code>(</code><i>T</i><code>)</code></p>
           </td>
           <td>
             <p>Typumwand-<br />lung (Cast)</p>
@@ -703,12 +681,13 @@
           </td>
           <td>
             <p>
-              Erzwingt eine Typumwandlung des nachfolgenden Ausdrucks<br />auf
+              Erzwingt eine Typumwandlung des nachfolgenden Ausdrucks auf
               <i>T</i>. Für <i>T</i> können &ndash; über die an Ein- und Ausgängen
               möglichen Typen hinaus &ndash; auch viele andere
               <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/keywords/value-types-table">Werttypen von C#</a>
               stehen.
             </p>
+            <p>Beispiel: <code>(int)Math.Round({x:N})</code></p>
           </td>
         </tr>
         <tr>
@@ -719,7 +698,7 @@
             <p style="margin-top:122px;">Von links nach rechts</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>* &nbsp; /</tt></p>
+            <p style="margin-top:16px;"><code>* &nbsp; /</code></p>
           </td>
           <td>
             <p>Punkt-Grund-rechenarten</p>
@@ -737,11 +716,11 @@
               abgeschnitten. Man vergleiche die folgenden Beispiele:
             </p>
             <ul>
-              <li><tt>-3 / 2</tt> &nbsp; &rarr; &nbsp; <tt>-1</tt></li>
-              <li><tt>-3.0 / 2</tt> &nbsp; &rarr; &nbsp; <tt>-1.5</tt></li>
+              <li><code>-3 / 2</code> &nbsp; &rarr; &nbsp; <code>-1</code></li>
+              <li><code>-3.0 / 2</code> &nbsp; &rarr; &nbsp; <code>-1.5</code></li>
               <li>
-                <tt>Math.Round(((double)-3) / 2)</tt> &nbsp; &rarr;
-                &nbsp; <tt>-2.0</tt>
+                <code>Math.Round(((double)-3) / 2)</code> &nbsp; &rarr;
+                &nbsp; <code>-2.0</code>
               </li>
             </ul>
             <p>
@@ -753,18 +732,18 @@
         </tr>
         <tr>
           <td>
-            <p style="margin-top:16px;"><tt>%</tt></p>
+            <p style="margin-top:16px;"><code>%</code></p>
           </td>
           <td>
             <p style="margin-top:16px;">Divisionsrest</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>int</tt></p>
+            <p style="margin-top:16px;"><code>int</code></p>
           </td>
           <td>
             <p>
               Ergibt den Divisionsrest einer ganzzahlingen Division.<br />
-              Beispiel: <tt>5 % 3</tt> &rarr; <tt>2</tt>.
+              Beispiel: <code>5 % 3</code> &rarr; <code>2</code>
             </p>
           </td>
         </tr>
@@ -776,7 +755,7 @@
             <p>Von links nach rechts</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>+ &nbsp; -</tt></p>
+            <p style="margin-top:16px;"><code>+ &nbsp; -</code></p>
           </td>
           <td>
             <p>Strich-Grund-rechenarten</p>
@@ -786,7 +765,7 @@
           </td>
           <td>
             <p style="margin-top:16px;">
-              <tt>+</tt> dient auch zur Verkettung von Texten (<tt>string</tt>).
+              <code>+</code> dient auch zur Verkettung von Texten (C#-Typ <code>string</code>).
             </p>
           </td>
         </tr>
@@ -798,20 +777,23 @@
             <p style="margin-top:18px;">Von links nach rechts</p>
           </td>
           <td>
-            <p><tt>< &nbsp;> &nbsp;<= &nbsp;>=</tt></p>
+            <p><code>&lt; &nbsp;&gt; &nbsp;&lt;= &nbsp;&gt;=</code></p>
           </td>
           <td>
             <p>Relational</p>
           </td>
           <td rowspan="2">
             <p style="margin-top:18px;">
-              <i>alle<br />Zahltypen</i><br />&rarr; <tt>bool</tt>
+              <i>alle<br />Zahltypen</i><br />&rarr; <code>bool</code>
             </p>
           </td>
           <td rowspan="2">
-            <p style="margin-top:25px;">
-              Vergleicht zwei Werte und ergibt <tt>true</tt>, wenn der
-              Vergleichsoperator zutrifft, sonst <tt>false</tt>.
+            <p style="margin-top:10px;">
+              Vergleicht zwei Werte und ergibt <code>true</code>, wenn der
+              Vergleichsoperator zutrifft, sonst <code>false</code>.
+            </p>
+            <p>
+              Beispiel: <code>{temperatur:N} > 21.5</code>
             </p>
           </td>
         </tr>
@@ -820,7 +802,7 @@
             <p style="margin-top:16px;">&nbsp;&nbsp;6</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>== &nbsp; !=</tt></p>
+            <p style="margin-top:16px;"><code>== &nbsp; !=</code></p>
           </td>
           <td>
             <p>Gleichheit,<br />Ungleichheit</p>
@@ -836,23 +818,23 @@
             </p>
           </td>
           <td>
-            <p><tt>&amp;</tt></p>
+            <p><code>&amp;</code></p>
           </td>
           <td>
             <p>UND</p>
           </td>
           <td rowspan="3">
-            <p style="margin-top:44px;"><tt>bool</tt></p>
+            <p style="margin-top:44px;"><code>bool</code></p>
           </td>
           <td rowspan="3">
-            <p style="margin-top:11px;">
+            <p style="margin-top:10px;">
               Logische Operatoren mit vollständiger Auswertung.
             </p>
             <p>
               Hinweis:<br />
-              Der sonst übliche Operator <tt>x^y</tt> (x<sup>y</sup>) für
+              Der sonst übliche Operator <code>x^y</code> (x<sup>y</sup>) für
               Zahlen steht nicht zur Verfügung. Man verwendet dazu die
-              <a href="#funktionen">Funktion</a> <tt>Math.Pow</tt>.
+              <a href="#funktionen">Funktion</a> <code>Math.Pow</code>.
             </p>
           </td>
         </tr>
@@ -861,7 +843,7 @@
             <p>&nbsp;&nbsp;8</p>
           </td>
           <td>
-            <p><tt>^</tt></p>
+            <p><code>^</code></p>
           </td>
           <td>
             <p>Exklusiv-ODER</p>
@@ -872,7 +854,7 @@
             <p>&nbsp;&nbsp;9</p>
           </td>
           <td>
-            <p><tt>|</tt></p>
+            <p><code>|</code></p>
           </td>
           <td>
             <p>ODER</p>
@@ -888,19 +870,20 @@
             </p>
           </td>
           <td>
-            <p><tt>&amp;&amp;</tt></p>
+            <p><code>&amp;&amp;</code></p>
           </td>
           <td>
             <p>UND</p>
           </td>
           <td rowspan="2">
-            <p style="margin-top:26px;"><tt>bool</tt></p>
+            <p style="margin-top:26px;"><code>bool</code></p>
           </td>
           <td rowspan="2">
-            <p style="margin-top:18px;">
+            <p style="margin-top:4px;">
               Logische Operatoren mit bedingter Auswertung, d. h. die Auswertung erfolgt nur
               so weit, bis das Ergebnis feststeht.
             </p>
+            <p>Beispiel: <code>/* Fenster geschlossen */ !{offen:B} && !{gekippt:B}</code></p>
           </td>
         </tr>
         <tr>
@@ -908,7 +891,7 @@
             <p>11</p>
           </td>
           <td>
-            <p><tt>||</tt></p>
+            <p><code>||</code></p>
           </td>
           <td>
             <p>ODER</p>
@@ -916,31 +899,34 @@
         </tr>
         <tr>
           <td>
-            <p style="margin-top:16px;">12</p>
+            <p style="margin-top:19px;">12</p>
           </td>
           <td>
-            <p>Von rechts nach links</p>
+            <p style="margin-top:10px;">Von rechts nach links</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><i>b</i><tt> ? </tt><i>x</i><tt> : </tt><i>y</i></p>
+            <p style="margin-top:19px;"><i>b</i><code> ? </code><i>x</i><code> : </code><i>y</i></p>
           </td>
           <td>
-            <p style="margin-top:16px;">Bedingung</p>
+            <p style="margin-top:19px;">Bedingung</p>
           </td>
           <td>
-            <p style="margin-top:16px;"><tt>bool</tt> &rarr; <i>alle</i></p>
+            <p style="margin-top:19px;"><code>bool</code> &rarr; <i>alle</i></p>
           </td>
           <td>
-            <p style="margin-top:16px;">Gibt <i>x</i> zurück, wenn <i>b</i> <tt>true</tt> ist, sonst <i>y</i>.</p>
+            <p style="margin-top:4px;">
+              Gibt <i>x</i> zurück, wenn <i>b</i> <code>true</code> ist, sonst <i>y</i>.
+            </p>
+            <p>Beispiel: <code> ({istVerriegelt:B} ? "verriegelt" : "offen"</code></p>
           </td>
         </tr>
       </table>
       <p>
         Die ersten beiden Spalten der Tabelle geben an, wie nicht geklammerte
         Ausdrücke ausgewertet werden. Darin ist z. B. auch die bekannte Regel
-        "Punkt vor Strich" enthalten: <tt>*</tt> und <tt>/</tt> werden vor
-        <tt>+</tt> und <tt>-</tt> ausgewertet. Geklammerte Ausdrücke
-        <tt>(</tt>...<tt>)</tt> werden "von innen nach außen" berechnet.
+        "Punkt vor Strich" enthalten: <code>*</code> und <code>/</code> werden vor
+        <code>+</code> und <code>-</code> ausgewertet. Geklammerte Ausdrücke
+        <code>(</code>...<code>)</code> werden "von innen nach außen" berechnet.
         Weitere Angaben dazu finden sich im Abschnitt
         <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/#operator-precedence">Operatorrangfolge</a>
         der C#-Sprachreferenz.
@@ -948,7 +934,7 @@
       <p>
         Obwohl Variablendeklarationen und Zuweisungen in Formeln generell
         nicht erlaubt sind, können dennoch temporäre Objekte mit dem
-        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/new-operator"><tt>new</tt>-Operator</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/new-operator"><code>new</code>-Operator</a>
         erzeugt und innerhalb einer Formel verwendet werden. Das Beispiel
         <a href="#newbeispiel">UNIX-UTC-Zeitstempel umwandeln</a>
         zeigt eine nützliche Anwendung.
@@ -957,7 +943,7 @@
       <p>
         Soweit ihre Parameter- und Rückgabetypen sinnvoll verwendbar sind,
         stehen viele Klassen des
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0">gut und in deutscher Sprache dokumentierten .NET 4.0 APIs</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0">gut in deutscher Sprache dokumentierten .NET 4.0 APIs</a>
         mit ihren Funktionen zur Verfügung. Dieses Kapitel geht nur auf
         einige besonders nützliche Bereiche und Besonderheiten ein.
       </p>
@@ -973,14 +959,14 @@
         können in den Formeln verwendet werden.
       </p>
       <p>
-        Beispiel: <tt>Math.Pow({x:N}, {y:N})</tt> berechnet aus den beiden Eingangswerten
+        Beispiel: <code>Math.Pow({x:N},{y:N})</code> berechnet aus den beiden Eingangswerten
         x und y deren Potenz x<sup>y</sup>.
       </p>
       <p>
-        Die trigonometrischen Funktionen der <tt>Math</tt>-Bibliothek verwenden
+        Die trigonometrischen Funktionen der <code>Math</code>-Bibliothek verwenden
         und liefern alle Winkelangaben im Bogenmaß. Zur Umrechnung zwischen Grad-
         und Bogenmaß stehen die folgenden beiden Funktionen der
-        <tt>Angle</tt>-Erweiterung zur Verfügung:
+        <code>Angle</code>-Erweiterung zur Verfügung:
       </p>
       <table class="Tabelle_Logicnode">
         <colgroup>
@@ -989,22 +975,16 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h4>Funktion</h4>
-          </th>
-          <th>
-            <h4>Datentyp</h4>
-          </th>
-          <th>
-            <h4>Beschreibung</h4>
-          </th>
+          <th class="small">Funktion</th>
+          <th class="small">Datentyp</th>
+          <th class="small">Beschreibung</th>
         </tr>
         <tr>
           <td>
-            <p><tt>Angle.Deg(</tt><i>rad</i><tt>)</tt></p>
+            <p><code>Angle.Deg(</code><i>rad</i><code>)</code></p>
           </td>
           <td>
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td>
             <p>Rechnet den im Bogenmaß gegebenen Winkel <i>rad</i> ins Gradmaß um.</p>
@@ -1012,10 +992,10 @@
         </tr>
         <tr>
           <td>
-            <p><tt>Angle.Rad(</tt><i>deg</i><tt>)</tt></p>
+            <p><code>Angle.Rad(</code><i>deg</i><code>)</code></p>
           </td>
           <td>
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td>
             <p>Rechnet den im Gradmaß gegebenen Winkel <i>deg</i> ins Bogenmaß um.</p>
@@ -1023,7 +1003,7 @@
         </tr>
       </table>
       <p>
-        Mit den <tt>Math</tt>- und <tt>Angle</tt>-Funktionen sind trigonometrische,
+        Mit den <code>Math</code>- und <code>Angle</code>-Funktionen sind trigonometrische,
         logarithmische und andere gebräuchliche mathematische Anwendungen abgedeckt.
       </p>
       <h3>Stringfunktionen</h3>
@@ -1035,14 +1015,13 @@
         verwendet werden.
       </p>
       <p>
-        Beispiel Textersetzung: Mit
-        <span class="box-noscroll"> {text:S}.Replace("alt","neu") </span>
+        Beispiel Textersetzung: Mit <code>{text:S}.Replace("alt","neu")</code>
         wird der Eingangstext: "<i>Alles alt macht der Mai</i>" am Ausgang zu
         "<i>Alles neu macht der Mai</i>".
       </p>
       <h3 id="light">Funktionen zur Beleuchtungssteuerung</h3>
       <p>
-        Die Funktionen der <tt>Light</tt>-Erweiterung rechnen gängige Größen
+        Die Funktionen der <code>Light</code>-Erweiterung rechnen gängige Größen
         der Beleuchtungstechnik um:
       </p>
       <table class="Tabelle_Logicnode">
@@ -1052,22 +1031,16 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h4>Funktion</h4>
-          </th>
-          <th>
-            <h4>Datentyp</h4>
-          </th>
-          <th>
-            <h4>Beschreibung</h4>
-          </th>
+          <th class="small">Funktion</th>
+          <th class="small">Datentyp</th>
+          <th class="small">Beschreibung</th>
         </tr>
         <tr>
           <td>
-            <p><tt>Light.HSV(</tt><i>h</i><tt>, </tt><i>s</i><tt>, </tt><i>v</i><tt>)</tt></p>
+            <p><code>Light.HSV(</code><i>h</i><code>, </code><i>s</i><code>, </code><i>v</i><code>)</code></p>
           </td>
           <td>
-            <p><tt>byte</tt> &rarr; <tt>int</tt></p>
+            <p><code>byte</code> &rarr; <code>int</code></p>
           </td>
           <td>
             <p>
@@ -1084,7 +1057,7 @@
                 Da Byte-Eingänge nicht vorgesehen sind, muss der Typumwandlungsoperator
                 verwendet werden, um Integer-Eingänge als byte-Parameter verwenden zu
                 können:
-                <div class="box-noscroll" style="width: 565px;"> <tt>Light.HSV((byte){h:I}, (byte){s:I}, (byte){v:I})</tt></div>
+                <div class="box-noscroll" style="width: 565px;"> <code>Light.HSV((byte){h:I}, (byte){s:I}, (byte){v:I})</code></div>
               </li>
               <li>
                 Für Integer-Werte außerhalb des Wertebereichs 0..255 führt dies zu
@@ -1099,13 +1072,13 @@
         <tr>
           <td>
             <p>
-              <tt>Light.HSVToH(</tt><i>hsv</i><tt>)</tt>
-              <tt>Light.HSVToS(</tt><i>hsv</i><tt>)</tt>
-              <tt>Light.HSVToV(</tt><i>hsv</i><tt>)</tt>
+              <code>Light.HSVToH(</code><i>hsv</i><code>)</code>
+              <code>Light.HSVToS(</code><i>hsv</i><code>)</code>
+              <code>Light.HSVToV(</code><i>hsv</i><code>)</code>
             </p>
           </td>
           <td>
-            <p><tt>int</tt> &rarr; <tt>byte</tt></p>
+            <p><code>int</code> &rarr; <code>byte</code></p>
           </td>
           <td>
             <p>
@@ -1118,10 +1091,10 @@
         </tr>
         <tr>
           <td>
-            <p><tt>Light.RGB(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>)</tt></p>
+            <p><code>Light.RGB(</code><i>r</i><code>, </code><i>g</i><code>, </code><i>b</i><code>)</code></p>
           </td>
           <td>
-            <p><tt>byte</tt> &rarr; <tt>int</tt></p>
+            <p><code>byte</code> &rarr; <code>int</code></p>
           </td>
           <td>
             <p>
@@ -1130,7 +1103,7 @@
               (3 Bytes, DPT 232.600) um.
             </p>
             <p>
-              Die bereits oben zu <tt>byte</tt>-Parametern gegebenen Hinweise gelten
+              Die bereits oben zu <code>byte</code>-Parametern gegebenen Hinweise gelten
               entsprechend.
             </p>
           </td>
@@ -1138,13 +1111,13 @@
         <tr>
           <td>
             <p>
-              <tt>Light.RGBToR(</tt><i>rgb</i><tt>)</tt>
-              <tt>Light.RGBToG(</tt><i>rgb</i><tt>)</tt>
-              <tt>Light.RGBToB(</tt><i>rgb</i><tt>)</tt>
+              <code>Light.RGBToR(</code><i>rgb</i><code>)</code>
+              <code>Light.RGBToG(</code><i>rgb</i><code>)</code>
+              <code>Light.RGBToB(</code><i>rgb</i><code>)</code>
             </p>
           </td>
           <td>
-            <p><tt>int</tt> &rarr; <tt>byte</tt></p>
+            <p><code>int</code> &rarr; <code>byte</code></p>
           </td>
           <td>
             <p>
@@ -1157,12 +1130,12 @@
         <tr>
           <td>
             <p>
-              <tt>Light.RGBW(</tt><i>rgb</i><tt>)</tt>
-              <tt>Light.RGBW(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>)</tt>
+              <code>Light.RGBW(</code><i>rgb</i><code>)</code>
+              <code>Light.RGBW(</code><i>r</i><code>, </code><i>g</i><code>, </code><i>b</i><code>)</code>
             </p>
           </td>
           <td>
-            <p><tt>int</tt> &rarr; <tt>long</tt><br /><tt>byte</tt> &rarr; <tt>long</tt></p>
+            <p><code>int</code> &rarr; <code>long</code><br /><code>byte</code> &rarr; <code>long</code></p>
           </td>
           <td>
             <p>
@@ -1175,17 +1148,17 @@
             </p>
             <p>
               Alle vier Werte im erzeugten DPT 251.600 sind gültig (und auch so markiert).
-              Die bereits oben zu <tt>byte</tt>-Parametern gegebenen Hinweise gelten
+              Die bereits oben zu <code>byte</code>-Parametern gegebenen Hinweise gelten
               entsprechend.
             </p>
           </td>
         </tr>
         <tr>
           <td>
-            <p><tt>Light.RGBW(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>, </tt><i>w</i><tt>)</tt></p>
+            <p><code>Light.RGBW(</code><i>r</i><code>, </code><i>g</i><code>, </code><i>b</i><code>, </code><i>w</i><code>)</code></p>
           </td>
           <td>
-            <p><tt>int</tt> &rarr; <tt>long</tt></p>
+            <p><code>int</code> &rarr; <code>long</code></p>
           </td>
           <td>
             <p>
@@ -1199,14 +1172,14 @@
         <tr>
           <td>
             <p>
-              <tt>Light.RGBWToR(</tt><i>rgbw</i><tt>)</tt>
-              <tt>Light.RGBWToG(</tt><i>rgbw</i><tt>)</tt>
-              <tt>Light.RGBWToB(</tt><i>rgbw</i><tt>)</tt>
-              <tt>Light.RGBWToW(</tt><i>rgbw</i><tt>)</tt>
+              <code>Light.RGBWToR(</code><i>rgbw</i><code>)</code>
+              <code>Light.RGBWToG(</code><i>rgbw</i><code>)</code>
+              <code>Light.RGBWToB(</code><i>rgbw</i><code>)</code>
+              <code>Light.RGBWToW(</code><i>rgbw</i><code>)</code>
             </p>
           </td>
           <td>
-            <p><tt>long</tt> &rarr; <tt>int</tt></p>
+            <p><code>long</code> &rarr; <code>int</code></p>
           </td>
           <td>
             <p>
@@ -1224,7 +1197,7 @@
                 Ganzzahl-Eingänge mit dem benötigten Wertebereich nicht zur
                 Verfügung stehen, muss ein Fließkommazahl-Eingang und ein
                 Typumwandlungsoperator verwendet werden; z. B.:
-                <div class="box-noscroll" style="width: 565px;"> <tt>RGBWToB((long){r:N})</tt></div>
+                <div class="box-noscroll" style="width: 565px;"> <code>RGBWToB((long){r:N})</code></div>
               </li>
               <li>
                 Wenn im Eingabewert Intensitäten als ungültig markiert sein können, dann
@@ -1237,16 +1210,16 @@
         <tr>
           <td>
             <p>
-              <tt>Light.RGBToHSV(</tt><i>r</i><tt>, </tt><i>g</i><tt>, </tt><i>b</i><tt>)</tt>
-              <tt>Light.RGBToHSV(</tt><i>rgb</i><tt>)</tt>
-              <tt>Light.HSVToRGB(</tt><i>h</i><tt>, </tt><i>s</i><tt>, </tt><i>v</i><tt>)</tt>
-              <tt>Light.HSVToRGB(</tt><i>hsv</i><tt>)</tt>
+              <code>Light.RGBToHSV(</code><i>r</i><code>, </code><i>g</i><code>, </code><i>b</i><code>)</code>
+              <code>Light.RGBToHSV(</code><i>rgb</i><code>)</code>
+              <code>Light.HSVToRGB(</code><i>h</i><code>, </code><i>s</i><code>, </code><i>v</i><code>)</code>
+              <code>Light.HSVToRGB(</code><i>hsv</i><code>)</code>
             </p>
           </td>
           <td>
             <p>
-              <tt>byte</tt> &rarr; <tt>int<br />int</tt> &rarr; <tt>int</tt><br />
-              <tt>byte</tt> &rarr; <tt>int<br />int</tt> &rarr; <tt>int</tt>
+              <code>byte</code> &rarr; <code>int<br />int</code> &rarr; <code>int</code><br />
+              <code>byte</code> &rarr; <code>int<br />int</code> &rarr; <code>int</code>
             </p>
           </td>
           <td>
@@ -1254,7 +1227,7 @@
               Rechnet Farbangaben zwischen dem RGB-Farbraum und dem HSV-Farbraum um.
             </p>
             <p>
-              Die bereits oben zu <tt>byte</tt>-Parametern und DPT 232.600 gegebenen
+              Die bereits oben zu <code>byte</code>-Parametern und DPT 232.600 gegebenen
               Hinweise gelten <span class="manhyphens">entsprechend</span>.
             </p>
           </td>
@@ -1266,7 +1239,7 @@
       </p>
       <h3 id="HLK">Funktionen für die Heizungs-, Lüftungs- und Klimatechnik (HLK)</h3>
       <p>
-        Die Funktionen der <tt>Hlk</tt>-Erweiterung helfen bei der Realisierung
+        Die Funktionen der <code>Hlk</code>-Erweiterung helfen bei der Realisierung
         von Heizungs- und Lüftungsreglern.
       </p>
       <table class="Tabelle_Logicnode">
@@ -1276,22 +1249,16 @@
           <col>
         </colgroup>
         <tr>
-          <th>
-            <h4>Funktion</h4>
-          </th>
-          <th>
-            <h4>Datentyp</h4>
-          </th>
-          <th>
-            <h4>Beschreibung</h4>
-          </th>
+          <th class="small">Funktion</th>
+          <th class="small">Datentyp</th>
+          <th class="small">Beschreibung</th>
         </tr>
         <tr>
           <td>
-            <p><tt>Hlk.HeatingCurve<br />(</tt><i>TaAvg</i><tt>, </tt><i>...</i><tt>)</tt></p>
+            <p><code>Hlk.HeatingCurve<br />(</code><i>TaAvg</i><code>, </code><i>...</i><code>)</code></p>
           </td>
           <td>
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td>
             <p>
@@ -1315,10 +1282,10 @@
         </tr>
         <tr>
           <td class="group">
-            <p><tt>Hlk.AbsHumidity(</tt><i>T</i><tt>, </tt><i>rf</i><tt>)</tt></p>
+            <p><code>Hlk.AbsHumidity(</code><i>T</i><code>, </code><i>rf</i><code>)</code></p>
           </td>
           <td class="group">
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td class="group">
             <p>
@@ -1331,10 +1298,10 @@
         </tr>
         <tr>
           <td class="group">
-            <p><tt>Hlk.DewPoint(</tt><i>T</i><tt>, </tt><i>rf</i><tt>)</tt></p>
+            <p><code>Hlk.DewPoint(</code><i>T</i><code>, </code><i>rf</i><code>)</code></p>
           </td>
           <td class="group">
-            <p><tt>double</tt></p>
+            <p><code>double</code></p>
           </td>
           <td class="group">
             <p>
@@ -1368,12 +1335,12 @@
       <h2 id="kommentare">Kommentare</h2>
       <p>
         Die Formeln können mit Kommentaren in der Form
-        <span class="box-noscroll"> <tt>/* ... */</tt> </span> dokumentiert
-        werden. Darin kann anstelle von <tt>...</tt> nahezu beliebiger Text
+        <span class="box-noscroll"> <code>/* ... */</code> </span> dokumentiert
+        werden. Darin kann anstelle von <code>...</code> nahezu beliebiger Text
         stehen. Solche Kommentare &ndash; auch mehrere davon &ndash; können
         am Anfang, am Ende oder an anderen Stellen der Formel stehen.
       </p>
-      <h2>Beispiele</h2>
+      <h2 id="beispiele">Beispiele</h2>
       <p>
         Das <a href="HeatingCurve.html#heizbeispiel">Anwendungsbeispiel
         "Bedarfsgeführte Heizungsregelung"</a> findet sich bei der
@@ -1385,18 +1352,18 @@
         Automatisierungsfunktionen anders ablaufen als an normalen
         Werktagen. Die folgende Formel berechnet dazu zunächst das
         morgige Datum als STRING:<br />
-        <span class="box-noscroll"> <tt>DateTime.Today.AddDays(1).ToString("d") /* Datum für Morgen errechnen */</tt> </span><br />
+        <span class="box-noscroll"> <code>DateTime.Today.AddDays(1).ToString("d") /* Datum für Morgen errechnen */</code> </span><br />
       </p>
       <p>
         Dieses dient als Parameter für eine Web-Anfrage mittels
         <a href="https://github.com/daniel-kun/Albuschat.LogicNodes/releases">Web Request</a> oder
         <a href="http://service.knx-user-forum.de/?comm=download&id=20000065">HTTP GET Request</a>.
         Der Request-Baustein wird mit folgender URL parametriert:<br />
-        <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW&datum={Morgen}</tt> </span><br />
+        <span class="box-noscroll"> <code>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW&datum={Morgen}</code> </span><br />
         Ein zweiter Request-Baustein verwendet fast die gleiche URL, aber
         ohne den Datumsparameter (was implizit "heute" bedeutet):
-        <span class="box-noscroll"> <tt>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW</tt> </span><br />
-        In beiden steht <tt>BW</tt> für das Bundesland Baden-Württemberg;
+        <span class="box-noscroll"> <code>http://ipty.de/feiertag/api.php?do=isFeiertag&loc=BW</code> </span><br />
+        In beiden steht <code>BW</code> für das Bundesland Baden-Württemberg;
         die Kürzel für andere Bundesländer entnimmt man der
         <a href="http://ipty.de/feiertag/">Online-Dokumentation</a>
         des Webservices.
@@ -1424,8 +1391,8 @@
         angegeben. Um solche Zeitangaben in einer Visualisierung verwenden zu
         können, muss man sie zu einem Text in lokaler Zeit wandeln. Das tut die
         folgende Formel:<br />
-        <span class="box-noscroll"> <tt>(new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc)).AddSeconds({unixUtcTimestamp:I}).ToLocalTime().ToString()</tt> </span><br />
-        Der <tt>new</tt>-Operator erzeugt zunächst ein <tt>DateTime</tt>-Objekt
+        <span class="box-noscroll"> <code>(new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc)).AddSeconds({unixUtcTimestamp:I}).ToLocalTime().ToString()</code> </span><br />
+        Der <code>new</code>-Operator erzeugt zunächst ein <code>DateTime</code>-Objekt
         mit dem richtigen Startzeitpunkt. Nach dem Addieren der Sekunden des
         UTC-Zeitstempels wandeln zwei weitere Funktionen das Objekt in den
         gewünschten Text um.
@@ -1434,23 +1401,23 @@
         Da dieser kombinierte Datums- und Zeit-Text länger als 14 Zeichen ist,
         kann er nicht auf dem KNX-Bus versendet, sondern nur innerhalb des L1/X1
         verwendet werden. Abhilfe schaffen im Bedarfsfall z. B.
-        <ul>
-          <li>
-            die Funktionen <tt>DateTime.ToShortDateString</tt> und
-            <tt>DateTime.ToShortTimeString</tt>, die kürzere Texte
-            getrennt nach Datum und Uhrzeit erzeugen
-          </li>
-          <li>
-            ein Typ-Konverter, der aus Text einen Datenpunkt vom Typ
-            "Datum und Uhrzeit" erzeugen kann. Dazu verwendet man
-            zweckmäßig folgenden Parameter im letzten Funktionsaufruf
-            der Formel:
-            <span class="box-noscroll"> <tt>...ToString(<b>"s"</b>)</tt> </span>.
-            (Ohne diesen werden evtl. Tag und Monat vertauscht, weil der
-            Gira-Typ-Konverter das Textformat nicht richtig erkennt.)
-          </li>
-        </ul>
       </p>
+      <ul>
+        <li>
+          die Funktionen <code>DateTime.ToShortDateString</code> und
+          <code>DateTime.ToShortTimeString</code>, die kürzere Texte
+          getrennt nach Datum und Uhrzeit erzeugen
+        </li>
+        <li>
+          ein Typ-Konverter, der aus Text einen Datenpunkt vom Typ
+          "Datum und Uhrzeit" erzeugen kann. Dazu verwendet man
+          zweckmäßig folgenden Parameter im letzten Funktionsaufruf
+          der Formel:
+          <span class="box-noscroll"> <code>...ToString(<b>"s"</b>)</code> </span>.
+          (Ohne diesen werden evtl. Tag und Monat vertauscht, weil der
+          Gira-Typ-Konverter das Textformat nicht richtig erkennt.)
+        </li>
+      </ul>
       <h3 id="hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</h3>
       <p>
         Der Gira-Baustein "Schwellwert mit Hysterese" setzt seinen Ausgang nur
@@ -1460,15 +1427,15 @@
         gewünschte Verhalten zu erreichen. Man erhält in diesen Fällen
         übersichtlichere Logikblätter mit weniger Bausteinen, wenn man eine
         Formelberechnung mit folgenden Formeln einsetzt:<br />
-        Formel 1: <span class="box-noscroll"> <tt>{Auslöser:N} > {ObereSchwelle:N}</tt> </span><br />
-        Formel 2: <span class="box-noscroll"> <tt>{Auslöser:N} < {UntereSchwelle:N}</tt> </span><br />
-        Formel 3: <span class="box-noscroll"> <tt>_out1_ ? (bool?)true : (_out2_ ? (bool?)false : /* nichts senden */ null)</tt> </span>
+        Formel 1: <span class="box-noscroll"> <code>{Auslöser:N} &gt; {ObereSchwelle:N}</code> </span><br />
+        Formel 2: <span class="box-noscroll"> <code>{Auslöser:N} &lt; {UntereSchwelle:N}</code> </span><br />
+        Formel 3: <span class="box-noscroll"> <code>_out1_ ? (bool?)true : (_out2_ ? (bool?)false : /* nichts senden */ null)</code> </span>
       </p>
       <p>
         Alle drei Ausgänge sind vom Typ BOOL. Der dritte gibt das gewünschte
         Endergebnis aus; die ersten beiden bleiben daher unbelegt. Solange
         der Auslöser zwischen den beiden Schwellwerten liegt, ergeben die
-        beiden ersten Formeln jeweils <tt>false</tt>. Formel 3 gibt in
+        beiden ersten Formeln jeweils <code>false</code>. Formel 3 gibt in
         diesem Fall <em>nichts</em> aus.
       </p>
       <p>Hinweise:</p>
@@ -1487,21 +1454,21 @@
           wenn die Schwellwerte nicht vertauscht werden. Im einfachsten Fall
           legt man dazu direkt in der ersten Formel den oberen Schwellwert auf
           eine höhere Zahl als den unteren Schwellwert fest:<br />
-          Formel 1: <span class="box-noscroll"> <tt>{Auslöser:N} > ({UntereSchwelle:N} + 2.0) /* obere Schwelle */</tt> </span><br />
+          Formel 1: <span class="box-noscroll"> <code>{Auslöser:N} > ({UntereSchwelle:N} + 2.0) /* obere Schwelle */</code> </span><br />
           Die beiden weiteren Formeln bleiben wie oben angegeben.
         </li>
       </ul>
       <h3 id="summenzaehler">Summenzähler</h3>
       <p>
-        Die folgende Formel erhöht, beginnend bei <tt>0</tt>, mit jedem
-        eintreffenden Telegramm am Eingang <tt>Erhöhung</tt> den Ausgang
+        Die folgende Formel erhöht, beginnend bei <code>0</code>, mit jedem
+        eintreffenden Telegramm am Eingang <code>Erhöhung</code> den Ausgang
         um den eingehenden Wert:<br />
-        <span class="box-noscroll"> <tt>{Neustart:B} ? 0 /* neu starten */ : (_previousOut1_ + {Erhöhung:I}) /* aufsummieren */</tt> </span><br />
+        <span class="box-noscroll"> <code>{Neustart:B} ? 0 /* neu starten */ : (_previousOut1_ + {Erhöhung:I}) /* aufsummieren */</code> </span><br />
         Aufgrund des Bedingungsoperators gilt dies jedoch nur so lange,
-        wie der Eingang <tt>Neustart</tt> den Wert <tt>false</tt> hat.
-        Wenn und solange <tt>Neustart</tt> den Wert <tt>true</tt> hat,
-        wird jede <tt>Erhöhung</tt> verworfen und der Ausgang wird (oder
-        bleibt bei) <tt>0</tt>.
+        wie der Eingang <code>Neustart</code> den Wert <code>false</code> hat.
+        Wenn und solange <code>Neustart</code> den Wert <code>true</code> hat,
+        wird jede <code>Erhöhung</code> verworfen und der Ausgang wird (oder
+        bleibt bei) <code>0</code>.
       </p>
       <p>
         Die angegebene Formel erzeugt am Ausgang eine Ganzzahl (z. B.
