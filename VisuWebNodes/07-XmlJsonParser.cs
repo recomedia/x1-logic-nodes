@@ -433,11 +433,12 @@ namespace Recomedia_de.Logic.VisuWeb
         outVal = XmlConvert.ToDouble(text);
         return true;  // successful
       }
-      catch
+      catch(System.FormatException ex)
       {
         mError.Value += Localize(mLanguage, OPERATION_PREFIX) +
-                        (i+1).ToString() + ": \"" + text + "\" " +
-                        Localize(mLanguage, "NoXmlDouble") + Environment.NewLine;
+            (i+1).ToString() + ": " + Localize(mLanguage, "NumErrPrefix") +
+            " \"" + text + "\" " + Localize(mLanguage, "NoXmlDouble") +
+            " (" + ex.Message + ")" + Environment.NewLine;
         outVal = 0.0;
         return false; // unsuccessful
       }

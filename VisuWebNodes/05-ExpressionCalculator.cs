@@ -131,7 +131,7 @@ namespace Recomedia_de.Logic.VisuWeb
         {
           mOutputs[i] = mTypeService.CreateBool(PortTypes.Bool, getOutputName(i));
         }
-        else if (PortTypes.String == outputType.Value)
+        else // PortTypes.String == outputType.Value
         {
           mOutputs[i] = mTypeService.CreateString(PortTypes.String, getOutputName(i));
         }
@@ -153,18 +153,19 @@ namespace Recomedia_de.Logic.VisuWeb
       return -1;
     }
 
-    protected override ValidationResult validateTemplate(string language,
-                                              StringValueObject template)
+    protected override ValidationResult validateTemplate(StringValueObject template,
+                                                                    string language,
+                                                                      bool doFullCheck)
     {
       // Call base class checks first
-      ValidationResult result = base.validateTemplate(language, template);
+      ValidationResult result = base.validateTemplate(template, language, doFullCheck);
       if ( result.HasError)
       {
         return result;
       }
 
       // Do our own checking
-      if (hasAssignment(template.Value))
+      if ( doFullCheck && hasAssignment(template.Value) )
       {
         return new ValidationResult {
           HasError = true,
@@ -178,31 +179,35 @@ namespace Recomedia_de.Logic.VisuWeb
     /// <summary>
     /// Verify that tokens have no format specification and that they have a
     /// user-supplied, valid identifier as name. Offending tokens are replaced
-    /// by error tokens. Everything else we leav to the interpreter to check
+    /// by error tokens. Everything else we leave to the interpreter to check
     /// in Execute().
+    /// If doFullCheck is false, we limit the ckecing to the absolute necessary
+    /// checking. This is done to update inputs even when errors are present
+    /// during interactive editing of templates
     /// </summary>
     protected override ValidationResult validateTokens(string templateName,
                                           ref List<TokenBase> templateTokens,
-                                                       string language)
+                                                       string language,
+                                                         bool doFullCheck)
     {
       for ( int i = 0; i < templateTokens.Count; i++ )
       {
         TokenBase token = templateTokens[i];
 
-        if ( token.hasFormatOrMappings() )
+        if ( doFullCheck && token.hasFormatOrMappings() )
         {
           templateTokens[i] = new ErrorToken(token.getSource(), "HasFormatOrMappings");
           return createTokenError(language, templateName, templateTokens[i]);
         }
-        if ( token.hasDefaultName() )
+        if ( doFullCheck && token.hasDefaultName() )
         {
           templateTokens[i] = new ErrorToken(token.getSource(), "HasDefaultName");
           return createTokenError(language, templateName, templateTokens[i]);
         }
-        if (token is ConstStringToken csToken)
+        if ( doFullCheck && (token is ConstStringToken csToken) )
         {
           string text = csToken.getText();
-          if (hasOutOfRangeRef(text, templateName))
+          if ( hasOutOfRangeRef(text, templateName) )
           {
             templateTokens[i] = new ErrorToken(token.getSource(), "HasOutOfRangeRef");
             return createTextError(language, templateName, templateTokens[i]);
@@ -471,10 +476,18 @@ namespace Recomedia_de.Logic.VisuWeb
             // Evaluate pre-compiled expression
             mCompiled[i](ref value);
             if (value != null)
-            { // Store in final output only when not null
-              // (otherwise just keep what it already has)
-              mOutputs[i].Value = value;
-              updateOutputField(i);
+            {
+              try
+              { // Store in final output only when it can be evaluated in range
+                // (otherwise just keep the previoue output value)
+                mOutputs[i].Value = value;
+                updateOutputField(i);
+              }
+              catch (LogicModule.ObjectModel.TypeSystem.ValueObjectOutOfRangeException)
+              {
+                mError.Value += mTemplates[i].Name +
+                    ": Result is not a number or out of range. Output remains unchanged.";
+              }
             }
           }
           else
@@ -673,9 +686,9 @@ namespace Recomedia_de.Logic.VisuWeb
         {
           expressionText += createVariableIdentifier(varToken.getName());
         }
-        else if (token is ConstStringToken csToken)
+        else // token is ConstStringToken
         {
-          expressionText += csToken.getText();
+          expressionText += token.getText();
         }
       }
       if (expressionText.Length == 0)

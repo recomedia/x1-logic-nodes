@@ -2157,98 +2157,98 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         {
           // Own error messages (localized)
           yield return new TestCaseData("", "EmptyTemplate",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorEmptyTemplate");
           yield return new TestCaseData("=", "HasAssignment",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                 SetName("ErrorAssignmentLonely");
           yield return new TestCaseData("{}", "EmptyPlaceholder",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorEmptyPlaceholder");
           yield return new TestCaseData("{:N}", "HasDefaultName",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorHasDefaultName");
           yield return new TestCaseData("{ :N}", "HasDefaultName",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorHasBlankName");
           yield return new TestCaseData("{x:N1}", "HasFormatOrMappings",
-                                        0, 0, 0, 0).
+                                        0, 0, 1, 0, true).
                                 SetName("ErrorHasFormat");
           yield return new TestCaseData("{x:N|0=null}", "HasFormatOrMappings",
-                                        0, 0, 0, 0).
+                                        0, 0, 1, 0, true).
                                 SetName("ErrorHasMappings");
           yield return new TestCaseData("{x 2:N}", "HasUnusableName",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                 SetName("ErrorHasUnusableName");
           yield return new TestCaseData("{_x:N}", "PlaceholderNameInvalid",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                 SetName("ErrorHasReservedName");
-          yield return new TestCaseData("_out0_", "HasOutOfRangeRef",
-                                        0, 0, 0, 0).
+          yield return new TestCaseData("_out0_ + {x:S}", "HasOutOfRangeRef",
+                                        0, 0, 0, 1, false).
                                 SetName("ErrorHasOutBelowRangeRef");
-          yield return new TestCaseData("_out1_", "HasOutOfRangeRef",
-                                        0, 0, 0, 0).
+          yield return new TestCaseData("_out1_ && {x:B}", "HasOutOfRangeRef",
+                                        1, 0, 0, 0, false).
                                 SetName("ErrorHasOutAboveRangeRef");
-          yield return new TestCaseData("_previousOut0_", "HasOutOfRangeRef",
-                                        0, 0, 0, 0).
+          yield return new TestCaseData("_previousOut0_ + {x:I}", "HasOutOfRangeRef",
+                                        0, 1, 0, 0, false).
                                 SetName("ErrorHasPreviousOutBelowRangeRef");
-          yield return new TestCaseData("_previousOut2_", "HasOutOfRangeRef",
-                                        0, 0, 0, 0).
+          yield return new TestCaseData("_previousOut2_ + {x:N}", "HasOutOfRangeRef",
+                                        0, 0, 1, 0, false).
                                 SetName("ErrorHasPreviousOutAboveRangeRef");
           yield return new TestCaseData("{2x:N}", "PlaceholderNameInvalid",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                 SetName("ErrorPlaceholderNameInvalid");
           yield return new TestCaseData("{a:I} = {x:I}", "HasAssignment",
-                                        0, 0, 0, 0).
+                                        0, 2, 0, 0, false).
                                 SetName("ErrorAssignmentPlaceholder");
           yield return new TestCaseData("a={x:I}", "HasAssignment",
-                                        0, 0, 0, 0).
+                                        0, 1, 0, 0, false).
                                 SetName("ErrorAssignmentVariable");
           yield return new TestCaseData("\"\\\"a\"=\"b\\\"\"", "HasAssignment",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                 SetName("ErrorAssignmentStringLiterals");
           // Errors causing exceptions in interpreter (not localized)
           yield return new TestCaseData("/", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorSlashTemplate");
           yield return new TestCaseData("*/", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorStarSlashTemplate");
           yield return new TestCaseData("x/", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorXSlashTemplate");
           yield return new TestCaseData("/*x/", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorCommentXTemplate");
           yield return new TestCaseData("/*x/2", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorCommentX2Template");
           yield return new TestCaseData("*", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorStarTemplate");
           yield return new TestCaseData("\"", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorQuoteTemplate");
           yield return new TestCaseData("}", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorCurlyCloseTemplate");
           yield return new TestCaseData("}{", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorCurlyCloseOpenTemplate");
           yield return new TestCaseData("}}", "",
-                                        0, 0, 0, 0).
+                                        0, 0, 0, 0, false).
                                SetName("ErrorCurlyClose2Template");
           yield return new TestCaseData("{x:N}^2", "",
-                                        0, 0, 1, 0).
+                                        0, 0, 1, 0, false).
                                 SetName("ExceptionSyntax");
           yield return new TestCaseData("{x:N}/0", "",
-                                        0, 0, 1, 0).
+                                        0, 0, 1, 0, false).
                                 SetName("ExceptionDivideByZero");
           yield return new TestCaseData("{x:B}/2", "",
-                                        1, 0, 0, 0).
+                                        1, 0, 0, 0, false).
                                 SetName("ExceptionBoolDivide");
-          yield return new TestCaseData("_unknown_", "",
-                                        0, 0, 0, 0).
+          yield return new TestCaseData("_unknown_ + {x:I}", "",
+                                        0, 1, 0, 0, false).
                                 SetName("ExceptionUnknownRef");
         }
       }
@@ -2260,7 +2260,8 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                               int expNumBinInputs,
                               int expNumIntInputs,
                               int expNumNumInputs,
-                              int expNumStrInputs)
+                              int expNumStrInputs,
+                             bool expectOutputValue)
     {
       // Use only the one default expression
       Assert.AreEqual(1, node.mTemplates.Count);
@@ -2268,6 +2269,10 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       // Execute the error test case
       node.mTemplates[0].Value = template;
       ValidationResult result = node.Validate("de");
+
+      // Check the resulting inputs
+      checkInputCounts(expNumBinInputs, expNumIntInputs,
+                       expNumNumInputs, expNumStrInputs);
 
       if (expectedError.Length > 0)
       { // Expect a validation error
@@ -2288,13 +2293,19 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         Assert.IsFalse(result.HasError);
       }
 
-      // Check the outputs
-      checkInputCounts(expNumBinInputs, expNumIntInputs,
-                       expNumNumInputs, expNumStrInputs);
       assignDefaultInputValues();
+
+      // Execute and check the outputs
       node.Execute();
       Assert.IsNotNull(node.mOutputs[0]);
-      Assert.IsFalse(node.mOutputs[0].HasValue);
+      if ( expectOutputValue )
+      {
+        Assert.IsTrue(node.mOutputs[0].HasValue);
+      }
+      else
+      {
+        Assert.IsFalse(node.mOutputs[0].HasValue);
+      }
       Assert.IsNotNull(node.mError);
 
       if ( expectedError.Length <= 0 )
@@ -2302,6 +2313,81 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         Assert.IsTrue(node.mError.HasValue);
         Assert.IsTrue(node.mError.Value.StartsWith(node.mTemplates[0].Name + ": "));
         Assert.IsTrue(node.mError.Value.Length > 15);
+      }
+    }
+
+    public class ExpressionCalculatorCreateOutputTestCaseData
+    {
+      public static IEnumerable CreateOutputTestCases
+      {
+        get
+        {
+          yield return new TestCaseData(2, 1,
+            " (((_previousOut4_==1)|(_previousOut4_==0))?({ExtLg :I}==1?(byte?)3{ExtKz:I}==1?(byte?)2:0)):0)",
+            "Die Formatvorlage ist leer. Sie sollte einen gültigen C#-Ausdruck enthalten.",
+            0, 2, 0, 0,
+            new List<string> { }, new List<string> { "ExtLg", "ExtKz" },
+            new List<string> { }, new List<string> { }
+            ).
+            SetName("EmptyThenUnknownRef");
+          yield return new TestCaseData(2, 0,
+            " (((_previousOut4_==1)|(_previousOut4_==0))?({ExtLg :I}==1?(byte?)3{ExtKz:I}==1?(byte?)2:0)):0)",
+            "Formel 1: … (((_previousOut4_==1)|(_previousOut4_==0))?(… enthält eine Referenz auf einen Ausgang der entweder nicht existiert oder an dieser Stelle nicht verwendet werden kann. Aktuelle Ausgangswerte (_out.._) können nur aus Formeln mit kleineren Nummern als der referenzierenden Formel verwendet werden.",
+            0, 2, 0, 0,
+            new List<string> { }, new List<string> { "ExtLg", "ExtKz" },
+            new List<string> { }, new List<string> { }
+            ).
+            SetName("UnknownRefThenEmpty");
+        }
+      }
+    }
+    [TestCaseSource(typeof(ExpressionCalculatorCreateOutputTestCaseData),
+                    "CreateOutputTestCases", Category = "CreateOutputTestCases")]
+    public void EmptyTemplateStillCreateInputs(int numOfTemplates,
+                                               int useTemplateIndex,
+                                             string template,
+                                             string expectedError,
+                                               int expNumBinInputs,
+                                               int expNumIntInputs,
+                                               int expNumNumInputs,
+                                               int expNumStrInputs,
+                                       List<string> expBinInputNames,
+                                       List<string> expIntInputNames,
+                                       List<string> expNumInputNames,
+                                       List<string> expStrInputNames)
+    {
+      // Use three expressions
+      node.mTemplateCount.Value = numOfTemplates;
+      Assert.AreEqual(numOfTemplates, node.mTemplates.Count);
+
+      // Use amd check the default output type
+      for (int i = 0; i < numOfTemplates; ++i)
+      {
+        Assert.AreEqual(PortTypes.Number, node.mOutputs[i].PortType.Name);
+      }
+
+      // Set only one of the templates, with a few syntax and semantic errors
+      node.mTemplates[useTemplateIndex].Value = template;
+
+      // Check the resulting inputs
+      checkInputCounts(expNumBinInputs, expNumIntInputs,
+                       expNumNumInputs, expNumStrInputs);
+      checkInputNames<BoolValueObject>(  expBinInputNames, node.mBinInputs );
+      checkInputNames<IntValueObject>(   expIntInputNames, node.mIntInputs );
+      checkInputNames<DoubleValueObject>(expNumInputNames, node.mNumInputs );
+      checkInputNames<StringValueObject>(expStrInputNames, node.mStrInputs );
+
+      // Expect validation error
+      var result = node.Validate("de");
+      Assert.IsTrue(result.HasError);
+      Assert.AreEqual(expectedError, result.Message);
+
+      // Check the output states
+      for (int i = 0; i < numOfTemplates; ++i)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be number
+        Assert.AreEqual(PortTypes.Number, node.mOutputs[i].PortType.Name);
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // no output value yet
       }
     }
   }

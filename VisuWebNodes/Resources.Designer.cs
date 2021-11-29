@@ -79,7 +79,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template is empty. Enter at least one placeholder enclosed in {}. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The format template is empty. Enter a valid C# expression. ähnelt.
         /// </summary>
         internal static string EmptyTemplate {
             get {
@@ -408,6 +408,15 @@ namespace Recomedia_de.Logic.VisuWeb {
         internal static string NumberInput {
             get {
                 return ResourceManager.GetString("NumberInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The text ähnelt.
+        /// </summary>
+        internal static string NumErrPrefix {
+            get {
+                return ResourceManager.GetString("NumErrPrefix", resourceCulture);
             }
         }
         

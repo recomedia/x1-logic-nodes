@@ -69,7 +69,8 @@ namespace Recomedia_de.Logic.VisuWeb
 
     protected override ValidationResult validateTokens(string templateName,
                                           ref List<TokenBase> templateTokens,
-                                                       string language)
+                                                       string language,
+                                                         bool doFullCheck)
     {
       // no additional validations; we fully support all token types
       return new ValidationResult { HasError = false };

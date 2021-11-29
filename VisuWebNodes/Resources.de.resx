@@ -126,7 +126,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="EmptyTemplate" xml:space="preserve">
-    <value>Die Formatvorlage ist leer. Sie sollte zumindest einen Platzhalter enthalten, der von {} umschlossen ist.</value>
+    <value>Die Formatvorlage ist leer. Sie sollte einen gültigen C#-Ausdruck enthalten.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="ExplicitMappingInvalidRange" xml:space="preserve">
@@ -400,5 +400,9 @@
   <data name="MappingWrongTextAssignment" xml:space="preserve">
     <value> enthält eine ungültige Zuweisung für eine Textersetzung. Gültige Zuweisungen enthalten genau ein Gleichkeitszeichen (=) zwischen Originaltext (links) und Ersetzungstext (rechts).</value>
     <comment>StringFormatter</comment>
+  </data>
+  <data name="NumErrPrefix" xml:space="preserve">
+    <value>Der Text</value>
+    <comment>XmlJsonParser</comment>
   </data>
 </root>

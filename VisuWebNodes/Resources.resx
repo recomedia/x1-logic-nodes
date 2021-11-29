@@ -126,7 +126,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="EmptyTemplate" xml:space="preserve">
-    <value>The format template is empty. Enter at least one placeholder enclosed in {}.</value>
+    <value>The format template is empty. Enter a valid C# expression.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="ExplicitMappingInvalidRange" xml:space="preserve">
@@ -400,5 +400,9 @@
   <data name="MappingWrongTextAssignment" xml:space="preserve">
     <value> contains an invalid assignment for a text replacement. Valid assignments contain exactly one equals sign (=) between the original text (left hand side) and the replacement text (right hand side).</value>
     <comment>StringFormatter</comment>
+  </data>
+  <data name="NumErrPrefix" xml:space="preserve">
+    <value>The text</value>
+    <comment>XmlJsonParser</comment>
   </data>
 </root>

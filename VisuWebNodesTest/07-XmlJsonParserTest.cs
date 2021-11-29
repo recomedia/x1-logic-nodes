@@ -456,8 +456,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
-      Assert.AreEqual("Art der Pfadauswahl 1: \"01n\" kann nicht in eine " +
-                      "Zahl umgewandelt werden.\r\n", node.mError.Value);
+      Assert.AreEqual("Art der Pfadauswahl 1: Der Text \"01n\" kann nicht in eine " +
+        "Zahl umgewandelt werden. (Die Eingabezeichenfolge hat das falsche Format.)\r\n",
+        node.mError.Value);
       Assert.IsNotNull(node.mOutput[0]);
       Assert.IsFalse(node.mOutput[0].HasValue);   // still has no output value
       Assert.IsNull(node.mOutput[0].Value);

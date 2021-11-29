@@ -218,16 +218,17 @@ namespace Recomedia_de.Logic.VisuWeb
 
       for (int i = 0; i < mTemplates.Count; i++)
       {
-        result = validateTemplate("en", mTemplates[i]);
+        result = validateTemplate(mTemplates[i], "en", doFullCheck: false);
         if (result.HasError)
         {
-          return;
+          continue;
         }
         // Check parameter.
         // Along the way fill mTemplateTokens and count numbers of inputs
         List<TokenBase> localTokens = new List<TokenBase>(10);
         ValidationResult res = validateInternal(mTemplates[i], ref localTokens,
-                    ref binCount, ref intCount, ref numCount, ref strCount, "en");
+                    ref binCount, ref intCount, ref numCount, ref strCount,
+                    "en", doFullCheck: false);
         if (res.HasError)
         {
           return;
@@ -305,7 +306,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
       foreach (var template in mTemplates)
       {
-        result = validateTemplate(language, template);
+        result = validateTemplate(template, language, doFullCheck: true);
         if (result.HasError)
         {
           return result;
@@ -317,7 +318,8 @@ namespace Recomedia_de.Logic.VisuWeb
         List<TokenBase> localTokensDummy = new List<TokenBase>(10);
         result = validateInternal(template, ref localTokensDummy,
                                   ref binCountDummy, ref intCountDummy,
-                                  ref numCountDummy, ref strCountDummy, language);
+                                  ref numCountDummy, ref strCountDummy,
+                                  language, doFullCheck: true);
         if (result.HasError)
         {
           return result;
@@ -326,10 +328,11 @@ namespace Recomedia_de.Logic.VisuWeb
       return base.Validate(language);
     }
 
-    protected virtual ValidationResult validateTemplate(string language,
-                                             StringValueObject template)
+    protected virtual ValidationResult validateTemplate(StringValueObject template,
+                                                                   string language,
+                                                                     bool doFullCheck)
     {
-      if ((!template.HasValue) || (template.Value.Length <= 0))
+      if ( (!template.HasValue) || (template.Value.Length <= 0) )
       {
         return new ValidationResult
         {
@@ -390,7 +393,8 @@ namespace Recomedia_de.Logic.VisuWeb
                                                         ref int intCount,
                                                         ref int numCount,
                                                         ref int strCount,
-                                                         string language)
+                                                         string language,
+                                                           bool doFullCheck)
     {
       System.Diagnostics.Trace.Assert(template.HasValue && (template.Value.Length > 0));
 
@@ -409,7 +413,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return result;
       }
 
-      return validateTokens(template.Name, ref templateTokens, language);
+      result = validateTokens(template.Name, ref templateTokens, language, doFullCheck);
+      return result;
     }
 
     private void splitTokens(StringValueObject template,
@@ -560,7 +565,8 @@ namespace Recomedia_de.Logic.VisuWeb
 
     protected abstract ValidationResult validateTokens(string templateName,
                                           ref List<TokenBase> templateTokens,
-                                                       string language);
+                                                       string language,
+                                                         bool doFullCheck);
 
     private ValidationResult validateTotalNumberOfTokens(
                                           ref List<TokenBase> templateTokens,
