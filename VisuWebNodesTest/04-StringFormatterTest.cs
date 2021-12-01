@@ -76,181 +76,220 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       {
         get
         {
-          yield return new TestCaseData("", "EmptyTemplate", true)
-                               .SetName("ErrorEmptyTemplate");
-          yield return new TestCaseData("abc", "NoPlaceholder", false)
-                               .SetName("ErrorNoSeparator");
-          yield return new TestCaseData("{", "NoPlaceholder", false)
-                               .SetName("ErrorOneSeparatorNoText");
-          yield return new TestCaseData("x{y", "NoPlaceholder", false)
-                               .SetName("ErrorOneSeparatorWithText");
-          yield return new TestCaseData("{{", "NoPlaceholder", false)
-                               .SetName("ErrorUnpairedSeparatorsNoText");
-          yield return new TestCaseData("x{{y", "NoPlaceholder", false)
-                               .SetName("ErrorUnpairedSeparatorWithText");
-          yield return new TestCaseData("a{b{n", "NoPlaceholder", false)
-                               .SetName("ErrorUnpairedSeparatorsWithTextAndParam");
-          yield return new TestCaseData("{}", "EmptyPlaceholder", false)
-                               .SetName("OnePlaceholderEmptyNoText");
-          yield return new TestCaseData("A{}B", "EmptyPlaceholder", false)
-                               .SetName("OnePlaceholderEmptyWithText");
-          yield return new TestCaseData("{}{}", "EmptyPlaceholder", false)
-                               .SetName("TwoPlaceholdersEmptyNoText");
-          yield return new TestCaseData("x{}y{}z", "EmptyPlaceholder", false)
-                               .SetName("TwoPlaceholdersEmptyWithText");
-          yield return new TestCaseData("{}{", "EmptyPlaceholder", false)
-                               .SetName("ThreeSeparatorsNoText1");
-          yield return new TestCaseData("{{}", "EmptyPlaceholder", false)
-                               .SetName("ThreeSeparatorsNoText2");
-          yield return new TestCaseData("{{}}", "EmptyPlaceholder", false)
-                               .SetName("FourSeparatorsNoText");
-          yield return new TestCaseData("{a{}n{z", "EmptyPlaceholder", false)
-                               .SetName("FourSeparatorsUnbalanced");
+          yield return new TestCaseData("", "EmptyTemplateText", true,
+              "Formatvorlage 1 ist leer. Sie sollte eine gültige Kombination aus Text und Platzhaltern enthalten.",
+              "Format Template 1 is empty. It should contain a valid combination of text and placeholders.")
+              .SetName("ErrorEmptyTemplate");
+          yield return new TestCaseData("abc", "NoPlaceholder", false, "", "")
+              .SetName("ErrorNoSeparator");
+          yield return new TestCaseData("{", "NoPlaceholder", false, "", "")
+              .SetName("ErrorOneSeparatorNoText");
+          yield return new TestCaseData("x{y", "NoPlaceholder", false, "", "")
+              .SetName("ErrorOneSeparatorWithText");
+          yield return new TestCaseData("{{", "NoPlaceholder", false, "", "")
+              .SetName("ErrorUnpairedSeparatorsNoText");
+          yield return new TestCaseData("x{{y", "NoPlaceholder", false, "", "")
+              .SetName("ErrorUnpairedSeparatorWithText");
+          yield return new TestCaseData("a{b{n", "NoPlaceholder", false, "", "")
+              .SetName("ErrorUnpairedSeparatorsWithTextAndParam");
+          yield return new TestCaseData("{}", "EmptyPlaceholder", false, "", "")
+              .SetName("OnePlaceholderEmptyNoText");
+          yield return new TestCaseData("A{}B", "EmptyPlaceholder", false, "", "")
+              .SetName("OnePlaceholderEmptyWithText");
+          yield return new TestCaseData("{}{}", "EmptyPlaceholder", false, "", "")
+              .SetName("TwoPlaceholdersEmptyNoText");
+          yield return new TestCaseData("x{}y{}z", "EmptyPlaceholder", false, "", "")
+              .SetName("TwoPlaceholdersEmptyWithText");
+          yield return new TestCaseData("{}{", "EmptyPlaceholder", false, "", "")
+              .SetName("ThreeSeparatorsNoText1");
+          yield return new TestCaseData("{{}", "EmptyPlaceholder", false, "", "")
+              .SetName("ThreeSeparatorsNoText2");
+          yield return new TestCaseData("{{}}", "EmptyPlaceholder", false, "", "")
+              .SetName("FourSeparatorsNoText");
+          yield return new TestCaseData("{a{}n{z", "EmptyPlaceholder", false, "", "")
+              .SetName("FourSeparatorsUnbalanced");
           yield return new TestCaseData(String.Concat(Enumerable.Repeat("{}", 151)),
-                                            "TooManyPlaceholders", false)
-                               .SetName("Error151SeparatorsNoText");
+                                            "TooManyPlaceholders", false, "", "")
+              .SetName("Error151SeparatorsNoText");
           yield return new TestCaseData(String.Concat(Enumerable.Repeat("{:B}", 51)),
-                                            "TooManyBinPlaceholders", false)
-                               .SetName("Error51BinPlaceholdersNoText");
+                                            "TooManyBinPlaceholders", false, "", "")
+              .SetName("Error51BinPlaceholdersNoText");
           yield return new TestCaseData(String.Concat(Enumerable.Repeat("{:I}", 51)),
-                                            "TooManyIntPlaceholders", false)
-                               .SetName("Error51IntPlaceholdersNoText");
+                                            "TooManyIntPlaceholders", false, "", "")
+              .SetName("Error51IntPlaceholdersNoText");
           yield return new TestCaseData(String.Concat(Enumerable.Repeat("{:N}", 51)),
-                                            "TooManyNumPlaceholders", false)
-                               .SetName("Error51NumPlaceholdersNoText");
+                                            "TooManyNumPlaceholders", false, "", "")
+              .SetName("Error51NumPlaceholdersNoText");
           yield return new TestCaseData(String.Concat(Enumerable.Repeat("{:P}", 51)),
-                                            "TooManyNumPlaceholders", false)
-                               .SetName("Error51PercentPlaceholdersNoText");
+                                            "TooManyNumPlaceholders", false, "", "")
+              .SetName("Error51PercentPlaceholdersNoText");
           yield return new TestCaseData(String.Concat(Enumerable.Repeat("{:S}", 51)),
-                                            "TooManyStrPlaceholders", false)
-                               .SetName("Error51StrPlaceholdersNoText");
-          yield return new TestCaseData("{:U}", "PlaceholderTypeInvalid", false)
-                               .SetName("ErrorUnsupportedPlaceholderNoText");
-          yield return new TestCaseData("{N}", "PlaceholderNameNotFound", false)
-                               .SetName("ErrorPlaceholderRefNotFound");
-          yield return new TestCaseData("X{:U}X", "PlaceholderTypeInvalid", false)
-                               .SetName("ErrorUnsupportedPlaceholderWithText");
-          yield return new TestCaseData("{:B:}", "PlaceholderMultipleColon", false)
-                               .SetName("ErrorPlaceholderMultipleColon");
-          yield return new TestCaseData("{:B0}", "PlaceholderBinLengthInvalid", false)
-                               .SetName("ErrorUnsupportedBinaryPlaceholderNoText1");
-          yield return new TestCaseData("X{:B101}X", "PlaceholderBinLengthInvalid", false)
-                               .SetName("ErrorUnsupportedBinaryPlaceholderWithText1");
-          yield return new TestCaseData("{:Bxx}", "PlaceholderBinSameText", false)
-                               .SetName("ErrorPlaceholderBinSameText1");
-          yield return new TestCaseData("{:B||}", "PlaceholderBinSameText", false)
-                               .SetName("ErrorPlaceholderBinSameText2");
-          yield return new TestCaseData("{:B|xyz|xyz}", "PlaceholderBinSameText", false)
-                               .SetName("ErrorPlaceholderBinSameText3");
-          yield return new TestCaseData("{:B|}", "PlaceholderBinLengthInvalid", false)
-                               .SetName("ErrorPlaceholderBinLengthInvalid");
-          yield return new TestCaseData("{:B|0}", "PlaceholderBinLengthInvalid", false)
-                               .SetName("ErrorUnsupportedBinaryPlaceholderNoText2");
-          yield return new TestCaseData("X{:B|1|0|1}X", "PlaceholderBinLengthInvalid", false)
-                               .SetName("ErrorUnsupportedBinaryPlaceholderWithText2");
-          yield return new TestCaseData("{:B|0=false|1=true}", "PlaceholderBinInvalidAssign", false)
-                               .SetName("ErrorPlaceholderBinInvalidAssignment");
-          yield return new TestCaseData("{:I1}", "PlaceholderIntLengthInvalid", false)
-                               .SetName("ErrorUnsupportedIntPlaceholderNoText");
-          yield return new TestCaseData("{:I|}", "MappingEmptyImplicitValue", false)
-                               .SetName("ErrorMappingEmptyImplicitValue1");
-          yield return new TestCaseData("{:I|0|}", "MappingEmptyImplicitValue", false)
-                               .SetName("ErrorMappingEmptyImplicitValue2");
-          yield return new TestCaseData("{:N10}", "PlaceholderNumFormatInvalid", false)
-                               .SetName("ErrorPlaceholderNumFormatInvalidNoText");
-          yield return new TestCaseData("X{:FX}X", "PlaceholderNumFormatInvalid", false)
-                               .SetName("ErrorPlaceholderNumFormatInvalidWithText");
-          yield return new TestCaseData("{:N|}", "MappingNoImplicitValues", false)
-                               .SetName("ErrorMappingNoImplicitValues1");
-          yield return new TestCaseData("{:F|0}", "MappingNoImplicitValues", false)
-                               .SetName("ErrorMappingNoImplicitValues2");
-          yield return new TestCaseData("{:N|0=x|}", "MappingNoImplicitValues", false)
-                               .SetName("ErrorMappingNoImplicitValues3");
-          yield return new TestCaseData("{:F|0|}", "MappingNoImplicitValues", false)
-                               .SetName("ErrorMappingNoImplicitValues4");
-          yield return new TestCaseData("{:S0}", "PlaceholderStrLengthInvalid", false)
-                               .SetName("ErrorPlaceholderStrLengthInvalidNoText");
-          yield return new TestCaseData("{T:S|alt}", "MappingNoImplicitTextValues", false)
-                               .SetName("ErrorPlaceholderMappingNoImplicitTextValues");
-          yield return new TestCaseData("{T:S|=new}", "MappingNoOriginalTextValue", false)
-                               .SetName("ErrorPlaceholderMappingNoOriginalTextValue");
-          yield return new TestCaseData("{T:S|x=y=z}", "MappingWrongTextAssignment", false)
-                               .SetName("ErrorPlaceholderStrInvalidMapping");
-          yield return new TestCaseData("X{:Sy}X", "PlaceholderStrLengthInvalid", false)
-                               .SetName("ErrorPlaceholderStrLengthInvalidWithText");
-          yield return new TestCaseData("{1Input:S}", "PlaceholderNameInvalid", false)
-                               .SetName("ErrorPlaceholderInvalidName1");
-          yield return new TestCaseData("{Input 1:S}{Input 1:I}", "PlaceholderReuseWrongType", false)
-                               .SetName("ErrorPlaceholderReuseWrongType");
-          yield return new TestCaseData("{Input 1:I|x=u}", "ExplicitMappingInvalidValue", false)
-                               .SetName("ErrorExplicitMappingInvalidValue");
-          yield return new TestCaseData("{Input 1:F|0..x=u}", "ExplicitMappingInvRngVal", false)
-                               .SetName("ErrorExplicitMappingInvalidRangeValue1");
-          yield return new TestCaseData("{Input 1:F|>..1=u}", "ExplicitMappingInvRngVal", false)
-                               .SetName("ErrorExplicitMappingInvalidRangeValue2");
-          yield return new TestCaseData("{Input 1:F|-1..>=u}", "ExplicitMappingInvRngVal", false)
-                               .SetName("ErrorExplicitMappingInvalidRangeValue3");
-          yield return new TestCaseData("{Input 1:F|0.1=u}", "ExplicitMappingInvalidRange", false)
-                               .SetName("ErrorExplicitMappingInvalidRange1");
-          yield return new TestCaseData("{Input 1:F|0...1=u}", "ExplicitMappingInvalidRange", false)
-                               .SetName("ErrorExplicitMappingInvalidRange2");
-          yield return new TestCaseData("{Input 1:F|1..1=u}", "ExplicitMappingInvertedRange", false)
-                               .SetName("ErrorExplicitMappingInvertedRange1");
-          yield return new TestCaseData("{Input 1:I|2..1=u}", "ExplicitMappingInvertedRange", false)
-                               .SetName("ErrorExplicitMappingInvertedRange2");
-          yield return new TestCaseData("{Input 1:N|u}", "MappingNoImplicitValues", false)
-                               .SetName("ErrorMappingNoImplicitValues");
-          yield return new TestCaseData("{Input 1:I|u|2=v}", "MappingNoExplicitValues", false)
-                               .SetName("ErrorMappingNoExplicitValues");
-          yield return new TestCaseData("{Input 1:I|0=1=u}", "MappingWrongAssignment", false)
-                               .SetName("ErrorMappingWrongAssignment2");
+                                            "TooManyStrPlaceholders", false, "", "")
+              .SetName("Error51StrPlaceholdersNoText");
+          yield return new TestCaseData("{:U}", "PlaceholderTypeInvalid", false, "", "")
+              .SetName("ErrorUnsupportedPlaceholderNoText");
+          yield return new TestCaseData("{N}", "PlaceholderNameNotFound", false, "", "")
+              .SetName("ErrorPlaceholderRefNotFound");
+          yield return new TestCaseData("X{:U}X", "PlaceholderTypeInvalid", false, "", "")
+              .SetName("ErrorUnsupportedPlaceholderWithText");
+          yield return new TestCaseData("{:B:}", "PlaceholderMultipleColon", false, "", "")
+              .SetName("ErrorPlaceholderMultipleColon");
+          yield return new TestCaseData("{:B0}", "PlaceholderBinLengthInvalid", false, "", "")
+              .SetName("ErrorUnsupportedBinaryPlaceholderNoText1");
+          yield return new TestCaseData("X{:B101}X", "PlaceholderBinLengthInvalid", false, "", "")
+              .SetName("ErrorUnsupportedBinaryPlaceholderWithText1");
+          yield return new TestCaseData("{:Bxx}", "PlaceholderBinSameText", false, "", "")
+              .SetName("ErrorPlaceholderBinSameText1");
+          yield return new TestCaseData("{:B||}", "PlaceholderBinSameText", false, "", "")
+              .SetName("ErrorPlaceholderBinSameText2");
+          yield return new TestCaseData("{:B|xyz|xyz}", "PlaceholderBinSameText", false, "", "")
+              .SetName("ErrorPlaceholderBinSameText3");
+          yield return new TestCaseData("{:B|}", "PlaceholderBinLengthInvalid", false, "", "")
+              .SetName("ErrorPlaceholderBinLengthInvalid");
+          yield return new TestCaseData("{:B|0}", "PlaceholderBinLengthInvalid", false, "", "")
+              .SetName("ErrorUnsupportedBinaryPlaceholderNoText2");
+          yield return new TestCaseData("X{:B|1|0|1}X",
+                                            "PlaceholderBinLengthInvalid", false, "", "")
+              .SetName("ErrorUnsupportedBinaryPlaceholderWithText2");
+          yield return new TestCaseData("{:B|0=false|1=true}",
+                                            "PlaceholderBinInvalidAssign", false, "", "")
+              .SetName("ErrorPlaceholderBinInvalidAssignment");
+          yield return new TestCaseData("{:I1}", "PlaceholderIntLengthInvalid", false, "", "")
+              .SetName("ErrorUnsupportedIntPlaceholderNoText");
+          yield return new TestCaseData("{:I|}", "MappingEmptyImplicitValue", false, "", "")
+              .SetName("ErrorMappingEmptyImplicitValue1");
+          yield return new TestCaseData("{:I|0|}", "MappingEmptyImplicitValue", false, "", "")
+              .SetName("ErrorMappingEmptyImplicitValue2");
+          yield return new TestCaseData("{:N10}", "PlaceholderNumFormatInvalid", false, "", "")
+              .SetName("ErrorPlaceholderNumFormatInvalidNoText");
+          yield return new TestCaseData("X{:FX}X", "PlaceholderNumFormatInvalid", false, "", "")
+              .SetName("ErrorPlaceholderNumFormatInvalidWithText");
+          yield return new TestCaseData("{:N|}", "MappingNoImplicitValues", false, "", "")
+              .SetName("ErrorMappingNoImplicitValues1");
+          yield return new TestCaseData("{:F|0}", "MappingNoImplicitValues", false, "", "")
+              .SetName("ErrorMappingNoImplicitValues2");
+          yield return new TestCaseData("{:N|0=x|}", "MappingNoImplicitValues", false, "", "")
+              .SetName("ErrorMappingNoImplicitValues3");
+          yield return new TestCaseData("{:F|0|}", "MappingNoImplicitValues", false, "", "")
+              .SetName("ErrorMappingNoImplicitValues4");
+          yield return new TestCaseData("{:S0}", "PlaceholderStrLengthInvalid", false, "", "")
+              .SetName("ErrorPlaceholderStrLengthInvalidNoText");
+          yield return new TestCaseData("{T:S|alt}", "MappingNoImplicitTextValues", false, "", "")
+              .SetName("ErrorPlaceholderMappingNoImplicitTextValues");
+          yield return new TestCaseData("{T:S|=new}", "MappingNoOriginalTextValue", false, "", "")
+              .SetName("ErrorPlaceholderMappingNoOriginalTextValue");
+          yield return new TestCaseData("{T:S|x=y=z}", "MappingWrongTextAssignment", false, "", "")
+              .SetName("ErrorPlaceholderStrInvalidMapping");
+          yield return new TestCaseData("X{:Sy}X", "PlaceholderStrLengthInvalid", false, "", "")
+              .SetName("ErrorPlaceholderStrLengthInvalidWithText");
+          yield return new TestCaseData("{1Input:S}", "PlaceholderNameInvalid", false, "", "")
+              .SetName("ErrorPlaceholderInvalidName1");
+          yield return new TestCaseData("{Input 1:S}{Input 1:I}",
+                                            "PlaceholderReuseWrongType", false, "", "")
+              .SetName("ErrorPlaceholderReuseWrongType");
+          yield return new TestCaseData("{Input 1:I|x=u}",
+                                            "ExplicitMappingInvalidValue", false, "", "")
+              .SetName("ErrorExplicitMappingInvalidValue");
+          yield return new TestCaseData("{Input 1:F|0..x=u}",
+                                            "ExplicitMappingInvRngVal", false, "", "")
+              .SetName("ErrorExplicitMappingInvalidRangeValue1");
+          yield return new TestCaseData("{Input 1:F|>..1=u}",
+                                            "ExplicitMappingInvRngVal", false, "", "")
+              .SetName("ErrorExplicitMappingInvalidRangeValue2");
+          yield return new TestCaseData("{Input 1:F|-1..>=u}",
+                                            "ExplicitMappingInvRngVal", false, "", "")
+              .SetName("ErrorExplicitMappingInvalidRangeValue3");
+          yield return new TestCaseData("{Input 1:F|0.1=u}",
+                                            "ExplicitMappingInvalidRange", false, "", "")
+              .SetName("ErrorExplicitMappingInvalidRange1");
+          yield return new TestCaseData("{Input 1:F|0...1=u}",
+                                            "ExplicitMappingInvalidRange", false, "", "")
+              .SetName("ErrorExplicitMappingInvalidRange2");
+          yield return new TestCaseData("{Input 1:F|1..1=u}",
+                                            "ExplicitMappingInvertedRange", false, "", "")
+              .SetName("ErrorExplicitMappingInvertedRange1");
+          yield return new TestCaseData("{Input 1:I|2..1=u}",
+                                            "ExplicitMappingInvertedRange", false, "", "")
+              .SetName("ErrorExplicitMappingInvertedRange2");
+          yield return new TestCaseData("{Input 1:N|u}", "MappingNoImplicitValues", false, "", "")
+              .SetName("ErrorMappingNoImplicitValues");
+          yield return new TestCaseData("{Input 1:I|u|2=v}", "MappingNoExplicitValues", false, "", "")
+              .SetName("ErrorMappingNoExplicitValues");
+          yield return new TestCaseData("{Input 1:I|0=1=u}", "MappingWrongAssignment", false, "", "")
+              .SetName("ErrorMappingWrongAssignment2");
         }
       }
     }
     [TestCaseSource(typeof(StringFormatterTemplateErrorTestCaseData),
                     "TemplateErrorTestCases", Category = "TemplateErrorTestCases")]
-    public void TemplateErrors(string template, string expectedError, bool doesErrorRemoveInputs)
+    public void TemplateErrors(string template,
+                               string expectedErrorCode,
+                                 bool doesErrorRemoveInputs,
+                               string expectedErrorTextDe,
+                               string expectedErrorTextEn)
     {
       // Set the same simple valid template using one of each kind of placeholders
       // that is used and checked in the GoodTemplate() test case
       node.mTemplates[0].Value = mAllTypesGoodTemplate;
+      // Set another template requiring another input. This input must stay intact
+      // even when an error removes the inputs of the first template
+      node.mTemplateCount.Value = 2;
+      node.mTemplates[1].Value = "bool2 {bool2:B}";
 
       // Check the resulting inputs
-      checkInputCounts(1, 1, 2, 1);
+      checkInputCounts(2, 1, 2, 1);
       // Check the output state
       Assert.IsNotNull(node.mOutputs[0]);         // output should exist ...
       Assert.IsFalse(node.mOutputs[0].HasValue);  // ... but has no output value
+      Assert.IsNotNull(node.mOutputs[1]);         // output should exist ...
+      Assert.IsFalse(node.mOutputs[1].HasValue);  // ... but has no output value
 
-      // Execute the error test case
+      // Execute the error test case with both de and en localization
       node.mTemplates[0].Value = template;
-      ValidationResult result = node.Validate("de");
-      Assert.IsTrue(result.HasError);         // expect error
-      // Some error messages have the offending token at the beginning.
-      // We ignore this by comparing only the fixed part of the message.
-      var messageDe = node.Localize("de", expectedError);
-      Assert.IsFalse(result.Message.StartsWith(" ")); // token mssing if true
-      Assert.IsTrue(result.Message.EndsWith(messageDe));
-      // Ensure that localized error messages exist 
-      Assert.IsTrue(messageDe.Length > 40);
-      var messageEn = node.Localize("en", expectedError);
-      Assert.IsTrue(messageEn.Length > 40);
-      Assert.IsTrue(expectedError.Length < 30);
+      ValidateAndCheckError("de", expectedErrorCode, expectedErrorTextDe);
+      ValidateAndCheckError("en", expectedErrorCode, expectedErrorTextEn);
 
       // Recheck the resulting inputs
       if (doesErrorRemoveInputs)
-      { // should be gone
-        checkInputCounts(0, 0, 0, 0);
+      { // should be gone, except bool2
+        checkInputCounts(1, 0, 0, 0);
       }
       else
       { // should still be there, unchanged
-        checkInputCounts(1, 1, 2, 1);
+        checkInputCounts(2, 1, 2, 1);
       }
       // Recheck the output state; must still have no value
       Assert.IsNotNull(node.mOutputs[0]);
       Assert.IsFalse(node.mOutputs[0].HasValue);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsFalse(node.mOutputs[1].HasValue);
     }
 
+    private void ValidateAndCheckError(string locale,
+                                       string expectedErrorCode,
+                                       string expectedErrorText)
+    {
+      ValidationResult result = node.Validate(locale);
+      Assert.IsTrue(result.HasError);         // expect error
 
+      // Check localized error message
+      Assert.AreNotEqual(result.Message, expectedErrorCode);
+      if (expectedErrorText.Length > 0)
+      { // Checkk detailed error message if given
+        Assert.AreEqual(expectedErrorText, result.Message);
+      }
+      else
+      { // Otherwise expect simple localization, potentialliy preceded by
+        // some prefix
+        var messageDe = node.Localize(locale, expectedErrorCode);
+        Assert.IsTrue(result.Message.EndsWith(messageDe));
+        // Some error messages are prefixed by the offending token or an
+        // input field name. Those error messages start with a blank. If
+        // this is still the case in the final message, the prefix is
+        // missing.
+        Assert.IsFalse(result.Message.StartsWith(" "));
+      }
+    }
 
     public class StringFormatterSeparatorErrorTestCaseData
     {
@@ -261,27 +300,27 @@ namespace Recomedia_de.Logic.VisuWeb.Test
           yield return new TestCaseData(",", ",",
                                         "Gruppen- und Dezimaltrennzeichen dürfen nicht gleich sein.",
                                         "Group and decimal separator cannot be the same.")
-                                        .SetName("BothComma");
+                       .SetName("BothComma");
           yield return new TestCaseData("", "",
                                         "Das Dezimaltrennzeichen darf nicht leer sein.",
                                         "The decimal separator cannot be empty.")
-                                        .SetName("BothEmpty");
+                       .SetName("BothEmpty");
           yield return new TestCaseData(",", "",
                                         "Das Dezimaltrennzeichen darf nicht leer sein.",
                                         "The decimal separator cannot be empty.")
-                                        .SetName("DecimalSepEmpty");
+                       .SetName("DecimalSepEmpty");
           yield return new TestCaseData(",,", ",",
                                         "Das Gruppentrennzeichen darf maximal ein Zeichen haben.",
                                         "The group separator cannot be longer than one character.")
-                                        .SetName("GroupSepTooLong");
+                       .SetName("GroupSepTooLong");
           yield return new TestCaseData(",", ",,",
                                         "Das Dezimaltrennzeichen darf maximal ein Zeichen haben.",
                                         "The decimal separator cannot be longer than one character.")
-                                        .SetName("DecimalSepTooLong");
+                       .SetName("DecimalSepTooLong");
           yield return new TestCaseData("ab", "xy",
                                         "Das Gruppentrennzeichen darf maximal ein Zeichen haben.",
                                         "The group separator cannot be longer than one character.")
-                                        .SetName("BothTooLong");
+                       .SetName("BothTooLong");
         }
       }
     }

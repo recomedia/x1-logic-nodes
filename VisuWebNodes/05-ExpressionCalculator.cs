@@ -153,6 +153,11 @@ namespace Recomedia_de.Logic.VisuWeb
       return -1;
     }
 
+    protected override string getEmptyTemplateError()
+    {
+      return "EmptyTemplateCsharp";
+    }
+
     protected override ValidationResult validateTemplate(StringValueObject template,
                                                                     string language,
                                                                       bool doFullCheck)

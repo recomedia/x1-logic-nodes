@@ -79,11 +79,20 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template is empty. Enter a valid C# expression. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  is empty. It should contain a valid C# expression. ähnelt.
         /// </summary>
-        internal static string EmptyTemplate {
+        internal static string EmptyTemplateCsharp {
             get {
-                return ResourceManager.GetString("EmptyTemplate", resourceCulture);
+                return ResourceManager.GetString("EmptyTemplateCsharp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  is empty. It should contain a valid combination of text and placeholders. ähnelt.
+        /// </summary>
+        internal static string EmptyTemplateText {
+            get {
+                return ResourceManager.GetString("EmptyTemplateText", resourceCulture);
             }
         }
         
@@ -376,7 +385,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template contains no placeholders. Enclose placeholders in {}. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains no placeholders. Enclose placeholders in {}. ähnelt.
         /// </summary>
         internal static string NoPlaceholder {
             get {
@@ -664,7 +673,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template contains too many binary ({:B}) placeholders. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains too many binary ({:B}) placeholders. ähnelt.
         /// </summary>
         internal static string TooManyBinPlaceholders {
             get {
@@ -673,7 +682,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template contains too many integer ({:I}) placeholders. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains too many integer ({:I}) placeholders. ähnelt.
         /// </summary>
         internal static string TooManyIntPlaceholders {
             get {
@@ -682,7 +691,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template contains too many floating point number (({:F}, {:N}, {:G} and/or {:P}) placeholders. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains too many floating point number (({:F}, {:N}, {:G} and/or {:P}) placeholders. ähnelt.
         /// </summary>
         internal static string TooManyNumPlaceholders {
             get {
@@ -691,7 +700,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template contains too many placeholders. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains too many placeholders. ähnelt.
         /// </summary>
         internal static string TooManyPlaceholders {
             get {
@@ -700,7 +709,7 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The format template contains too many string ({:S}) placeholders. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  contains too many string ({:S}) placeholders. ähnelt.
         /// </summary>
         internal static string TooManyStrPlaceholders {
             get {

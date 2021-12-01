@@ -67,6 +67,11 @@ namespace Recomedia_de.Logic.VisuWeb
       // We have no other members that need to be updated along with templates
     }
 
+    protected override string getEmptyTemplateError()
+    {
+      return "EmptyTemplateText";
+    }
+
     protected override ValidationResult validateTokens(string templateName,
                                           ref List<TokenBase> templateTokens,
                                                        string language,

@@ -125,8 +125,12 @@
     <value> ist leer. Platzhalter müssen mindestens entweder einen (bereits vorher verwendeten) {&lt;Namen&gt;} oder einen gültigen Typ-Buchstaben mit vorangestelltem Doppelpunkt  {:&lt;T&gt;} enthalten.</value>
     <comment>StringFormatter</comment>
   </data>
-  <data name="EmptyTemplate" xml:space="preserve">
-    <value>Die Formatvorlage ist leer. Sie sollte einen gültigen C#-Ausdruck enthalten.</value>
+  <data name="EmptyTemplateCsharp" xml:space="preserve">
+    <value> ist leer. Sie sollte einen gültigen C#-Ausdruck enthalten.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="EmptyTemplateText" xml:space="preserve">
+    <value> ist leer. Sie sollte eine gültige Kombination aus Text und Platzhaltern enthalten.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="ExplicitMappingInvalidRange" xml:space="preserve">
@@ -158,7 +162,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="NoPlaceholder" xml:space="preserve">
-    <value>Die Formatvorlage enthält keine Platzhalter. Platzhalter müssen von {} umschlossen sein.</value>
+    <value> enthält keine Platzhalter. Platzhalter müssen von {} umschlossen sein.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="NumberInput" xml:space="preserve">
@@ -210,23 +214,23 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyBinPlaceholders" xml:space="preserve">
-    <value>Die Formatvorlage enthält zu viele Binär-Platzhalter ({:B}).</value>
+    <value> enthält zu viele Binär-Platzhalter ({:B}).</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyIntPlaceholders" xml:space="preserve">
-    <value>Die Formatvorlage enthält zu viele Ganzzahl-Platzhalter ({:I}).</value>
+    <value> enthält zu viele Ganzzahl-Platzhalter ({:I}).</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyNumPlaceholders" xml:space="preserve">
-    <value>Die Formatvorlage enthält zu viele Fließkommazahl-Platzhalter ({:F}, {:N}, {:G} und/oder {:P}).</value>
+    <value> enthält zu viele Fließkommazahl-Platzhalter ({:F}, {:N}, {:G} und/oder {:P}).</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyPlaceholders" xml:space="preserve">
-    <value>Die Formatvorlage enthält zu viele Platzhalter.</value>
+    <value> enthält zu viele Platzhalter.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyStrPlaceholders" xml:space="preserve">
-    <value>Die Formatvorlage enthält zu viele Text-Platzhalter ({:S}).</value>
+    <value> enthält zu viele Text-Platzhalter ({:S}).</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderNameInvalid" xml:space="preserve">

@@ -2156,7 +2156,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         get
         {
           // Own error messages (localized)
-          yield return new TestCaseData("", "EmptyTemplate",
+          yield return new TestCaseData("", "EmptyTemplateCsharp",
                                         0, 0, 0, 0, false).
                                SetName("ErrorEmptyTemplate");
           yield return new TestCaseData("=", "HasAssignment",
@@ -2324,7 +2324,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         {
           yield return new TestCaseData(2, 1,
             " (((_previousOut4_==1)|(_previousOut4_==0))?({ExtLg :I}==1?(byte?)3{ExtKz:I}==1?(byte?)2:0)):0)",
-            "Die Formatvorlage ist leer. Sie sollte einen gültigen C#-Ausdruck enthalten.",
+            "Formel 1 ist leer. Sie sollte einen gültigen C#-Ausdruck enthalten.",
             0, 2, 0, 0,
             new List<string> { }, new List<string> { "ExtLg", "ExtKz" },
             new List<string> { }, new List<string> { }
@@ -2345,18 +2345,18 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                     "CreateOutputTestCases", Category = "CreateOutputTestCases")]
     public void EmptyTemplateStillCreateInputs(int numOfTemplates,
                                                int useTemplateIndex,
-                                             string template,
-                                             string expectedError,
+                                            string template,
+                                            string expectedErrorText,
                                                int expNumBinInputs,
                                                int expNumIntInputs,
                                                int expNumNumInputs,
                                                int expNumStrInputs,
-                                       List<string> expBinInputNames,
-                                       List<string> expIntInputNames,
-                                       List<string> expNumInputNames,
-                                       List<string> expStrInputNames)
+                                      List<string> expBinInputNames,
+                                      List<string> expIntInputNames,
+                                      List<string> expNumInputNames,
+                                      List<string> expStrInputNames)
     {
-      // Use three expressions
+      // Use the given number of expressions
       node.mTemplateCount.Value = numOfTemplates;
       Assert.AreEqual(numOfTemplates, node.mTemplates.Count);
 
@@ -2380,7 +2380,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       // Expect validation error
       var result = node.Validate("de");
       Assert.IsTrue(result.HasError);
-      Assert.AreEqual(expectedError, result.Message);
+      Assert.AreEqual(expectedErrorText, result.Message);
 
       // Check the output states
       for (int i = 0; i < numOfTemplates; ++i)

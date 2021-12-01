@@ -328,6 +328,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return base.Validate(language);
     }
 
+    protected abstract string getEmptyTemplateError();
+
     protected virtual ValidationResult validateTemplate(StringValueObject template,
                                                                    string language,
                                                                      bool doFullCheck)
@@ -337,7 +339,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "EmptyTemplate")
+          Message = Localize(language, template.Name) +
+                    Localize(language, getEmptyTemplateError())
         };
       }
       return new ValidationResult { HasError = false };
@@ -400,7 +403,8 @@ namespace Recomedia_de.Logic.VisuWeb
 
       splitTokens(template, ref templateTokens);
 
-      ValidationResult result = validateTotalNumberOfTokens(ref templateTokens, language);
+      ValidationResult result = validateTotalNumberOfTokens(template.Name,
+                                             ref templateTokens, language);
       if (result.HasError)
       {
         return result;
@@ -507,7 +511,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "TooManyBinPlaceholders")
+          Message = Localize(language, templateName) +
+                    Localize(language, "TooManyBinPlaceholders")
         };
       }
       if (intCount > MAX_INPUTS)
@@ -515,7 +520,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "TooManyIntPlaceholders")
+          Message = Localize(language, templateName) +
+                    Localize(language, "TooManyIntPlaceholders")
         };
       }
       if (numCount > MAX_INPUTS)
@@ -523,7 +529,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "TooManyNumPlaceholders")
+          Message = Localize(language, templateName) +
+                    Localize(language, "TooManyNumPlaceholders")
         };
       }
       if (strCount > MAX_INPUTS)
@@ -531,7 +538,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "TooManyStrPlaceholders")
+          Message = Localize(language, templateName) +
+                    Localize(language, "TooManyStrPlaceholders")
         };
       }
       return new ValidationResult { HasError = false };
@@ -568,16 +576,17 @@ namespace Recomedia_de.Logic.VisuWeb
                                                        string language,
                                                          bool doFullCheck);
 
-    private ValidationResult validateTotalNumberOfTokens(
-                                          ref List<TokenBase> templateTokens,
-                                                       string language)
+    private ValidationResult validateTotalNumberOfTokens(string templateName,
+                                            ref List<TokenBase> templateTokens,
+                                                         string language)
     {
       if (templateTokens.Count < (isPlaceholderEnforced() ? 2 : 1))
       {
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "NoPlaceholder")
+          Message = Localize(language, templateName) +
+                    Localize(language, "NoPlaceholder")
         };
       }
       if (templateTokens.Count > (6 * MAX_INPUTS + 1))
@@ -585,7 +594,8 @@ namespace Recomedia_de.Logic.VisuWeb
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "TooManyPlaceholders")
+          Message = Localize(language, templateName) +
+                    Localize(language, "TooManyPlaceholders")
         };
       }
       return new ValidationResult { HasError = false };

@@ -125,8 +125,12 @@
     <value> is empty. Placeholders must at least specify a (previously defined) {&lt;name&gt;} or a valid type letter prefixed with a colon {:&lt;T&gt;}.</value>
     <comment>StringFormatter</comment>
   </data>
-  <data name="EmptyTemplate" xml:space="preserve">
-    <value>The format template is empty. Enter a valid C# expression.</value>
+  <data name="EmptyTemplateCsharp" xml:space="preserve">
+    <value> is empty. It should contain a valid C# expression.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="EmptyTemplateText" xml:space="preserve">
+    <value> is empty. It should contain a valid combination of text and placeholders.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="ExplicitMappingInvalidRange" xml:space="preserve">
@@ -158,7 +162,7 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="NoPlaceholder" xml:space="preserve">
-    <value>The format template contains no placeholders. Enclose placeholders in {}.</value>
+    <value> contains no placeholders. Enclose placeholders in {}.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="NumberInput" xml:space="preserve">
@@ -210,23 +214,23 @@
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyBinPlaceholders" xml:space="preserve">
-    <value>The format template contains too many binary ({:B}) placeholders.</value>
+    <value> contains too many binary ({:B}) placeholders.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyIntPlaceholders" xml:space="preserve">
-    <value>The format template contains too many integer ({:I}) placeholders.</value>
+    <value> contains too many integer ({:I}) placeholders.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyNumPlaceholders" xml:space="preserve">
-    <value>The format template contains too many floating point number (({:F}, {:N}, {:G} and/or {:P}) placeholders.</value>
+    <value> contains too many floating point number (({:F}, {:N}, {:G} and/or {:P}) placeholders.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyPlaceholders" xml:space="preserve">
-    <value>The format template contains too many placeholders.</value>
+    <value> contains too many placeholders.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="TooManyStrPlaceholders" xml:space="preserve">
-    <value>The format template contains too many string ({:S}) placeholders.</value>
+    <value> contains too many string ({:S}) placeholders.</value>
     <comment>StringFormatter</comment>
   </data>
   <data name="PlaceholderNameInvalid" xml:space="preserve">
