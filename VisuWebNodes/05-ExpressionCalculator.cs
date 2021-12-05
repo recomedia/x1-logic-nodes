@@ -461,7 +461,7 @@ namespace Recomedia_de.Logic.VisuWeb
       mError.Value = "";
       initEvalEngine();
       updatePreviousOutputFields();
-      updateVariableFields();
+      updateAllVariableFields();
       for (int i = 0; i < mTokensPerTemplate.Count; i++)
       {
         try
@@ -490,8 +490,8 @@ namespace Recomedia_de.Logic.VisuWeb
               }
               catch (LogicModule.ObjectModel.TypeSystem.ValueObjectOutOfRangeException)
               {
-                mError.Value += mTemplates[i].Name +
-                    ": Result is not a number or out of range. Output remains unchanged.";
+                mError.Value += Localize(mLanguage, mTemplates[i].Name) +
+                    Localize(mLanguage, "ResultNanOrOor") + "\r\n";
               }
             }
           }
@@ -501,9 +501,13 @@ namespace Recomedia_de.Logic.VisuWeb
             string errorText = mEngineReport.ToString();
             if ( errorText.Length < 1 )
             {
-              errorText = "Syntax error.";
+              errorText = Localize(mLanguage, "SyntaxError") + "\r\n";
             }
-            mError.Value += mTemplates[i].Name + ": " + errorText;
+            mError.Value += (Localize(mLanguage, mTemplates[i].Name) +
+                             ": " + errorText)
+                .Replace(": (1,", " (" + Localize(mLanguage, "BeforeChar"))
+                .Replace("\r\n(1,", "\r\n" + Localize(mLanguage, mTemplates[i].Name) +
+                                  " (" + Localize(mLanguage, "BeforeChar"));
           }
         }
         catch (Exception ex)
@@ -546,7 +550,7 @@ namespace Recomedia_de.Logic.VisuWeb
                     "using Recomedia_de.Logic.VisuWeb;");
 
         // Declare all variables we will ever use
-        string declText = getVariableDecls();
+        string declText = getAllVariableDeclarations();
         mEngine.Run(declText);
 
         // After we declared all needed variables is the time to get access to
@@ -561,24 +565,24 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private string getVariableDecls()
+    private string getAllVariableDeclarations()
     {
       var declText = "";
       foreach (var boolInput in mBinInputs)
       {
-        declText += getVariableDeclaration(boolInput);
+        declText += getVariableDeclarations(boolInput);
       }
       foreach (var intInput in mIntInputs)
       {
-        declText += getVariableDeclaration(intInput);
+        declText += getVariableDeclarations(intInput);
       }
       foreach (var doubleInput in mNumInputs)
       {
-        declText += getVariableDeclaration(doubleInput);
+        declText += getVariableDeclarations(doubleInput);
       }
       foreach (var stringInput in mStrInputs)
       {
-        declText += getVariableDeclaration(stringInput);
+        declText += getVariableDeclarations(stringInput);
       }
       for (int i = 0; i < mOutputs.Count; i++)
       {
@@ -587,13 +591,16 @@ namespace Recomedia_de.Logic.VisuWeb
       return declText;
     }
 
-    private string getVariableDeclaration(ValueObjectBase input)
+    private string getVariableDeclarations(ValueObjectBase input)
     {
+
       string typeStr = getTypeString(input.PortType);
       System.Diagnostics.Trace.Assert(input.HasValue);
-      string initStr = getInitString(input.PortType, input.Value);
-      input.WasSet = false; // Value has been used
-      return typeStr + " " + createVariableIdentifier(input.Name) + initStr + "; ";
+      string valueInitStr = getInitString(input.PortType, input.Value);
+      string varDecls =
+        typeStr + " " + createVariableIdentifier(input.Name) + valueInitStr + "; " +
+        "bool " + createIsVariableValueSetIdentifier(input.Name) + "; ";
+      return varDecls;
     }
 
     private string getOutputDeclarations(int i)
@@ -614,6 +621,11 @@ namespace Recomedia_de.Logic.VisuWeb
       string identifier = "_in_" + name + "_";
       return identifier;
     }
+    private string createIsVariableValueSetIdentifier(string name)
+    {
+      string identifier = "_is" + name + "ValueSet_";
+      return identifier;
+    }
 
     private string createOutIdentifier(int i)
     {
@@ -627,32 +639,39 @@ namespace Recomedia_de.Logic.VisuWeb
       return identifier;
     }
 
-    private void updateVariableFields()
+    private void updateAllVariableFields()
     {
       foreach (var boolInput in mBinInputs)
       {
-        updateVariableField(boolInput);
+        updateVariableFields(boolInput);
       }
       foreach (var intInput in mIntInputs)
       {
-        updateVariableField(intInput);
+        updateVariableFields(intInput);
       }
       foreach (var doubleInput in mNumInputs)
       {
-        updateVariableField(doubleInput);
+        updateVariableFields(doubleInput);
       }
       foreach (var stringInput in mStrInputs)
       {
-        updateVariableField(stringInput);
+        updateVariableFields(stringInput);
       }
     }
 
-    private void updateVariableField(ValueObjectBase var)
+    private void updateVariableFields(ValueObjectBase var)
     {
       if ( var.WasSet )
       {
         System.Diagnostics.Trace.Assert(var.Value != null);
         updateField(createVariableIdentifier(var.Name), var.Value);
+        // Indicate that this input has just received a value 
+        updateField(createIsVariableValueSetIdentifier(var.Name), true);
+        var.WasSet = false; // Value has been used; no longer new
+      }
+      else
+      { // Indicate that this input has NOT received a value 
+        updateField(createIsVariableValueSetIdentifier(var.Name), false);
       }
     }
 
@@ -754,6 +773,8 @@ namespace Recomedia_de.Logic.VisuWeb
     /// </summary>
     public override string Localize(string language, string key)
     {
+      mLanguage = language;   // memorize for localization in Execute
+
       string templateCountPrefix = TEMPLATE_PREFIX + "Count";
       if (key.Equals(templateCountPrefix))
       {

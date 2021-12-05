@@ -146,6 +146,8 @@ namespace Recomedia_de.Logic.VisuWeb
     [Output(DisplayOrder = 1, IsRequired = true)]
     public List<IValueObject> mOutputs { get; set; }
 
+    protected string mLanguage = "de";
+
     /// <summary>
     /// This method has been added as a ValueSet handler to the template
     /// count parameter. It will therefore be called whenever the number
@@ -295,6 +297,8 @@ namespace Recomedia_de.Logic.VisuWeb
     /// 
     public override sealed ValidationResult Validate(string language)
     {
+      mLanguage = language;   // memorize for localization in Execute
+
       ValidationResult result = validateSeparators(language);
       if (result.HasError)
       {

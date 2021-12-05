@@ -24,17 +24,31 @@
       <h2>Inhaltsverzeichnis</h2>
       <img src="ExpressionCalculator.png" alt="" class="description" />
       <ul>
-        <li><a href="#beschreibung">Beschreibung</a></li>
-        <li><a href="#eingaenge">Eingänge</a></li>
-        <li><a href="#ausgaenge">Ausgänge</a></li>
-        <li><a href="#parameter">Parameter</a></li>
-        <li><a href="#variablen">Ausgangswerte als Variablen</a></li>
-        <li><a href="#platzhalter">Platzhalter für Variablen</a></li>
-        <li><a href="#konstanten">Literale Konstanten</a></li>
-        <li><a href="#operatoren">Operatoren</a></li>
-        <li><a href="#funktionen">Funktionen</a></li>
-        <li><a href="#kommentare">Kommentare</a></li>
-        <li><a href="#beispiele">Beispiele</a></li>
+        <li><b><a href="#beschreibung">Beschreibung</a></b></li>
+        <li><b><a href="#eingaenge">Eingänge</a></b></li>
+        <li><b><a href="#ausgaenge">Ausgänge</a></b></li>
+        <li><b><a href="#parameter">Parameter</a></b></li>
+        <li><b><a href="#platzhalter">Platzhalter für Variablen</a></b></li>
+        <li><b><a href="#eingangsvariablen">Welche Eingangswerte sind neu?</a></b></li>
+        <li><b><a href="#ausgangsvariablen">Ausgangswerte als Variablen</a></b></li>
+        <li><b><a href="#konstanten">Literale Konstanten</a></b></li>
+        <li><b><a href="#operatoren">Operatoren</a></b></li>
+        <li>
+          <b><a href="#funktionen">Funktionen</a></b><br />
+          <a href="#math">Mathematische Funktionen</a> &ndash;
+          <a href="#string">Textbearbeitung</a> &ndash;
+          <a href="#light">Beleuchtungssteuerung</a> &ndash;
+          <a href="#HLK">Heizungs-, Lüftungs- und Klimatechnik (HLK)</a>
+        </li>
+        <li><b><a href="#kommentare">Kommentare</a></b></li>
+        <li>
+          <b><a href="#beispiele">Beispiele</a></b><br />
+          <a href="#feiertag">Feiertage</a> &ndash;
+          <a href="#zeitstempel">UNIX-UTC-Zeitstempel umwandeln</a> &ndash;
+          <a href="#hysterese">Verbesserter Schwellwert mit Hysterese</a> &ndash;
+          <a href="#summenzaehler">Summenzähler</a> &ndash;
+          <a href="#zustandsautomat">Zustandsautomat</a>
+        </li>
       </ul>
       <h2 id="beschreibung">Beschreibung</h2>
       <p>
@@ -322,70 +336,6 @@
           </td>
         </tr>
       </table>
-      <h2 id="variablen">Ausgangswerte als Variablen</h2>
-      <p>
-        Aktuelle und vorherige Ausgabewerte können in den Formeln als Variablen
-        verwendet werden. Diese Variablen haben die Namen <code>_out1_</code> ..
-        <code>_out49_</code> (für aktuelle Werte) bzw. <code>_previousOut1_</code> ..
-        <code>_previousOut50_</code> (für vorherige Werte). Sie dürfen überall stehen,
-        wo auch eine Konstante des gleichen Typs stehen dürfte.
-      </p>
-      <p>
-        <em>Aktuelle</em> Werte sind solche, die seit der letzten Änderung
-        eines Eingangs neu berechnet worden sind. Durch ihre Verwendung
-        lassen sich große Formeln (oder solche, in denen Zwischenergebnisse
-        mehrfach verwendet werden) in übersichtliche Teile zerlegen. Wird ein
-        Zwischenergebnis nur in den weiteren Formeln (also nicht außerhalb des
-        Bausteins) benötigt, so bleibt der entsprechende Ausgang unbelegt.
-        Das Beispiel
-        <a href="#hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</a>
-        benutzt einen solchen Formelsatz.
-      </p>
-      <p>
-        <em>Vorherige</em> Werte sind solche, die <em>zuletzt vor</em> der
-        aktuellen Änderung eines Eingangs auf die Ausgänge gegeben worden
-        sind. Dabei ist zu beachten, das <em>jede</em> Änderung eines Eingangs
-        <em>alle</em> Formeln neu berechnet (auch solche die den geänderten
-        Eingangswert gar nicht verwenden). Damit lassen sich einfache
-        <a href="https://de.wikipedia.org/wiki/Endlicher_Automat">Zustandsautomaten</a>
-        realisieren. Das Beispiel <a href="#summenzaehler">Summenzähler</a>
-        zeigt eine einfache und nützliche Anwendung.
-      </p>
-      <p>
-        Folgende Werte können in einer Formel verwendet werden, deren Nummer <i>n</i>
-        sei:
-      </p>
-      <ul>
-        <li>
-          <em>Aktuelle</em> Werte können nur aus Formeln mit <em>niedrigeren</em>
-          Nummern (<code>_out1_</code> .. <code>_out&lt;<i>n</i>-1&gt;_</code>) verwendet
-          werden. Sie stehen also nur zur Verfügung, wenn es mehrere Formeln gibt.
-          Dies vermeidet zyklische Abhängigkeiten.
-        </li>
-        <li>
-          <em>Vorherige</em> Werte können aus <em>allen</em> Formeln verwendet
-          werden. Das schließt die eigene und höhere Nummern
-          (<code>_previousOut&lt;<i>n</i>&gt;_</code> ..) ein. (Zu zyklischen
-          Abhängigkeiten führt das nicht, weil diese Werte erst wieder vor den
-          Berechnungen für die <em>nächste</em> Änderung aktualisiert werden.)
-        </li>
-      </ul>
-      <p>
-        Nach einer Inbetriebnahme oder einem Neustart des Logikmoduls gibt es
-        zunächst keine Werte aus vorherigen Berechnungen. Je nach Typ werden
-        bis zum ersten Setzen eines Ausgangs <i>n</i> die folgenden Werte für
-        <code>_previousOut&lt;<i>n</i>&gt;_</code> verwendet:
-      </p>
-      <dl>
-        <dt>NUMBER</dt>
-        <dd><code>0.0</code></dd>
-        <dt>INT64, INTEGER, BYTE</dt>
-        <dd><code>0</code></dd>
-        <dt>BOOL</dt>
-        <dd><code>false</code></dd>
-        <dt>STRING</dt>
-        <dd><code>""</code> (Leerstring)</dd>
-      </dl>
       <h2 id="platzhalter">Platzhalter für Variablen</h2>
       <p>
         Platzhalter in den Formeln dienen dazu, variable Eingangswerte in den
@@ -455,6 +405,80 @@
         Werden sie in irgend einem Teil der Formel überschritten, kommt es zu
         falschen Ergebnissen.
       </p>
+      <h2 id="eingangsvariablen">Welche Eingangswerte sind neu?</h2>
+      <p>
+        Für jeden Eingang wird eine Variable <code>bool _is</code><i>&lt;name&gt;</i><code>ValueSet_</code> angelegt. Diese gibt an, ob der Eingang für die laufende
+        Berechnung ein neues Eingangstelegramm erhalten hat (<code>true</code>) oder
+        ob der Wert von einem früheren Eingangstelegramm stammt (<code>false</code>).
+        Ob sich der Eingangswert durch dieses Telegramm tatsächlich <i>geändert</i>
+        hat (oder nur der gleiche Wert erneut empfangen worden ist), lässt sich
+        daraus <i>nicht</i> ableiten. Das Beispiel <a href="#zustandsautomat">Zustandsautomat</a> zeigt eine Anwendung dieser Variablen.
+      </p>
+      <h2 id="ausgangsvariablen">Ausgangswerte als Variablen</h2>
+      <p>
+        Aktuelle und vorherige Ausgabewerte können in den Formeln als Variablen
+        verwendet werden. Diese Variablen haben die Namen <code>_out1_</code> ..
+        <code>_out49_</code> (für aktuelle Werte) bzw. <code>_previousOut1_</code> ..
+        <code>_previousOut50_</code> (für vorherige Werte). Sie dürfen überall stehen,
+        wo auch eine Konstante des gleichen Typs stehen dürfte.
+      </p>
+      <p>
+        <em>Aktuelle</em> Werte sind solche, die seit der letzten Änderung
+        eines Eingangs neu berechnet worden sind. Durch ihre Verwendung
+        lassen sich große Formeln (oder solche, in denen Zwischenergebnisse
+        mehrfach verwendet werden) in übersichtliche Teile zerlegen. Wird ein
+        Zwischenergebnis nur in den weiteren Formeln (also nicht außerhalb des
+        Bausteins) benötigt, so bleibt der entsprechende Ausgang unbelegt.
+        Das Beispiel
+        <a href="#hysterese">Verbesserter Schwellwert mit Hysterese</a>
+        benutzt einen solchen Formelsatz.
+      </p>
+      <p>
+        <em>Vorherige</em> Werte sind solche, die <em>zuletzt vor</em> der
+        aktuellen Berechnung auf die Ausgänge gegeben worden sind. Dabei ist
+        zu beachten, das <em>jede</em> Änderung eines Eingangs <em>alle</em>
+        Formeln neu berechnet (auch solche die den geänderten Eingangswert
+        gar nicht verwenden). Damit lassen sich u. a. einfache
+        <a href="https://de.wikipedia.org/wiki/Endlicher_Automat">Zustandsautomaten</a>
+        realisieren, wie im Beispiel <a href="#zustandsautomat">Zustandsautomat</a>
+        gezeigt ist. Das Beispiel <a href="#summenzaehler">Summenzähler</a>
+        zeigt eine weitere nützliche Anwendung dieser Variablen.
+      </p>
+      <p>
+        Folgende Werte können in einer Formel verwendet werden, deren Nummer <i>n</i>
+        sei:
+      </p>
+      <ul>
+        <li>
+          <em>Aktuelle</em> Werte können nur aus Formeln mit <em>niedrigeren</em>
+          Nummern (<code>_out1_</code> .. <code>_out&lt;<i>n</i>-1&gt;_</code>) verwendet
+          werden. Sie stehen also nur zur Verfügung, wenn es mehrere Formeln gibt.
+          Dies vermeidet zyklische Abhängigkeiten.
+        </li>
+        <li>
+          <em>Vorherige</em> Werte können aus <em>allen</em> Formeln verwendet
+          werden. Das schließt die eigene und höhere Nummern
+          (<code>_previousOut&lt;<i>n</i>&gt;_</code> ..) ein. (Zu zyklischen
+          Abhängigkeiten führt das nicht, weil diese Werte erst wieder vor den
+          Berechnungen für die <em>nächste</em> Änderung aktualisiert werden.)
+        </li>
+      </ul>
+      <p>
+        Nach einer Inbetriebnahme oder einem Neustart des Logikmoduls gibt es
+        zunächst keine Werte aus vorherigen Berechnungen. Je nach Typ werden
+        bis zum ersten Setzen eines Ausgangs <i>n</i> die folgenden Werte für
+        <code>_previousOut&lt;<i>n</i>&gt;_</code> verwendet:
+      </p>
+      <dl>
+        <dt>NUMBER</dt>
+        <dd><code>0.0</code></dd>
+        <dt>INT64, INTEGER, BYTE</dt>
+        <dd><code>0</code></dd>
+        <dt>BOOL</dt>
+        <dd><code>false</code></dd>
+        <dt>STRING</dt>
+        <dd><code>""</code> (Leerstring)</dd>
+      </dl>
       <h2 id="konstanten">Literale Konstanten</h2>
       <table class="Tabelle_Logicnode">
         <colgroup>
@@ -549,16 +573,17 @@
           <td>
             <p>
               Nicht wirklich Konstanten, da die Werte vom Zeitpunkt des Aufrufs abhängen:<br />
-              Aktuelles Datum (<code>Today</code> mit Uhrzeit 0:00 Uhr; <code>Now</code> mit aktueller
-              Uhrzeit)
+              Aktuelles Datum (<code>Today</code> mit Uhrzeit 0:00 Uhr; <code>Now</code>
+              mit aktueller Uhrzeit)
             </p>
             <p>
-              Hinweis: Objekte vom Typ <code>DateTime</code> sind nicht direkt als Ausgabewerte
-              verwendbar. Nützlich sind sie für Berechnungen mit Daten und Uhrzeiten, die
-              anders nicht ohne Weiteres möglich wären. Sie lassen sich auch in gültige
-              Ausgabetypen (Zahlen oder Texte) umwandeln. Siehe dazu die
+              Hinweis: Objekte vom Typ <code>DateTime</code> sind nicht direkt als
+              Ausgabewerte verwendbar. Nützlich sind sie für Berechnungen mit Daten
+              und Uhrzeiten, die anders nicht ohne Weiteres möglich wären. Sie lassen
+              sich auch in gültige Ausgabetypen (Zahlen oder Texte) umwandeln. Siehe
+              dazu die
               <a href="https://docs.microsoft.com/de-de/dotnet/api/system.datetime?view=netframework-4.0">Dokumentation der <code>DateTime</code>-Klasse</a>
-              und das <a href="#feiertagbeispiel">Anwendungsbeispiel "Feiertag"</a>.
+              und das <a href="#feiertag">Anwendungsbeispiel "Feiertag"</a>.
               Korrekt formatierte Texte kann der Gira-Typumwandler auch wieder
               in DateTime-Datenpunkte umwandeln.
             </p>
@@ -594,7 +619,7 @@
               das direkt. Für alle anderen Ausgangstypen muss man im anderen
               Zweig des Bedingungsoperators explizit die auf NULL festlegbare
               Variante des Ausgabetyps verwenden. Das Beispiel
-              <a href="#hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</a>
+              <a href="#hysterese">Verbesserter Schwellwert mit Hysterese</a>
               zeigt, wie man das mit Typumwandlungs-Operatoren erreicht.
             </p>
           </td>
@@ -936,7 +961,7 @@
         nicht erlaubt sind, können dennoch temporäre Objekte mit dem
         <a href="https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/new-operator"><code>new</code>-Operator</a>
         erzeugt und innerhalb einer Formel verwendet werden. Das Beispiel
-        <a href="#newbeispiel">UNIX-UTC-Zeitstempel umwandeln</a>
+        <a href="#zeitstempel">UNIX-UTC-Zeitstempel umwandeln</a>
         zeigt eine nützliche Anwendung.
       </p>
       <h2 id="funktionen">Funktionen</h2>
@@ -952,7 +977,7 @@
         <a href="#light">Beleuchtungs-</a> und <a href="#HLK">Klimatechnik</a>
         zur Verfügung.
       </p>
-      <h3>Mathematische Funktionen: Math-Bibliothek und Winkelfunktionen</h3>
+      <h3 id="math">Mathematische Funktionen: Math-Bibliothek und Erweiterungen</h3>
       <p>
         Die meisten
         <a href="https://docs.microsoft.com/de-de/dotnet/api/system.math?view=netframework-4.0#methoden"><b>Math</b>-Methoden des .NET-4.0-Standards</a>
@@ -1003,10 +1028,55 @@
         </tr>
       </table>
       <p>
-        Mit den <code>Math</code>- und <code>Angle</code>-Funktionen sind trigonometrische,
-        logarithmische und andere gebräuchliche mathematische Anwendungen abgedeckt.
+        In der <code>Math</code>-Bibliothek stehen Funktionen zur Berechnung von
+        Minima und Maxima nur mit zwei Parametern zur Verfügung. Oft benötigt man
+        aber mehr Eingabewerte. Um dann keine unschöne Schachtelung anwenden zu
+        müssen, gibt es die folgenden beiden Methoden, die beliebig viele Parameter
+        verarbeiten können:
       </p>
-      <h3>Stringfunktionen</h3>
+      <table class="Tabelle_Logicnode">
+        <colgroup>
+          <col style="width: 175px">
+          <col style="width: 125px">
+          <col>
+        </colgroup>
+        <tr>
+          <th class="small">Funktion</th>
+          <th class="small">Datentyp</th>
+          <th class="small">Beschreibung</th>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <code>MoreMath.Min(</code><i>value1</i><code>
+                ,
+              </code><i>value2</i><code>, </code><i>...</i><code>)</code>
+            </p>
+          </td>
+          <td>
+            <p><code>double</code> oder <code>int</code></p>
+          </td>
+          <td>
+            <p>Gibt den niedrigsten Wert unter den gegebenen Parametern zurück.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <code>MoreMath.Max(</code><i>value1</i><code>
+                ,
+              </code><i>value2</i><code>, </code><i>...</i><code>)</code>
+            </p>
+          </td>
+          <td>
+            <p><code>double</code> oder <code>int</code></p>
+          </td>
+          <td>
+            <p>Gibt den höchsten Wert unter den gegebenen Parametern zurück.</p>
+          </td>
+        </tr>
+      </table>
+      <h3 id="string">Funktionen zur Textbearbeitung</h3>
       <p>
         <a href="https://docs.microsoft.com/de-de/dotnet/api/system.double.tostring?view=netframework-4.0">ToString</a>
         mit seinen verschiedenen Varianten für alle numerischen Typen erlaubt die
@@ -1342,11 +1412,13 @@
       </p>
       <h2 id="beispiele">Beispiele</h2>
       <p>
-        Das <a href="HeatingCurve.html#heizbeispiel">Anwendungsbeispiel
-        "Bedarfsgeführte Heizungsregelung"</a> findet sich bei der
+        Das <a href="HeatingCurve.html#heizbeispiel">
+          Anwendungsbeispiel
+          "Bedarfsgeführte Heizungsregelung"
+        </a> findet sich bei der
         <a href="HeatingCurve.html">Beschreibung der Funktion HeatingCurve</a>.
       </p>
-      <h3 id="feiertagbeispiel">Feiertage</h3>
+      <h3 id="feiertag">Feiertage</h3>
       <p>
         An Feiertagen und ihren Vortagen sollen bestimmte
         Automatisierungsfunktionen anders ablaufen als an normalen
@@ -1382,7 +1454,7 @@
         Eingangswert, wird aber dennoch angestoßen, sobald ein Trigger
         eintrifft.
       </p>
-      <h3 id="newbeispiel">UNIX-UTC-Zeitstempel umwandeln</h3>
+      <h3 id="zeitstempel">UNIX-UTC-Zeitstempel umwandeln</h3>
       <p>
         Viele Webservices verwenden für Datums- und Zeitangaben Ganzzahlen als
         Zeitstempel. Inhalt ist die Anzahl der Sekunden seit dem 1.1.1970, 0:00
@@ -1418,7 +1490,7 @@
           Gira-Typ-Konverter das Textformat nicht richtig erkennt.)
         </li>
       </ul>
-      <h3 id="hysteresebeispiel">Verbesserter Schwellwert mit Hysterese</h3>
+      <h3 id="hysterese">Verbesserter Schwellwert mit Hysterese</h3>
       <p>
         Der Gira-Baustein "Schwellwert mit Hysterese" setzt seinen Ausgang nur
         dann neu, wenn ein neuer Auslöser-Wert eintrifft. Ändern sich nur die
@@ -1474,6 +1546,61 @@
         Die angegebene Formel erzeugt am Ausgang eine Ganzzahl (z. B.
         INTEGER). Sie lässt sich leicht so abwandeln, dass sie
         Fließkommazahlen verarbeitet und ausgibt.
+      </p>
+      <h3 id="zustandsautomat">Zustandsautomat</h3>
+      <p>
+        Als Beispiel für einen einfachen Zustandsautomaten dient ein Auf-/Abwärtszähler
+        mit unterer Grenze 0 und oberer Grenze 2. Das folgende Zustandsdiagramm
+        zeigt, welche Zustände dieser Automat annehmen kann und welche Übergänge
+        zwischen ihnen möglich sein sollen:<br />
+      </p>
+      <p>
+        <img src="StateDiagram.png" alt="" class="example" />
+      </p>
+      <p>
+        Um die Formeln übersichtlich zu halten, hat jeder Zustandsübergang seine
+        eigene Formel, in der die Anfangsbedingung und der Zielzustand enthalten
+        sind. Wichtig ist, dass immer nur <i>eine</i> der Anfangsbedingungen
+        erfüllt ist. Dazu wertet die erste Formel aus, welche Eingänge aktuell
+        einen Wert erhalten haben. Nur wenn ein Auf- oder Ab-Telegramm, aber
+        kein kein Reset anliegt, lassen wir die Zustandsübergänge zum Auf- und
+        Abwärtszählen zu:<br />
+        Formel 1: <span class="box-noscroll"> <code>_isAbAufValueSet_ && !({Reset:B} && _isResetValueSet_)</code> </span><br />
+        Die Zustandsübergänge zum Auf- und Abwärtszählen benötigen außerdem den
+        aktuellen Zustand des Automaten, der zuletzt an Ausgang 8 ausgegeben
+        worden ist:<br />
+        Formel 2: <span class="box-noscroll"> <code>(!{AbAuf:B} && _out1_ && (_previousOut8_ == 1)) ? 0 : -1</code> </span><br />
+        Formel 3: <span class="box-noscroll"> <code>(!{AbAuf:B} && _out1_ && (_previousOut8_ == 2)) ? 1 : -1</code> </span><br />
+        Formel 4: <span class="box-noscroll"> <code>({AbAuf:B} && _out1_ && (_previousOut8_ == 0)) ? 1 : -1</code> </span><br />
+        Formel 5: <span class="box-noscroll"> <code>({AbAuf:B} && _out1_ && (_previousOut8_ == 1)) ? 2 : -1</code> </span><br />
+        Der Reset führt unabhängig vom aktuellen Zustand immer in den Zustand 0:<br />
+        Formel 6: <span class="box-noscroll"> <code>({Reset:B} && _isResetValueSet_) ? 0 : -1</code> </span><br />
+        Da die Formeln für alle <i>nicht</i> zutreffenden Zustandsübergänge -1
+        ausgeben, führt der tatsächlich zutreffende Zustandsübergang zu dem
+        Zustand, der sich aus dem Maximum der vorigen fünf Ergebnisse ergibt:<br />
+        Formel 7: <span class="box-noscroll"> <code>MoreMath.Max(_out2_, _out3_, _out4_, _out5_, _out6_)</code> </span><br />
+        Wenn dieses Maximum -1 ist, dann findet <i>gar kein</i> Zustandsübergang
+        statt. In diesem Fall soll auch nichts ausgegeben werden:<br />
+        Formel 8: <span class="box-noscroll"> <code>(_out7_ >= 0) ? (int?)_out7_ : null</code> </span>
+      </p>
+      <p>
+        Der gesamte Zustandsautomat lässt sich so mit einem einzigen
+        Formelberechnungs-Baustein realisieren, der hier mit beispielhaften
+        Simulationsdaten gezeigt ist:<br />
+        <img src="StateMachine.png" alt="" class="example" width="606" /><br />
+        Zuletzt wurde eine 1 gleichzeitig an Ab/Auf und Reset gesendet. Da der
+        Reset Priorität hat, wird das Auf-Telegramm verworfen. Der Ausgang steht
+        deshalb wie gewünscht auf 0.
+      </p>
+      <p>
+        Bei der Weiterverarbeitung des Ausgabewerts von Ausgang 8 ist zu beachten,
+        dass der Startzustand immer 0 ist. Dieser wird aber beim Neustart des
+        Logikmoduls nicht ausgegeben. Die Eingänge nachfolgender Logikbausteine
+        müssen daher mit 0 vorbelegt sein.
+      </p>
+      <p>
+        Nach dem gezeigten Prinzip lassen sich auch komplexere Zustandsautomaten
+        realisieren.
       </p>
     </div>
   </section>

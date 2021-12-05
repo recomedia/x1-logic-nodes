@@ -1380,6 +1380,139 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     }
 
     [Test]
+    public void MinMaxFunctions()
+    {
+      node.mTemplateCount.Value = 16;
+      node.mTemplates[ 0].Value = "MoreMath.Min({val:N}, 2)";
+      node.mTemplates[ 1].Value = "MoreMath.Min(9, {val:N}, 2)";
+      node.mTemplates[ 2].Value = "MoreMath.Min(9, {val:N}, 2, 3.5)";
+      node.mTemplates[ 3].Value = "MoreMath.Min(13.3, 9, {val:N}, 2, 3.5)";
+      node.mTemplates[ 4].Value = "MoreMath.Max({val:N}, 2)";
+      node.mTemplates[ 5].Value = "MoreMath.Max(9, {val:N}, 2)";
+      node.mTemplates[ 6].Value = "MoreMath.Max(9, {val:N}, 2, 3.5)";
+      node.mTemplates[ 7].Value = "MoreMath.Max(13.3, 9, {val:N}, 2, 3.5)";
+      node.mTemplates[ 8].Value = "MoreMath.Min({int:I}, 2)";
+      node.mTemplates[ 9].Value = "MoreMath.Min(9, {int:I}, 2)";
+      node.mTemplates[10].Value = "MoreMath.Min(9, {int:I}, 2, 5)";
+      node.mTemplates[11].Value = "MoreMath.Min(13, 9, {int:I}, 2, 5)";
+      node.mTemplates[12].Value = "MoreMath.Max({int:I}, 2)";
+      node.mTemplates[13].Value = "MoreMath.Max(9, {int:I}, 2)";
+      node.mTemplates[14].Value = "MoreMath.Max(9, {int:I}, 2, 5)";
+      node.mTemplates[15].Value = "MoreMath.Max(13, 9, {int:I}, 2, 5)";
+
+      for ( int i = 0; i < 8; i++)
+      {
+        // Rely on default output type for double outputs
+        Assert.AreEqual(PortTypes.Number, node.mOutputs[i].PortType.Name);
+        // Set and check output type for int outputs
+        node.mOutputTypes[i + 8].Value = PortTypes.Integer;
+        Assert.AreEqual(PortTypes.Integer, node.mOutputs[i + 8].PortType.Name);
+      }
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 1, 1, 0);
+      checkInputNames<BoolValueObject>  (new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>   (new List<string> { "int" }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "val" }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
+
+      // Check the output states
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      for (int i = 0; i < 8; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be double
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // no output value yet
+        Assert.IsNotNull(node.mOutputs[i + 8]);     // should be int
+        Assert.IsFalse(node.mOutputs[i + 8].HasValue);  // no output value yet
+      }
+
+      // Set input values and re-check the output states
+      node.mIntInputs[0].Value = 3;
+      node.mNumInputs[0].Value = 1.7;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      for (int i = 0; i < 4; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be double
+        Assert.IsTrue(node.mOutputs[i].HasValue);   // now has an output value
+        Assert.AreEqual(1.7, (double)node.mOutputs[i].Value, 1e-18);
+        Assert.IsNotNull(node.mOutputs[i + 8]);         // should be int
+        Assert.IsTrue(node.mOutputs[i + 8].HasValue);   // now has an output value
+        Assert.AreEqual(2, node.mOutputs[i + 8].Value);
+      }
+      Assert.IsNotNull(node.mOutputs[4]);         // should be double
+      Assert.IsTrue(node.mOutputs[4].HasValue);   // now has an output value
+      Assert.AreEqual(2.0, (double)node.mOutputs[4].Value, 1e-18);
+      Assert.IsNotNull(node.mOutputs[5]);         // should be double
+      Assert.IsTrue(node.mOutputs[5].HasValue);   // now has an output value
+      Assert.AreEqual(9.0, (double)node.mOutputs[5].Value, 1e-18);
+      Assert.IsNotNull(node.mOutputs[6]);         // should be double
+      Assert.IsTrue(node.mOutputs[6].HasValue);   // now has an output value
+      Assert.AreEqual(9.0, (double)node.mOutputs[6].Value, 1e-18);
+      Assert.IsNotNull(node.mOutputs[7]);         // should be double
+      Assert.IsTrue(node.mOutputs[7].HasValue);   // now has an output value
+      Assert.AreEqual(13.3, (double)node.mOutputs[7].Value, 1e-18);
+      Assert.IsNotNull(node.mOutputs[12]);         // should be double
+      Assert.IsTrue(node.mOutputs[12].HasValue);   // now has an output value
+      Assert.AreEqual(3, node.mOutputs[12].Value);
+      Assert.IsNotNull(node.mOutputs[13]);         // should be double
+      Assert.IsTrue(node.mOutputs[13].HasValue);   // now has an output value
+      Assert.AreEqual(9, node.mOutputs[13].Value);
+      Assert.IsNotNull(node.mOutputs[14]);         // should be double
+      Assert.IsTrue(node.mOutputs[14].HasValue);   // now has an output value
+      Assert.AreEqual(9, node.mOutputs[14].Value);
+      Assert.IsNotNull(node.mOutputs[15]);         // should be double
+      Assert.IsTrue(node.mOutputs[15].HasValue);   // now has an output value
+      Assert.AreEqual(13, node.mOutputs[15].Value);
+
+      // Set input values again and re-check the output states
+      node.mIntInputs[0].Value = 1;
+      node.mNumInputs[0].Value = 10.7;
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      for (int i = 0; i < 4; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be double
+        Assert.IsTrue(node.mOutputs[i].HasValue);   // now has an output value
+        Assert.AreEqual(2.0, (double)node.mOutputs[i].Value, 1e-18);
+        Assert.IsNotNull(node.mOutputs[i + 8]);         // should be int
+        Assert.IsTrue(node.mOutputs[i + 8].HasValue);   // now has an output value
+        Assert.AreEqual(1, node.mOutputs[i + 8].Value);
+      }
+      Assert.IsNotNull(node.mOutputs[4]);         // should be double
+      Assert.IsTrue(node.mOutputs[4].HasValue);   // now has an output value
+      Assert.AreEqual(10.7, (double)node.mOutputs[4].Value, 1e-18);
+      Assert.IsNotNull(node.mOutputs[4 + 8]);         // should be int
+      Assert.IsTrue(node.mOutputs[4 + 8].HasValue);   // now has an output value
+      Assert.AreEqual(2, node.mOutputs[4 + 8].Value);
+
+      for (int i = 5; i < 7; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be double
+        Assert.IsTrue(node.mOutputs[i].HasValue);   // now has an output value
+        Assert.AreEqual(10.7, (double)node.mOutputs[i].Value, 1e-18);
+        Assert.IsNotNull(node.mOutputs[i + 8]);         // should be int
+        Assert.IsTrue(node.mOutputs[i + 8].HasValue);   // now has an output value
+        Assert.AreEqual(9, node.mOutputs[i + 8].Value);
+      }
+      Assert.IsNotNull(node.mOutputs[7]);         // should be double
+      Assert.IsTrue(node.mOutputs[7].HasValue);   // now has an output value
+      Assert.AreEqual(13.3, (double)node.mOutputs[7].Value, 1e-18);
+      Assert.IsNotNull(node.mOutputs[7 + 8]);         // should be int
+      Assert.IsTrue(node.mOutputs[7 + 8].HasValue);   // now has an output value
+      Assert.AreEqual(13, node.mOutputs[7 + 8].Value);
+    }
+
+    [Test]
     public void SimpleLighting()
     {
       // Use the default template; don't set the number of templates
@@ -2156,107 +2289,133 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         get
         {
           // Own error messages (localized)
-          yield return new TestCaseData("", "EmptyTemplateCsharp",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorEmptyTemplate");
-          yield return new TestCaseData("=", "HasAssignment",
-                                        0, 0, 0, 0, false).
-                                SetName("ErrorAssignmentLonely");
-          yield return new TestCaseData("{}", "EmptyPlaceholder",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorEmptyPlaceholder");
-          yield return new TestCaseData("{:N}", "HasDefaultName",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorHasDefaultName");
-          yield return new TestCaseData("{ :N}", "HasDefaultName",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorHasBlankName");
-          yield return new TestCaseData("{x:N1}", "HasFormatOrMappings",
-                                        0, 0, 1, 0, true).
-                                SetName("ErrorHasFormat");
-          yield return new TestCaseData("{x:N|0=null}", "HasFormatOrMappings",
-                                        0, 0, 1, 0, true).
-                                SetName("ErrorHasMappings");
-          yield return new TestCaseData("{x 2:N}", "HasUnusableName",
-                                        0, 0, 0, 0, false).
-                                SetName("ErrorHasUnusableName");
-          yield return new TestCaseData("{_x:N}", "PlaceholderNameInvalid",
-                                        0, 0, 0, 0, false).
-                                SetName("ErrorHasReservedName");
-          yield return new TestCaseData("_out0_ + {x:S}", "HasOutOfRangeRef",
-                                        0, 0, 0, 1, false).
-                                SetName("ErrorHasOutBelowRangeRef");
-          yield return new TestCaseData("_out1_ && {x:B}", "HasOutOfRangeRef",
-                                        1, 0, 0, 0, false).
-                                SetName("ErrorHasOutAboveRangeRef");
-          yield return new TestCaseData("_previousOut0_ + {x:I}", "HasOutOfRangeRef",
-                                        0, 1, 0, 0, false).
-                                SetName("ErrorHasPreviousOutBelowRangeRef");
-          yield return new TestCaseData("_previousOut2_ + {x:N}", "HasOutOfRangeRef",
-                                        0, 0, 1, 0, false).
-                                SetName("ErrorHasPreviousOutAboveRangeRef");
-          yield return new TestCaseData("{2x:N}", "PlaceholderNameInvalid",
-                                        0, 0, 0, 0, false).
-                                SetName("ErrorPlaceholderNameInvalid");
-          yield return new TestCaseData("{a:I} = {x:I}", "HasAssignment",
-                                        0, 2, 0, 0, false).
-                                SetName("ErrorAssignmentPlaceholder");
-          yield return new TestCaseData("a={x:I}", "HasAssignment",
-                                        0, 1, 0, 0, false).
-                                SetName("ErrorAssignmentVariable");
-          yield return new TestCaseData("\"\\\"a\"=\"b\\\"\"", "HasAssignment",
-                                        0, 0, 0, 0, false).
-                                SetName("ErrorAssignmentStringLiterals");
-          // Errors causing exceptions in interpreter (not localized)
+          yield return new TestCaseData("", "EmptyTemplateCsharp", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorEmptyTemplate");
+          yield return new TestCaseData("=", "HasAssignment", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorAssignmentLonely");
+          yield return new TestCaseData("{}", "EmptyPlaceholder", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorEmptyPlaceholder");
+          yield return new TestCaseData("{:N}", "HasDefaultName", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorHasDefaultName");
+          yield return new TestCaseData("{ :N}", "HasDefaultName", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorHasBlankName");
+          yield return new TestCaseData("{x:N1}", "HasFormatOrMappings", "",
+              0, 0, 1, 0, true).
+              SetName("ErrorHasFormat");
+          yield return new TestCaseData("{x:N|0=null}", "HasFormatOrMappings", "",
+              0, 0, 1, 0, true).
+              SetName("ErrorHasMappings");
+          yield return new TestCaseData("{x 2:N}", "HasUnusableName", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorHasUnusableName");
+          yield return new TestCaseData("{_x:N}", "PlaceholderNameInvalid", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorHasReservedName");
+          yield return new TestCaseData("_out0_ + {x:S}", "HasOutOfRangeRef", "",
+              0, 0, 0, 1, false).
+              SetName("ErrorHasOutBelowRangeRef");
+          yield return new TestCaseData("_out1_ && {x:B}", "HasOutOfRangeRef", "",
+              1, 0, 0, 0, false).
+              SetName("ErrorHasOutAboveRangeRef");
+          yield return new TestCaseData("_previousOut0_ + {x:I}", "HasOutOfRangeRef", "",
+              0, 1, 0, 0, false).
+              SetName("ErrorHasPreviousOutBelowRangeRef");
+          yield return new TestCaseData("_previousOut2_ + {x:N}", "HasOutOfRangeRef", "",
+              0, 0, 1, 0, false).
+              SetName("ErrorHasPreviousOutAboveRangeRef");
+          yield return new TestCaseData("{2x:N}", "PlaceholderNameInvalid", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorPlaceholderNameInvalid");
+          yield return new TestCaseData("{a:I} = {x:I}", "HasAssignment", "",
+              0, 2, 0, 0, false).
+              SetName("ErrorAssignmentPlaceholder");
+          yield return new TestCaseData("a={x:I}", "HasAssignment", "",
+              0, 1, 0, 0, false).
+              SetName("ErrorAssignmentVariable");
+          yield return new TestCaseData("\"\\\"a\"=\"b\\\"\"", "HasAssignment", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorAssignmentStringLiterals");
+          // Errors causing exceptions in interpreter
           yield return new TestCaseData("/", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorSlashTemplate");
+              "Formel 1 (vor Zeichen 2): error CS1525: Unexpected symbol `/'\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorSlashTemplate");
           yield return new TestCaseData("*/", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorStarSlashTemplate");
+              "Formel 1 (vor Zeichen 3): error CS1525: Unexpected symbol `/'\r\n" +
+              "Formel 1 (vor Zeichen 4): error CS1525: Unexpected symbol `)'\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorStarSlashTemplate");
           yield return new TestCaseData("x/", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorXSlashTemplate");
+              "Formel 1 (vor Zeichen 4): error CS1525: Unexpected symbol `)'\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorXSlashTemplate");
           yield return new TestCaseData("/*x/", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorCommentXTemplate");
+              "Formel 1 (vor Zeichen 8): error CS1035: End-of-file found, '*/' expected\r\n" +
+              "Formel 1 (vor Zeichen 10): error CS1035: End-of-file found, '*/' expected\r\n" +
+              "Formel 1 (vor Zeichen 9): error CS1035: End-of-file found, '*/' expected\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorCommentXTemplate");
           yield return new TestCaseData("/*x/2", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorCommentX2Template");
+              "Formel 1 (vor Zeichen 9): error CS1035: End-of-file found, '*/' expected\r\n" +
+              "Formel 1 (vor Zeichen 11): error CS1035: End-of-file found, '*/' expected\r\n" +
+              "Formel 1 (vor Zeichen 10): error CS1035: End-of-file found, '*/' expected\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorCommentX2Template");
           yield return new TestCaseData("*", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorStarTemplate");
+              "Formel 1 (vor Zeichen 3): error CS1525: Unexpected symbol `)'\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorStarTemplate");
           yield return new TestCaseData("\"", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorQuoteTemplate");
-          yield return new TestCaseData("}", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorCurlyCloseTemplate");
-          yield return new TestCaseData("}{", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorCurlyCloseOpenTemplate");
-          yield return new TestCaseData("}}", "",
-                                        0, 0, 0, 0, false).
-                               SetName("ErrorCurlyClose2Template");
-          yield return new TestCaseData("{x:N}^2", "",
-                                        0, 0, 1, 0, false).
-                                SetName("ExceptionSyntax");
+              "Formel 1: Syntax-Fehler\r\n",
+              0, 0, 0, 0, false).
+              SetName("ErrorQuoteTemplate");
+          yield return new TestCaseData("}", "", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorCurlyCloseTemplate");
+          yield return new TestCaseData("}{", "", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorCurlyCloseOpenTemplate");
+          yield return new TestCaseData("}}", "", "",
+              0, 0, 0, 0, false).
+              SetName("ErrorCurlyClose2Template");
           yield return new TestCaseData("{x:N}/0", "",
-                                        0, 0, 1, 0, false).
-                                SetName("ExceptionDivideByZero");
+              "Formel 1: Das Rechenergebnis des Ausdrucks ist keine Zahl oder " +
+              "liegt außerhalb des zulässigen Wertebereichs. Der Ausgang bleibt " +
+              "unverändert.\r\n",
+              0, 0, 1, 0, false).
+              SetName("ExceptionDivideByZero");
+          yield return new TestCaseData("{x:N}^2", "",
+              "Formel 1 (vor Zeichen 3): error CS0019: Operator `^' cannot be applied to " +
+              "operands of type `double' and `int'\r\n",
+              0, 0, 1, 0, false).
+              SetName("ExceptionOperator");
           yield return new TestCaseData("{x:B}/2", "",
-                                        1, 0, 0, 0, false).
-                                SetName("ExceptionBoolDivide");
+              "Formel 1 (vor Zeichen 3): error CS0019: Operator `/' cannot be applied " +
+              "to operands of type `bool' and `int'\r\n",
+              1, 0, 0, 0, false).
+              SetName("ExceptionBoolDivide");
+          yield return new TestCaseData("{x:B} x2", "",
+              "Formel 1 (vor Zeichen 9): error CS1525: Unexpected symbol `x2'\r\n",
+              1, 0, 0, 0, false).
+              SetName("ExceptionUnexpectedSymbol");
           yield return new TestCaseData("_unknown_ + {x:I}", "",
-                                        0, 1, 0, 0, false).
-                                SetName("ExceptionUnknownRef");
+              "Formel 1 (vor Zeichen 3): error CS0103: The name `_unknown_' does not " +
+              "exist in the current context\r\n",
+              0, 1, 0, 0, false).
+              SetName("ExceptionUnknownRef");
         }
       }
     }
     [TestCaseSource(typeof(ExpressionCalculatorErrorTestCaseData),
                     "ErrorTestCases", Category = "ErrorTestCases")]
     public void ErrorTests(string template,
-                           string expectedError,
+                           string expectedValidationErrorCode,
+                           string expectedRuntimeErrorText,
                               int expNumBinInputs,
                               int expNumIntInputs,
                               int expNumNumInputs,
@@ -2274,19 +2433,19 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       checkInputCounts(expNumBinInputs, expNumIntInputs,
                        expNumNumInputs, expNumStrInputs);
 
-      if (expectedError.Length > 0)
+      if (expectedValidationErrorCode.Length > 0)
       { // Expect a validation error
         Assert.IsTrue(result.HasError);
-        var messageDe = node.Localize("de", expectedError);
+        var messageDe = node.Localize("de", expectedValidationErrorCode);
         // Some error messages have the offending token at the beginning.
         // We ignore this by comparing only the fixed part of the message.
         Assert.IsFalse(result.Message.StartsWith(" ")); // token mssing if true
         Assert.IsTrue(result.Message.EndsWith(messageDe));
         // Ensure that localized error messages exist 
         Assert.IsTrue(messageDe.Length > 40);
-        var messageEn = node.Localize("en", expectedError);
+        var messageEn = node.Localize("en", expectedValidationErrorCode);
         Assert.IsTrue(messageEn.Length > 40);
-        Assert.IsTrue(expectedError.Length < 30);
+        Assert.IsTrue(expectedValidationErrorCode.Length < 30);
       }
       else
       { // Expect no validation error
@@ -2308,11 +2467,19 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       }
       Assert.IsNotNull(node.mError);
 
-      if ( expectedError.Length <= 0 )
-      { // If no validation error expected, then expect a runtime error 
+      if ( (expectedRuntimeErrorText.Length <= 0) &&
+           (expectedValidationErrorCode.Length <= 0) )
+      { // If no validation error expected and no specific runtime error text given,
+        // then expect some runtime error that starts with the node name 
         Assert.IsTrue(node.mError.HasValue);
-        Assert.IsTrue(node.mError.Value.StartsWith(node.mTemplates[0].Name + ": "));
+        string errVal = node.Localize("de", node.mTemplates[0].Name + " (vor Zeichen 2): error CS");
+        Assert.IsTrue(node.mError.Value.StartsWith(errVal));
         Assert.IsTrue(node.mError.Value.Length > 15);
+      }
+      else if ((expectedRuntimeErrorText.Length > 0))
+      { // If a specific runtime error text given, then expect that
+        Assert.IsTrue(node.mError.HasValue);
+        Assert.AreEqual(expectedRuntimeErrorText, node.mError.Value);
       }
     }
 
@@ -2389,6 +2556,289 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         Assert.AreEqual(PortTypes.Number, node.mOutputs[i].PortType.Name);
         Assert.IsFalse(node.mOutputs[i].HasValue);  // no output value yet
       }
+    }
+
+    public class ExpressionCalculatorNewValueTestCaseData
+    {
+      public static IEnumerable NewValueTestCases
+      {
+        get
+        {
+          yield return new TestCaseData(true, null, null, "", "42fox").
+            SetName("BoolHasSameValue");
+          yield return new TestCaseData(false, null, null, "", "73,1fox").
+            SetName("BoolHasNewValue");
+          yield return new TestCaseData(null, 42, null, "", "42fox").
+            SetName("IntHasSameValue");
+          yield return new TestCaseData(null, 41, null, "", "41fox").
+            SetName("IntHasNewValue");
+          yield return new TestCaseData(null, null, 73.1, "", "42fox").
+            SetName("DoubleHasSameValue");
+          yield return new TestCaseData(null, null, 73.2, "", "42fox").
+            SetName("DoubleHasNewValue");
+          yield return new TestCaseData(null, null, null, "fox", "42fox").
+            SetName("StringHasSameValue");
+          yield return new TestCaseData(null, null, null, "cat", "42cat").
+            SetName("StringHasNewValue");
+          yield return new TestCaseData(false, null, 73.3, "", "73,3fox").
+            SetName("BoolSameDoubleNewValue");
+          yield return new TestCaseData(null, 42, null, "cat", "42cat").
+            SetName("IntSameStringNewValue");
+        }
+      }
+    }
+    [TestCaseSource(typeof(ExpressionCalculatorNewValueTestCaseData),
+                    "NewValueTestCases", Category = "NewValueTestCases")]
+    public void HasNewValue(bool? newBoolValue,
+                                  int? newIntValue,
+                               double? newDoubleValue,
+                                string newStringValue,
+                                string expectedOutput)
+    {
+      // Set up outputs and types
+      node.mTemplateCount.Value = 5;
+      node.mOutputTypes[0].Value = PortTypes.String;
+      node.mOutputTypes[1].Value = PortTypes.Bool;
+      node.mOutputTypes[2].Value = PortTypes.Bool;
+      node.mOutputTypes[3].Value = PortTypes.Bool;
+      node.mOutputTypes[4].Value = PortTypes.Bool;
+
+      // Set a simple valid template that uses a few placeholders.
+      // Intentionally using class names as input names.
+      node.mTemplates[0].Value =
+          "({Boolean:B} ? {Integer:I}.ToString() : {Double:N}.ToString()) + {String:S}";
+      // Further templates contain the reserved variable names that indicate whether a
+      // value has just been set (true) or has been in place already earlier (false)
+      node.mTemplates[1].Value = "_isBooleanValueSet_";
+      node.mTemplates[2].Value = "_isIntegerValueSet_";
+      node.mTemplates[3].Value = "_isDoubleValueSet_";
+      node.mTemplates[4].Value = "_isStringValueSet_";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(1, 1, 1, 1);
+      checkInputNames<BoolValueObject>(new List<string> { "Boolean" }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { "Integer" }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { "Double" }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "String" }, node.mStrInputs);
+
+      // Check the initial output state
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      for (int i = 1; i < 5; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be bool
+        Assert.AreEqual(PortTypes.Bool, node.mOutputs[i].PortType.Name);
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // no output value yet
+      }
+
+      // Set input values
+      node.mBinInputs[0].Value = true;
+      node.mIntInputs[0].Value = 42;
+      node.mNumInputs[0].Value = 73.1;
+      node.mStrInputs[0].Value = "fox";
+
+      // Execute; expect no error
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+
+      // Re-check the outputs
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("42fox", node.mOutputs[0].Value);
+
+      for (int i = 1; i < 5; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);
+        Assert.IsTrue(node.mOutputs[i].HasValue); // now has an output value
+        Assert.AreEqual(true, node.mOutputs[i].Value);
+      }
+
+      // Set new input values as far as given
+      if (null != newBoolValue)
+      {
+        node.mBinInputs[0].Value = (bool)newBoolValue;
+      }
+      if (null != newIntValue)
+      {
+        node.mIntInputs[0].Value = (int)newIntValue;
+      }
+      if (null != newDoubleValue)
+      {
+        node.mNumInputs[0].Value = (double)newDoubleValue;
+      }
+      if ("" != newStringValue)
+      {
+        node.mStrInputs[0].Value = (string)newStringValue;
+      }
+
+      // Execute; expect no error
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+
+      // Re-check the outputs
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // still has the same output value
+      Assert.AreEqual(expectedOutput, node.mOutputs[0].Value);
+
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual((null != newBoolValue), node.mOutputs[1].Value);
+
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual((null != newIntValue), node.mOutputs[2].Value);
+
+      Assert.IsNotNull(node.mOutputs[3]);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual((null != newDoubleValue), node.mOutputs[3].Value);
+
+      Assert.IsNotNull(node.mOutputs[4]);
+      Assert.IsTrue(node.mOutputs[4].HasValue);
+      Assert.AreEqual(("" != newStringValue), node.mOutputs[4].Value);
+    }
+
+    [Test]
+    public void StateMachine()
+    {
+      // Set up outputs and types
+      node.mTemplateCount.Value = 8;
+      node.mOutputTypes[0].Value = PortTypes.Bool;
+      for ( int i = 1; i < 8; i++ )
+      {
+        node.mOutputTypes[i].Value = PortTypes.Integer;
+      }
+
+      // Set templates
+      node.mTemplates[0].Value = "_isAbAufValueSet_ && !({Reset:B} && _isResetValueSet_)";
+      node.mTemplates[1].Value = "(!{AbAuf:B} && _out1_ && (_previousOut8_ == 1)) ? 0 : -1";
+      node.mTemplates[2].Value = "(!{AbAuf:B} && _out1_ && (_previousOut8_ == 2)) ? 1 : -1";
+      node.mTemplates[3].Value = "({AbAuf:B} && _out1_ && (_previousOut8_ == 0)) ? 1 : -1";
+      node.mTemplates[4].Value = "({AbAuf:B} && _out1_ && (_previousOut8_ == 1)) ? 2 : -1";
+      node.mTemplates[5].Value = "({Reset:B} && _isResetValueSet_) ? 0 : -1";
+      node.mTemplates[6].Value = "MoreMath.Max(_out2_, _out3_, _out4_, _out5_, _out6_)";
+      node.mTemplates[7].Value = "(_out7_ >= 0) ? (int?)_out7_ : null";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(2, 0, 0, 0);
+      checkInputNames<BoolValueObject>(new List<string> { "Reset", "AbAuf" }, node.mBinInputs);
+      checkInputNames<IntValueObject>   (new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { }, node.mStrInputs);
+
+      // Check the initial output states
+      Assert.IsNotNull(node.mOutputs[0]);         // should be bool
+      Assert.AreEqual(PortTypes.Bool, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      for (int i = 1; i < 8; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be int
+        Assert.AreEqual(PortTypes.Integer, node.mOutputs[i].PortType.Name);
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // no output value yet
+      }
+
+      checkStateTransition(reset: true , abAuf: true ,
+                           expectStateFrom: 5   , expectState: 0);
+      checkStateTransition(reset: true , abAuf: false,
+                           expectStateFrom: 5   , expectState: 0);
+      checkStateTransition(reset: false, abAuf: true,
+                           expectStateFrom: 3   , expectState: 1);
+      checkStateTransition(reset: true , abAuf: null,
+                           expectStateFrom: 5   , expectState: 0);
+      checkStateTransition(reset: null , abAuf: false,
+                           expectStateFrom: null, expectState: 0);
+      checkStateTransition(reset: false, abAuf: true,
+                           expectStateFrom: 3   , expectState: 1);
+      checkStateTransition(reset: null , abAuf: true,
+                           expectStateFrom: 4   , expectState: 2);
+      checkStateTransition(reset: false, abAuf: true,
+                           expectStateFrom: null, expectState: 2);
+      checkStateTransition(reset: false, abAuf: false,
+                           expectStateFrom: 2   , expectState: 1);
+      checkStateTransition(reset: true , abAuf: false,
+                           expectStateFrom: 5   , expectState: 0);
+      checkStateTransition(reset: false, abAuf: true,
+                           expectStateFrom: 3   , expectState: 1);
+      checkStateTransition(reset: false, abAuf: false,
+                           expectStateFrom: 1   , expectState: 0);
+      checkStateTransition(reset: false, abAuf: false,
+                           expectStateFrom: null, expectState: 0);
+    }
+
+    private void checkStateTransition(bool? reset, bool? abAuf,
+                                      int? expectStateFrom, int expectState)
+    {
+      // Set input value(s)
+      if (reset != null)
+      {
+        node.mBinInputs[0].Value = (bool)reset;
+      }
+      if (abAuf != null)
+      {
+        node.mBinInputs[1].Value = (bool)abAuf;
+      }
+
+      node.Execute();
+
+      // Check output states
+      Assert.IsNotNull(node.mOutputs[0]);         // should be bool
+      Assert.AreEqual(PortTypes.Bool, node.mOutputs[0].PortType.Name);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      if ( ((reset != null) && (bool)reset) || (abAuf == null) )
+      {
+        Assert.IsFalse((bool)node.mOutputs[0].Value);
+      }
+      else
+      {
+        Assert.IsTrue((bool)node.mOutputs[0].Value);
+      }
+
+      for ( int i = 1; i < 6; i++ )
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // should be int
+        Assert.AreEqual(PortTypes.Integer, node.mOutputs[i].PortType.Name);
+        Assert.IsTrue(node.mOutputs[i].HasValue);   // now has an output value
+        if ( (expectStateFrom != null) && ((int)expectStateFrom == i) )
+        {
+          Assert.AreEqual(expectState, node.mOutputs[i].Value);
+        }
+        else
+        {
+          Assert.AreEqual(-1, node.mOutputs[i].Value);
+        }
+      }
+
+      Assert.IsNotNull(node.mOutputs[6]);         // should be int
+      Assert.AreEqual(PortTypes.Integer, node.mOutputs[6].PortType.Name);
+      Assert.IsTrue(node.mOutputs[6].HasValue);   // now has an output value
+      if ( expectStateFrom != null )
+      {
+        Assert.AreEqual(expectState, node.mOutputs[6].Value);
+      }
+      else
+      {
+        Assert.AreEqual(-1, node.mOutputs[6].Value);
+      }
+
+        Assert.IsNotNull(node.mOutputs[7]);         // should be int
+      Assert.AreEqual(PortTypes.Integer, node.mOutputs[7].PortType.Name);
+      Assert.IsTrue(node.mOutputs[7].HasValue);   // now has an output value
+      Assert.AreEqual(expectState, node.mOutputs[7].Value);
     }
   }
 }

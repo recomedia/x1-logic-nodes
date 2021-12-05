@@ -2,6 +2,109 @@
 
 namespace Recomedia_de.Logic.VisuWeb
 {
+  public static class MoreMath
+  {
+    // This method only exists for consistency, so you can *always* call
+    // MoreMath.Max instead of alternating between MoreMath.Max and Math.Max
+    // depending on your argument count.
+    public static long Min(long x, long y)
+    {
+      return Math.Min(x, y);
+    }
+
+    public static long Min(long x, long y, long z)
+    {
+      // Or inline it as x < y ? (y < z ? z : y) : (x < z ? z : x);
+      // Time it before micro-optimizing though!
+      return Math.Min(x, Math.Min(y, z));
+    }
+
+    public static long Min(long w, long x, long y, long z)
+    {
+      return Math.Min(Math.Min(w, x), Math.Min(y, z));
+    }
+
+    public static long Min(params long[] values)
+    {
+      return System.Linq.Enumerable.Min(values);
+    }
+
+    // This method only exists for consistency, so you can *always* call
+    // MoreMath.Max instead of alternating between MoreMath.Max and Math.Max
+    // depending on your argument count.
+    public static long Max(long x, long y)
+    {
+      return Math.Max(x, y);
+    }
+
+    public static long Max(long x, long y, long z)
+    {
+      // Or inline it as x < y ? (y < z ? z : y) : (x < z ? z : x);
+      // Time it before micro-optimizing though!
+      return Math.Max(x, Math.Max(y, z));
+    }
+
+    public static long Max(long w, long x, long y, long z)
+    {
+      return Math.Max(w, Math.Max(x, Math.Max(y, z)));
+    }
+
+    public static long Max(params long[] values)
+    {
+      return System.Linq.Enumerable.Max(values);
+    }
+
+    // This method only exists for consistency, so you can *always* call
+    // MoreMath.Max instead of alternating between MoreMath.Max and Math.Max
+    // depending on your argument count.
+    public static double Min(double x, double y)
+    {
+      return Math.Min(x, y);
+    }
+
+    public static double Min(double x, double y, double z)
+    {
+      // Or inline it as x < y ? (y < z ? z : y) : (x < z ? z : x);
+      // Time it before micro-optimizing though!
+      return Math.Min(x, Math.Min(y, z));
+    }
+
+    public static double Min(double w, double x, double y, double z)
+    {
+      return Math.Min(Math.Min(w, x), Math.Min(y, z));
+    }
+
+    public static double Min(params double[] values)
+    {
+      return System.Linq.Enumerable.Min(values);
+    }
+
+    // This method only exists for consistency, so you can *always* call
+    // MoreMath.Max instead of alternating between MoreMath.Max and Math.Max
+    // depending on your argument count.
+    public static double Max(double x, double y)
+    {
+      return Math.Max(x, y);
+    }
+
+    public static double Max(double x, double y, double z)
+    {
+      // Or inline it as x < y ? (y < z ? z : y) : (x < z ? z : x);
+      // Time it before micro-optimizing though!
+      return Math.Max(x, Math.Max(y, z));
+    }
+
+    public static double Max(double w, double x, double y, double z)
+    {
+      return Math.Max(w, Math.Max(x, Math.Max(y, z)));
+    }
+
+    public static double Max(params double[] values)
+    {
+      return System.Linq.Enumerable.Max(values);
+    }
+  }
+
   // Angle conversion functions degrees <--> radian
   public static class Angle
   {

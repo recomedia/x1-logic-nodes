@@ -409,4 +409,16 @@
     <value>Der Text</value>
     <comment>XmlJsonParser</comment>
   </data>
+  <data name="BeforeChar" xml:space="preserve">
+    <value>vor Zeichen </value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="ResultNanOrOor" xml:space="preserve">
+    <value>: Das Rechenergebnis des Ausdrucks ist keine Zahl oder liegt außerhalb des zulässigen Wertebereichs. Der Ausgang bleibt unverändert.</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
+  <data name="SyntaxError" xml:space="preserve">
+    <value>Syntax-Fehler</value>
+    <comment>ExpressionCalculator</comment>
+  </data>
 </root>

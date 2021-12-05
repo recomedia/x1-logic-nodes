@@ -61,6 +61,15 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die before character  ähnelt.
+        /// </summary>
+        internal static string BeforeChar {
+            get {
+                return ResourceManager.GetString("BeforeChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Binary ähnelt.
         /// </summary>
         internal static string BinaryInput {
@@ -565,6 +574,15 @@ namespace Recomedia_de.Logic.VisuWeb {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die : The result of the expression calculation is not a number or out of range. The output remains unchanged. ähnelt.
+        /// </summary>
+        internal static string ResultNanOrOor {
+            get {
+                return ResourceManager.GetString("ResultNanOrOor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Runtime Error ähnelt.
         /// </summary>
         internal static string RuntimeError {
@@ -651,6 +669,15 @@ namespace Recomedia_de.Logic.VisuWeb {
         internal static string StringInput {
             get {
                 return ResourceManager.GetString("StringInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Syntax error ähnelt.
+        /// </summary>
+        internal static string SyntaxError {
+            get {
+                return ResourceManager.GetString("SyntaxError", resourceCulture);
             }
         }
         
