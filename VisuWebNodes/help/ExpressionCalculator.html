@@ -1048,13 +1048,11 @@
         <tr>
           <td>
             <p>
-              <code>MoreMath.Min(</code><i>value1</i><code>
-                ,
-              </code><i>value2</i><code>, </code><i>...</i><code>)</code>
+              <code>MoreMath.Min(</code><i>value</i><code>, </code><i>...</i><code>)</code>
             </p>
           </td>
           <td>
-            <p><code>double</code> oder <code>int</code></p>
+            <p><code>double</code>, <code>long</code> oder <code>int</code></p>
           </td>
           <td>
             <p>Gibt den niedrigsten Wert unter den gegebenen Parametern zurück.</p>
@@ -1063,13 +1061,11 @@
         <tr>
           <td>
             <p>
-              <code>MoreMath.Max(</code><i>value1</i><code>
-                ,
-              </code><i>value2</i><code>, </code><i>...</i><code>)</code>
+              <code>MoreMath.Max(</code><i>value</i><code>, </code><i>...</i><code>)</code>
             </p>
           </td>
           <td>
-            <p><code>double</code> oder <code>int</code></p>
+            <p><code>double</code>, <code>long</code> oder <code>int</code></p>
           </td>
           <td>
             <p>Gibt den höchsten Wert unter den gegebenen Parametern zurück.</p>
@@ -1563,7 +1559,7 @@
         sind. Wichtig ist, dass immer nur <i>eine</i> der Anfangsbedingungen
         erfüllt ist. Dazu wertet die erste Formel aus, welche Eingänge aktuell
         einen Wert erhalten haben. Nur wenn ein Auf- oder Ab-Telegramm, aber
-        kein kein Reset anliegt, lassen wir die Zustandsübergänge zum Auf- und
+        <i>kein</i> Reset anliegt, lassen wir die Zustandsübergänge zum Auf- und
         Abwärtszählen zu:<br />
         Formel 1: <span class="box-noscroll"> <code>_isAbAufValueSet_ && !({Reset:B} && _isResetValueSet_)</code> </span><br />
         Die Zustandsübergänge zum Auf- und Abwärtszählen benötigen außerdem den

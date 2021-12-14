@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Globalization;
-using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using LogicModule.Nodes.Helpers;
@@ -561,7 +560,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
         // Start with nulled compiled expressions (lazy-init in Execute)
         mCompiled = new List<CompiledMethod>(
-                            Enumerable.Repeat<CompiledMethod>(null, mOutputs.Count));
+            System.Linq.Enumerable.Repeat<CompiledMethod>(null, mOutputs.Count));
       }
     }
 

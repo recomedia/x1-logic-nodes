@@ -96,7 +96,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
     public static double Max(double w, double x, double y, double z)
     {
-      return Math.Max(w, Math.Max(x, Math.Max(y, z)));
+      return Math.Max(Math.Max(w, x), Math.Max(y, z));
     }
 
     public static double Max(params double[] values)

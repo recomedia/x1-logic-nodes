@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Globalization;
 using LogicModule.ObjectModel;
 using LogicModule.ObjectModel.TypeSystem;

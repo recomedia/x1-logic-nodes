@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using LogicModule.ObjectModel;
@@ -284,7 +283,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
     private bool isBinTextValid(string s)
     {
-      if ( s.Contains('=') )
+      if ( s.Contains("=") )
       {
         return false;
       }
