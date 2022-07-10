@@ -46,7 +46,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
     public static long Max(long w, long x, long y, long z)
     {
-      return Math.Max(w, Math.Max(x, Math.Max(y, z)));
+      return Math.Max(Math.Max(w, x), Math.Max(y, z));
     }
 
     public static long Max(params long[] values)
@@ -124,23 +124,27 @@ namespace Recomedia_de.Logic.VisuWeb
     private const double D360 = 256.0;      // 360°
     private const double  D60 = D360 / 6.0; //  60°
 
-    private static byte ToHue(byte r, byte g, byte b, int max, double span)
+    private static byte ToHue(byte r, byte g, byte b, out byte maxOut, out double spanOut)
     {
+      byte min = (byte)MoreMath.Min((long)r, (long)g, (long)b);
+      maxOut = (byte)MoreMath.Max((long)r, (long)g, (long)b);
+      spanOut = (double)maxOut - (double)min;
+
       double hf = 0.0;
 
-      if (span != 0.0)
+      if (spanOut != 0.0)
       {
-        if (max == r)
+        if (maxOut == r)
         {
-          hf = D60 * (0.0 + ((double)g - (double)b) / span);
+          hf = D60 * (0.0 + ((double)g - (double)b) / spanOut);
         }
-        else if (max == g)
+        else if (maxOut == g)
         {
-          hf = D60 * (2.0 + ((double)b - (double)r) / span);
+          hf = D60 * (2.0 + ((double)b - (double)r) / spanOut);
         }
-        else // if (max == b)
+        else // if (maxOut == b)
         {
-          hf = D60 * (4.0 + ((double)r - (double)g) / span);
+          hf = D60 * (4.0 + ((double)r - (double)g) / spanOut);
         }
         if (hf < 0.0)
         {
@@ -177,10 +181,9 @@ namespace Recomedia_de.Logic.VisuWeb
 
     public static int RGBToHSV(byte r, byte g, byte b)
     {
-      byte max = Math.Max(Math.Max(r, g), b);
-      byte min = Math.Min(Math.Min(r, g), b);
-      double span = (double)max - (double)min;
-      byte h = ToHue(r, g, b, max, span);
+      byte max;
+      double span;
+      byte h = ToHue(r, g, b, out max, out span);
       byte s = 0;
       if (max != 0)
       {

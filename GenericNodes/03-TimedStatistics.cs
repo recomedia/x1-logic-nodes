@@ -365,7 +365,7 @@ namespace Recomedia_de.Logic.Generic
     /// </summary>
     public void Trigger()
     {
-      lock(mTimedValues)  // prevent Execute and Trigger from concurrently executing
+      lock(mTimedValues)  // prevent Execute and Trigger from executing concurrently
       {
         var firstUpdateAfterTimeTicks = getFirstUpdateAfterTimeTicks();
 

@@ -395,11 +395,12 @@
               <a href="#resol"> Auflösung der Eingangswerte</a>).
             </p>
             <p>
-              Ist dieser Wert größer als 0 (im Bereich 1s bis zur Hälfte
-              des Betrachtungszeitraums), so werden die Ausgänge regelmäßig
-              im gegebenen Zeitabstand aktualisiert, auch wenn keine neuen
-              Eingangswerte eintreffen. Dazu wird der aktuellste Wert konstant
-              extrapoliert.
+              Ist dieser Wert größer als 0 (im Bereich 1s bis zur Hälfte des
+              Betrachtungszeitraums), so werden die Ausgänge nicht nur beim
+              Eintreffen neuer Eingangstelegramme, sondern zusätzlich regelmäßig
+              im gegebenen Zeitabstand aktualisiert (auch wenn keine neuen
+              Eingangstelegramme eintreffen). Dazu wird der aktuellste
+              Eingangswert ggf. konstant extrapoliert.
             </p>
           </td>
         </tr>
