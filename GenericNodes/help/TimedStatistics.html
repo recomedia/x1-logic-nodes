@@ -44,6 +44,11 @@
         ankommen. Der Baustein interpoliert zwischen den gegebenen Werten
         linear und extrapoliert nach dem neuesten Wert konstant.
       </p>
+      <p>
+        Zum Verhalten bei einem Neustart des Logikmoduls &ndash; z. B. nach
+        Stromausfall oder erneuter Inbetriebnahme im GPA &ndash; siehe unter
+        dem Parameter <a href="#neustart">Neustart mit letztem Wert</a>.
+      </p>
       <h2>Eingänge</h2>
       <table class="Tabelle_Logicnode">
         <colgroup>
@@ -91,9 +96,9 @@
             </ul>
           </td>
         </tr>
-        <tr>
+        <tr id="neustart">
           <td>
-            <p>Neustart mit letztem Wert</p>
+            <p>Neustart mit<br/>letztem Wert</p>
           </td>
           <td>
             <p>Binary</p>
@@ -111,8 +116,17 @@
               <li>Trend der aktuellsten Werte wird 0 (gleichbleibend)</li>
             </ul>
             <p>
-              Hinweis: Der Startwert sollte unbestimmt oder 0 sein.
+              Hinweise:
             </p>
+            <ul>
+              <li>Der Startwert für diesen Parameter sollte unbestimmt oder 0 sein.
+              <li>
+                Ein Neustart des Logikmoduls &ndash; z. B. nach Stromausfall oder erneuter
+                Inbetriebnahme im GPA &ndash; hat fast dieselbe Wirkung. Neue Werte werden
+                in diesem Fall allerdings nicht sofort ausgegeben, sondern entsprechend der
+                Einstellung des Parameters <a href="#firstval">Erste Werte ausgeben nach</a>.
+              </li>
+            </ul>
           </td>
         </tr>
       </table>
@@ -464,8 +478,7 @@
               </li>
               <li>
                 Der Ausgang <a href="#curstore">
-                  Anzahl gespeicherter
-                  Eingangswerte
+                  Anzahl gespeicherter Eingangswerte
                 </a> dient im laufenden Betrieb zur
                 Kontrolle einer sinnvollen Einstellung.
               </li>
@@ -494,7 +507,7 @@
         werden müsste. Über den <a href="#timespan">Betrachtungszeitraum</a>
         von 6 Stunden treffen dadurch ca. 120 Telegramme ein. Um die Zahl
         der zu verarbeitenden Telegramme sinnvoll zu reduzieren, ist eine
-        <a href="#resol">Auflösung der Eingangswerte</a> von 0,1 &deg;C 
+        <a href="#resol">Auflösung der Eingangswerte</a> von 0,1 &deg;C
         ingestellt. Dadurch werden von aufeinanderfolgenden fast gleichen
         Eingangstelegrammen jeweils nur das erste und das letzte verarbeitet.
         In der Praxis sind dies fast immer weniger als 50 Telegramme in 6
