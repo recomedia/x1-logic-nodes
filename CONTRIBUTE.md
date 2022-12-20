@@ -3,7 +3,8 @@
 Der **Quelltext** ist für jedes Paket nach Produktiv- und Testcode getrennt.
 Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
 * Das [Gira X1/L1 Logikbaustein SDK](https://partner.gira.de/service/developer.html)
-  (der ausgepackte Ordner muss im gleichen Ordner liegen, wie die Quelltextordner)
+  (der ausgepackte Ordner muss mit dem Namen LogicNodesSDK im gleichen Ordner
+  liegen wie die Quelltextordner)
 * Eine DeveloperId und ein Entwicklerzertifikat (Wie man das bekommt und
   verwendet, steht in der mit dem SDK gelieferten PDF-Dokumentation)
 * [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15)

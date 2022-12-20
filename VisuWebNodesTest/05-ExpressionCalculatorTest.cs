@@ -2222,11 +2222,12 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
 
       // Set input value and re-check the output
-      node.mStrInputs[0].Value = File.ReadAllText(@"../../openweather.json");
+      node.mStrInputs[0].Value = File.ReadAllText(workDir + @"\..\..\openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mOutputs[0]);
       Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
-      Assert.AreEqual(File.ReadAllText(@"../../openweather2.json"), node.mOutputs[0].Value);
+      Assert.AreEqual(File.ReadAllText(workDir + @"\..\..\openweather2.json"),
+                      node.mOutputs[0].Value);
     }
 
     [Test]
@@ -2291,129 +2292,129 @@ namespace Recomedia_de.Logic.VisuWeb.Test
           // Own error messages (localized)
           yield return new TestCaseData("", "EmptyTemplateCsharp", "",
               0, 0, 0, 0, false).
-              SetName("ErrorEmptyTemplate");
+              SetName("ErrorTestC-EmptyTemplate");
           yield return new TestCaseData("=", "HasAssignment", "",
               0, 0, 0, 0, false).
-              SetName("ErrorAssignmentLonely");
+              SetName("ErrorTestC-AssignmentLonely");
           yield return new TestCaseData("{}", "EmptyPlaceholder", "",
               0, 0, 0, 0, false).
-              SetName("ErrorEmptyPlaceholder");
+              SetName("ErrorTestC-EmptyPlaceholder");
           yield return new TestCaseData("{:N}", "HasDefaultName", "",
               0, 0, 0, 0, false).
-              SetName("ErrorHasDefaultName");
+              SetName("ErrorTestC-HasDefaultName");
           yield return new TestCaseData("{ :N}", "HasDefaultName", "",
               0, 0, 0, 0, false).
-              SetName("ErrorHasBlankName");
+              SetName("ErrorTestC-HasBlankName");
           yield return new TestCaseData("{x:N1}", "HasFormatOrMappings", "",
               0, 0, 1, 0, true).
-              SetName("ErrorHasFormat");
+              SetName("ErrorTestC-HasFormat");
           yield return new TestCaseData("{x:N|0=null}", "HasFormatOrMappings", "",
               0, 0, 1, 0, true).
-              SetName("ErrorHasMappings");
+              SetName("ErrorTestC-HasMappings");
           yield return new TestCaseData("{x 2:N}", "HasUnusableName", "",
               0, 0, 0, 0, false).
-              SetName("ErrorHasUnusableName");
+              SetName("ErrorTestC-HasUnusableName");
           yield return new TestCaseData("{_x:N}", "PlaceholderNameInvalid", "",
               0, 0, 0, 0, false).
-              SetName("ErrorHasReservedName");
+              SetName("ErrorTestC-HasReservedName");
           yield return new TestCaseData("_out0_ + {x:S}", "HasOutOfRangeRef", "",
               0, 0, 0, 1, false).
-              SetName("ErrorHasOutBelowRangeRef");
+              SetName("ErrorTestC-HasOutBelowRangeRef");
           yield return new TestCaseData("_out1_ && {x:B}", "HasOutOfRangeRef", "",
               1, 0, 0, 0, false).
-              SetName("ErrorHasOutAboveRangeRef");
+              SetName("ErrorTestC-HasOutAboveRangeRef");
           yield return new TestCaseData("_previousOut0_ + {x:I}", "HasOutOfRangeRef", "",
               0, 1, 0, 0, false).
-              SetName("ErrorHasPreviousOutBelowRangeRef");
+              SetName("ErrorTestC-HasPreviousOutBelowRangeRef");
           yield return new TestCaseData("_previousOut2_ + {x:N}", "HasOutOfRangeRef", "",
               0, 0, 1, 0, false).
-              SetName("ErrorHasPreviousOutAboveRangeRef");
+              SetName("ErrorTestC-HasPreviousOutAboveRangeRef");
           yield return new TestCaseData("{2x:N}", "PlaceholderNameInvalid", "",
               0, 0, 0, 0, false).
-              SetName("ErrorPlaceholderNameInvalid");
+              SetName("ErrorTestC-PlaceholderNameInvalid");
           yield return new TestCaseData("{a:I} = {x:I}", "HasAssignment", "",
               0, 2, 0, 0, false).
-              SetName("ErrorAssignmentPlaceholder");
+              SetName("ErrorTestC-AssignmentPlaceholder");
           yield return new TestCaseData("a={x:I}", "HasAssignment", "",
               0, 1, 0, 0, false).
-              SetName("ErrorAssignmentVariable");
+              SetName("ErrorTestC-AssignmentVariable");
           yield return new TestCaseData("\"\\\"a\"=\"b\\\"\"", "HasAssignment", "",
               0, 0, 0, 0, false).
-              SetName("ErrorAssignmentStringLiterals");
+              SetName("ErrorTestC-AssignmentStringLiterals");
           // Errors causing exceptions in interpreter
           yield return new TestCaseData("/", "",
               "Formel 1 (vor Zeichen 2): error CS1525: Unexpected symbol `/'\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorSlashTemplate");
+              SetName("ErrorTestC-SlashTemplate");
           yield return new TestCaseData("*/", "",
               "Formel 1 (vor Zeichen 3): error CS1525: Unexpected symbol `/'\r\n" +
               "Formel 1 (vor Zeichen 4): error CS1525: Unexpected symbol `)'\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorStarSlashTemplate");
+              SetName("ErrorTestC-StarSlashTemplate");
           yield return new TestCaseData("x/", "",
               "Formel 1 (vor Zeichen 4): error CS1525: Unexpected symbol `)'\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorXSlashTemplate");
+              SetName("ErrorTestC-XSlashTemplate");
           yield return new TestCaseData("/*x/", "",
               "Formel 1 (vor Zeichen 8): error CS1035: End-of-file found, '*/' expected\r\n" +
               "Formel 1 (vor Zeichen 10): error CS1035: End-of-file found, '*/' expected\r\n" +
               "Formel 1 (vor Zeichen 9): error CS1035: End-of-file found, '*/' expected\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorCommentXTemplate");
+              SetName("ErrorTestC-CommentXTemplate");
           yield return new TestCaseData("/*x/2", "",
               "Formel 1 (vor Zeichen 9): error CS1035: End-of-file found, '*/' expected\r\n" +
               "Formel 1 (vor Zeichen 11): error CS1035: End-of-file found, '*/' expected\r\n" +
               "Formel 1 (vor Zeichen 10): error CS1035: End-of-file found, '*/' expected\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorCommentX2Template");
+              SetName("ErrorTestC-CommentX2Template");
           yield return new TestCaseData("*", "",
               "Formel 1 (vor Zeichen 3): error CS1525: Unexpected symbol `)'\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorStarTemplate");
+              SetName("ErrorTestC-StarTemplate");
           yield return new TestCaseData("\"", "",
               "Formel 1: Syntax-Fehler\r\n",
               0, 0, 0, 0, false).
-              SetName("ErrorQuoteTemplate");
+              SetName("ErrorTestC-QuoteTemplate");
           yield return new TestCaseData("}", "", "",
               0, 0, 0, 0, false).
-              SetName("ErrorCurlyCloseTemplate");
+              SetName("ErrorTestC-CurlyCloseTemplate");
           yield return new TestCaseData("}{", "", "",
               0, 0, 0, 0, false).
-              SetName("ErrorCurlyCloseOpenTemplate");
+              SetName("ErrorTestC-CurlyCloseOpenTemplate");
           yield return new TestCaseData("}}", "", "",
               0, 0, 0, 0, false).
-              SetName("ErrorCurlyClose2Template");
+              SetName("ErrorTestC-CurlyClose2Template");
           yield return new TestCaseData("{x:N}/0", "",
               "Formel 1: Das Rechenergebnis des Ausdrucks ist keine Zahl oder " +
               "liegt außerhalb des zulässigen Wertebereichs. Der Ausgang bleibt " +
               "unverändert.\r\n",
               0, 0, 1, 0, false).
-              SetName("ExceptionDivideByZero");
+              SetName("ErrorTestC-ExceptionDivideByZero");
           yield return new TestCaseData("{x:N}^2", "",
               "Formel 1 (vor Zeichen 3): error CS0019: Operator `^' cannot be applied to " +
               "operands of type `double' and `int'\r\n",
               0, 0, 1, 0, false).
-              SetName("ExceptionOperator");
+              SetName("ErrorTestC-ExceptionOperator");
           yield return new TestCaseData("{x:B}/2", "",
               "Formel 1 (vor Zeichen 3): error CS0019: Operator `/' cannot be applied " +
               "to operands of type `bool' and `int'\r\n",
               1, 0, 0, 0, false).
-              SetName("ExceptionBoolDivide");
+              SetName("ErrorTestC-ExceptionBoolDivide");
           yield return new TestCaseData("{x:B} x2", "",
               "Formel 1 (vor Zeichen 9): error CS1525: Unexpected symbol `x2'\r\n",
               1, 0, 0, 0, false).
-              SetName("ExceptionUnexpectedSymbol");
+              SetName("ErrorTestC-ExceptionUnexpectedSymbol");
           yield return new TestCaseData("_unknown_ + {x:I}", "",
               "Formel 1 (vor Zeichen 3): error CS0103: The name `_unknown_' does not " +
               "exist in the current context\r\n",
               0, 1, 0, 0, false).
-              SetName("ExceptionUnknownRef");
+              SetName("ErrorTestC-ExceptionUnknownRef");
         }
       }
     }
     [TestCaseSource(typeof(ExpressionCalculatorErrorTestCaseData),
                     "ErrorTestCases", Category = "ErrorTestCases")]
-    public void ErrorTests(string template,
+    public void ErrorTestCases(string template,
                            string expectedValidationErrorCode,
                            string expectedRuntimeErrorText,
                               int expNumBinInputs,
@@ -2496,7 +2497,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
             new List<string> { }, new List<string> { "ExtLg", "ExtKz" },
             new List<string> { }, new List<string> { }
             ).
-            SetName("EmptyThenUnknownRef");
+            SetName("EmptyTempl-EmptyThenUnknownRef");
           yield return new TestCaseData(2, 0,
             " (((_previousOut4_==1)|(_previousOut4_==0))?({ExtLg :I}==1?(byte?)3{ExtKz:I}==1?(byte?)2:0)):0)",
             "Formel 1: … (((_previousOut4_==1)|(_previousOut4_==0))?(… enthält eine Referenz auf einen Ausgang der entweder nicht existiert oder an dieser Stelle nicht verwendet werden kann. Aktuelle Ausgangswerte (_out.._) können nur aus Formeln mit kleineren Nummern als der referenzierenden Formel verwendet werden.",
@@ -2504,7 +2505,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
             new List<string> { }, new List<string> { "ExtLg", "ExtKz" },
             new List<string> { }, new List<string> { }
             ).
-            SetName("UnknownRefThenEmpty");
+            SetName("EmptyTempl-UnknownRefThenEmpty");
         }
       }
     }
@@ -2565,25 +2566,25 @@ namespace Recomedia_de.Logic.VisuWeb.Test
         get
         {
           yield return new TestCaseData(true, null, null, "", "42fox").
-            SetName("BoolHasSameValue");
+            SetName("HasNewV-BoolHasSameValue");
           yield return new TestCaseData(false, null, null, "", "73,1fox").
-            SetName("BoolHasNewValue");
+            SetName("HasNewV-BoolHasNewValue");
           yield return new TestCaseData(null, 42, null, "", "42fox").
-            SetName("IntHasSameValue");
+            SetName("HasNewV-IntHasSameValue");
           yield return new TestCaseData(null, 41, null, "", "41fox").
-            SetName("IntHasNewValue");
+            SetName("HasNewV-IntHasNewValue");
           yield return new TestCaseData(null, null, 73.1, "", "42fox").
-            SetName("DoubleHasSameValue");
+            SetName("HasNewV-DoubleHasSameValue");
           yield return new TestCaseData(null, null, 73.2, "", "42fox").
-            SetName("DoubleHasNewValue");
+            SetName("HasNewV-DoubleHasNewValue");
           yield return new TestCaseData(null, null, null, "fox", "42fox").
-            SetName("StringHasSameValue");
+            SetName("HasNewV-StringHasSameValue");
           yield return new TestCaseData(null, null, null, "cat", "42cat").
-            SetName("StringHasNewValue");
+            SetName("HasNewV-StringHasNewValue");
           yield return new TestCaseData(false, null, 73.3, "", "73,3fox").
-            SetName("BoolSameDoubleNewValue");
+            SetName("HasNewV-BoolSameDoubleNewValue");
           yield return new TestCaseData(null, 42, null, "cat", "42cat").
-            SetName("IntSameStringNewValue");
+            SetName("HasNewV-IntSameStringNewValue");
         }
       }
     }

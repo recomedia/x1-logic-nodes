@@ -273,3 +273,7 @@ __pycache__/
 /Horst_Lehner.p12
 /Recomedia.sln
 /PaketeSignieren.bat
+
+# general excludes
+*.bak
+*.pw

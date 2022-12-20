@@ -13,10 +13,17 @@ namespace Recomedia_de.Logic.VisuWeb.Test
   {
     protected INodeContext context;
     protected NodeT node;
+    protected string workDir;
 
     public PlaceholderTestBase()
     {
       context = TestNodeContext.Create();
+    }
+
+    [SetUp]
+    public void PlaceholderTestBaseSetUp()
+    {
+      workDir = TestContext.CurrentContext.WorkDirectory;
     }
 
     [TearDown]

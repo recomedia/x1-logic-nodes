@@ -16,6 +16,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
   {
     protected INodeContext context;
     protected XmlJsonParser node;
+    protected string workDir;
 
     public XmlJsonParserTest()
     {
@@ -26,9 +27,10 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     public void XmlJsonParserTestSetUp()
     {
       node = new XmlJsonParser(context);
+      workDir = TestContext.CurrentContext.WorkDirectory;
     }
 
-    [TearDown]
+        [TearDown]
     public void XmlJsonParserTearDown()
     {
       node = null;
@@ -77,7 +79,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.AreEqual("2,5", node.mSelectParam[2].Value);
 
       // Set an input value and re-check the outputs
-      node.mInput.Value = File.ReadAllText(@"../../openweather.xml");
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.xml");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
@@ -203,8 +205,8 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.AreEqual(PortTypes.String, node.mError.PortType.Name);
       Assert.IsFalse(node.mError.HasValue);       // no output value yet
 
-      // Set an input value and re-check the outputs
-      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+            // Set an input value and re-check the outputs
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
@@ -268,7 +270,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mOutput[0].HasValue);  // no output value yet
 
       // Set an input value and re-check the outputs
-      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
@@ -307,7 +309,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mError.HasValue);       // no output value yet
 
       // Set an input value and re-check the outputs
-      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);        // still no error
@@ -352,7 +354,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mError.HasValue);       // no output value yet
 
       // Set an input value and re-check the outputs
-      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);        // still no error
@@ -398,7 +400,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                       result.Message);
 
       // Expect execution error, no value
-      node.mInput.Value = File.ReadAllText(@"../../openweather.xml");
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.xml");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
@@ -452,7 +454,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mOutput[0].HasValue);  // no output value yet
 
       // Set an input value and re-check the outputs
-      node.mInput.Value = File.ReadAllText(@"../../openweather.json");
+      node.mInput.Value = File.ReadAllText(workDir + @"\..\..\openweather.json");
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);

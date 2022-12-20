@@ -1147,11 +1147,11 @@ namespace Recomedia_de.Logic.Generic.Test
       {
         get
         {
-          yield return new TestCaseData( 0).SetName("Immediately");
-          yield return new TestCaseData( 1).SetName("BeforeSecondValue");
-          yield return new TestCaseData(15).SetName("LessThanConsidered");
-          yield return new TestCaseData(20).SetName("EqualsConsidered");
-          yield return new TestCaseData(21).SetName("MoreThanConsidered");
+          yield return new TestCaseData( 0).SetName("FirstOutputAfterTimeImmediately");
+          yield return new TestCaseData( 1).SetName("FirstOutputAfterTimeBeforeSecondValue");
+          yield return new TestCaseData(15).SetName("FirstOutputAfterTimeLessThanConsidered");
+          yield return new TestCaseData(20).SetName("FirstOutputAfterTimeEqualsConsidered");
+          yield return new TestCaseData(21).SetName("FirstOutputAfterTimeMoreThanConsidered");
         }
       }
     }

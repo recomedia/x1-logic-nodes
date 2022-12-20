@@ -148,10 +148,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd "$(SolutionDir)"
-if not exist out mkdir out
-
-LogicNodesSDK\LogicNodeTool.exe create VisuWebNodes\bin\Debug out
-</PostBuildEvent>
+.\PostBuild.bat VisuWeb</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
