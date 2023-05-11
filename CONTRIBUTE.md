@@ -7,7 +7,7 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
   liegen wie die Quelltextordner)
 * Eine DeveloperId und ein Entwicklerzertifikat (Wie man das bekommt und
   verwendet, steht in der mit dem SDK gelieferten PDF-Dokumentation)
-* [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15) oder [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022)
+* [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15) oder [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/de/vs/community/)
   (die kostenlose Community Edition reicht)
 * Zur Messung der Abdeckung automatisierter Tests
    * für VS 2017: [AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)
