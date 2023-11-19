@@ -37,6 +37,7 @@
           <b><a href="#funktionen">Funktionen</a></b><br />
           <a href="#math">Mathematische Funktionen</a> &ndash;
           <a href="#string">Textbearbeitung</a> &ndash;
+          <a href="#data">Verarbeitung von Daten in eindimensionalen Feldern</a> &ndash;
           <a href="#light">Beleuchtungssteuerung</a> &ndash;
           <a href="#HLK">Heizungs-, Lüftungs- und Klimatechnik (HLK)</a>
         </li>
@@ -968,7 +969,8 @@
       <p>
         Soweit ihre Parameter- und Rückgabetypen sinnvoll verwendbar sind,
         stehen viele Klassen des
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0">gut in deutscher Sprache dokumentierten .NET 4.0 APIs</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/?view=netframework-4.0"
+        >gut in deutscher Sprache dokumentierten .NET 4.0 APIs</a>
         mit ihren Funktionen zur Verfügung. Dieses Kapitel geht nur auf
         einige besonders nützliche Bereiche und Besonderheiten ein.
       </p>
@@ -980,7 +982,8 @@
       <h3 id="math">Mathematische Funktionen: Math-Bibliothek und Erweiterungen</h3>
       <p>
         Die meisten
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.math?view=netframework-4.0#methoden"><b>Math</b>-Methoden des .NET-4.0-Standards</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.math?view=netframework-4.0"
+        ><b>Math</b>-Methoden des .NET-4.0-Standards</a>
         können in den Formeln verwendet werden.
       </p>
       <p>
@@ -1074,10 +1077,12 @@
       </table>
       <h3 id="string">Funktionen zur Textbearbeitung</h3>
       <p>
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.double.tostring?view=netframework-4.0">ToString</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.double.tostring?view=netframework-4.0"
+        ><code>ToString</code></a>
         mit seinen verschiedenen Varianten für alle numerischen Typen erlaubt die
         sehr flexible Formatierung von Zahlen als Texte. Auch können fast alle
-        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.string?view=netframework-4.0#methoden"><b>String</b>-Methoden des .NET-4.0-Standards</a>
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.string?view=netframework-4.0"
+        ><code>String</code>-Methoden des .NET-4.0-Standards</a>
         verwendet werden.
       </p>
       <p>
@@ -1085,10 +1090,166 @@
         wird der Eingangstext: "<i>Alles alt macht der Mai</i>" am Ausgang zu
         "<i>Alles neu macht der Mai</i>".
       </p>
+      <h3 id="data">Funktionen zur Verarbeitung von Daten in eindimensionalen Feldern</h3>
+      <p>
+        Als Quellen für zu verarbeitende Datenfelder dienen meist Web-Abfragen,
+        oft in Verbindung mit einer <a href="XmlJsonParser.html"
+        >Datenauswahl aus XML- oder JSON-Antworten</a>.
+      </p>
+      <p>
+        <code>.NET 4.0</code> stellt in den
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.string?view=netframework-4.0"
+        ><code>String</code>-</a> und
+        <a href="https://docs.microsoft.com/de-de/dotnet/api/system.array?view=netframework-4.0"
+        ><code>Array</code>-Klassen</a> Methoden bereit, mit denen sich
+        eindimensionale Felder von Zahlen oder Texten erzeugen und weiter
+        verarbeiten lassen. Die Methoden der Erweiterungsklasse <code>Data</code>
+        ergänzen diese so, dass mehrere Verarbeitungsschritte in einem Ausdruck
+        auch in solchen Fällen möglich werden, wo dies allein mit <code>.NET</code>
+        nicht möglich wäre:
+      </p>
+      <table class="Tabelle_Logicnode">
+        <colgroup>
+          <col style="width: 175px">
+          <col style="width: 275px">
+          <col>
+        </colgroup>
+        <tr>
+          <th class="small">Funktion</th>
+          <th class="small">Datentyp und Bedeutung</th>
+          <th class="small">Beschreibung</th>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <code>Data.ConvertDoubles(</code><i>input</i><code>)</code>
+            </p>
+          </td>
+          <td>
+            <p><code>string[]</code> &rarr; <code>double[]</code></p>
+          </td>
+          <td>
+            <p>Vereinfacht gegenüber der
+            <a href="https://learn.microsoft.com/de-de/dotnet/api/system.array.convertall?view=netframework-4.0"
+            ><code>.NET</code>-Methode <code>Array.ConvertAll</code></a>,
+            ein Feld von Textstrings in ein Feld von Fließkommazahlen zu
+            konvertieren, wenn dabei <code>.</code> als Dezimaltrennzeichen
+            und ggf. <code>,</code> als Gruppentrennzeichen interpretiert
+            werden soll.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Data.Sort(</code><i>values</i><code>,<br />
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               </code><i>comparer</i><code>)</code></p>
+          </td>
+          <td>
+            <p><i>values</i>: Eindimensionales Feld</p>
+            <p><i>comparer</i>: optionaler
+               <a href="https://learn.microsoft.com/de-de/dotnet/csharp/language-reference/operators/lambda-operator"
+                  >Lambdaausdruck</a> zur Festlegung der Sortierreihenfolge
+              (aufsteigend falls nicht gegeben)</p>
+          </td>
+          <td>
+            <p>Sortiert das gegebene Feld von Werten aufsteigend (wenn kein
+            <i>comparer</i> gegeben ist) oder gemäß der vom <i>comparer</i>
+            gegebenen Ordnung.</p>
+            <p>Im Gegensatz zur
+            <a href="https://learn.microsoft.com/de-de/dotnet/api/system.array.sort?view=netframework-4.0"
+            ><code>.NET</code>-Methode <code>Array.Sort</code></a> besteht
+            gibt siese Methode das sortierte <i>values</i>-Feld auch zurück.
+            Dadurch kann es im gleichen Ausdruck weiter verarbeitet werden.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><code>Data.Join(</code><i>separator</i><code>,<br />
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               </code><i>values</i><code>,<br />
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               </code><i>startIdx</i><code>,<br />
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               </code><i>length</i><code>)</code></p>
+          </td>
+          <td>
+            <p><i>separator</i>: <code>string</code></p>
+            <p><i>values</i>: Eindimensionales Feld</p>
+            <p><i>startIdx</i>: erstes auszugebendes Element (falls nicht gegeben: 0)</p>
+            <p><i>length</i>: Anzahl der auszugebenden Elemente (falls nicht oder zu groß gegeben: alle bis zum Ende des Felds)</p>
+          </td>
+          <td>
+            <p>Verkettet Werte des gegebenen Feldes <i>values</i> zu einem
+            Ausgabe-Textstring, indem die einzelnen Werte formatiert und
+            durch den gegebenen <i>separator</i> voneinander getrennt werden.</p>
+            <p>Anders als mit der
+            <a href="https://learn.microsoft.com/de-de/dotnet/api/system.array.join?view=netframework-4.0"
+            ><code>.NET</code>-Methode <code>Array.Join</code></a>
+            </p>
+            <ul>
+              <li>werden dabei Fließkommazahlen ohne Gruppentrennzeichen und
+              mit <code>.</code> als Dezimaltrennzeichen formatiert,</li>
+              <li>kann mit den optionalen Parametern <code>startIdx</code>
+              und <code>length</code> wahlweise nur ein Teil der Feldelemente
+              ausgegeben werden.</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <p>
+        Da Datenfeld-Typen für Ausgänge des Bausteins nicht direkt verwendbar
+        sind, muss die letze Operation auf einem Feld immer einen zulässigen
+        Ausgabetyp erzeugen. In Frage kommen dafür vor allem:
+      </p>
+      <ol>
+        <li>Auswahl eines einzelnen Werts mit dem Indexoperator
+        <code>[</code><i>n</i><code>]</code>,</li>
+        <li>Verkettung mehrerer Werte zu einem Textstring mit einer der
+        <code>Join</code>-Varianten.</li>
+      </ol>
+      Die zweite Variante erlaubt auch, ein Feld in einer nachfolgenden Formel
+      weiter zu verarbeiten, indem der Text dort zunächst wieder in ein Feld
+      konvertiert wird.
+      <h4>Beispiel 1: Ausgabe des zweitgrößten Werts einer Zahlenmenge</h4>
+      <span class="box-noscroll"> <code>Data.Sort( Data.ConvertDoubles({text:S}.Split(';')), (a, b) => b.CompareTo(a) ) [1]</code> </span>
+      <p>Die verwendeten Funktionen im Einzelnen:</p>
+      <ul>
+        <li><code>{text:S}.Split(';')</code>
+        zerlegt den Eingabetext anhand der darin enthaltenen
+        Trennzeichen <code>;</code> in ein Feld von Texten</li>
+        <li><code>Data.ConvertDoubles(</code>...<code>)</code>
+        erzeugt daraus ein Feld von Fließkommazahlen</li>
+        <li><code>Data.Sort(</code>...<code>)</code>
+        sortiert dieses Feld ...</li>
+        <li>... wobei der Lambdaausdruck
+        <code>(a, b) => b.CompareTo(a)</code>
+        die Elemente in absteigender Reihenfolge anordnet</li>
+        <li>Der Indexoperator ... <code>[1]</code> wählt aus
+        dem Feld das zweite, also zweitgrößte Element aus</li>
+      </ul>
+      <h4>Beispiel 2: Ausgabe der drei kleinsten positiven Ganzzahlen einer Zahlenmenge</h4>
+      <span class="box-noscroll"> <code>Data.Join( ", ", Data.Sort( Array.FindAll( Array.ConvertAll({text:S}.Split(','), int.Parse), x => (x > 0) ) ) , 0, 3 )</code> </span>
+      <p>Die verwendeten Funktionen im Einzelnen:</p>
+      <ul>
+        <li><code>{text:S}.Split(',')</code>
+        zerlegt den Eingabetext anhand der darin enthaltenen
+        Trennzeichen <code>,</code> in ein Feld von Texten</li>
+        <li><code>Array.ConvertAll(</code>...<code>, int.Parse)</code>
+        erzeugt daraus ein Feld von Ganzzahlen</li>
+        <li><code>Array.FindAll( </code>...<code>, x => (x > 0) )</code>
+        wählt aus dem Feld mit dem Lambda-Operator alle positiven
+        Elemente aus</li>
+        <li><code>Data.Sort( </code>...<code> )</code>
+        sortiert diese positiven Werte aufsteigend</li>
+        <li><code>Data.Join( ", ", </code>...<code>, 0, 3 )</code>
+        formatiert die ersten bis zu drei Zahlen des verbleibenden
+        Feldinhalts als Komma-separierten Text</li>
+      </ul>
       <h3 id="light">Funktionen zur Beleuchtungssteuerung</h3>
       <p>
-        Die Funktionen der <code>Light</code>-Erweiterung rechnen gängige Größen
-        der Beleuchtungstechnik um:
+        Die Funktionen der <code>Light</code>-Erweiterung rechnen
+        gängige Größen der Beleuchtungstechnik um:
       </p>
       <table class="Tabelle_Logicnode">
         <colgroup>
@@ -1408,11 +1569,10 @@
       </p>
       <h2 id="beispiele">Beispiele</h2>
       <p>
-        Das <a href="HeatingCurve.html#heizbeispiel">
-          Anwendungsbeispiel
-          "Bedarfsgeführte Heizungsregelung"
-        </a> findet sich bei der
-        <a href="HeatingCurve.html">Beschreibung der Funktion HeatingCurve</a>.
+        Das <a href="HeatingCurve.html#heizbeispiel"
+        >Anwendungsbeispiel "Bedarfsgeführte Heizungsregelung"</a>
+        findet sich bei der <a href="HeatingCurve.html"
+        >Beschreibung der Funktion HeatingCurve</a>.
       </p>
       <h3 id="feiertag">Feiertage</h3>
       <p>

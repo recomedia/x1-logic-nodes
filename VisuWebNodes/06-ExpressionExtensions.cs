@@ -124,30 +124,40 @@ namespace Recomedia_de.Logic.VisuWeb
       Array.Sort(data, comparer);
       return data;
     }
-  
-    public static string Join<T>(string separator, T[] data)
+
+    public static string Join<T>(string separator, T[] data,
+                                 uint startIdx = 0,
+                                 uint length   = uint.MaxValue)
     {
-      if (data == null || data.Length < 1)
+      if (data == null || (data.Length < startIdx + 1) || (length < 1))
       {
         return string.Empty;
       }
 
-      if ((object) separator == null)  {
+      if ((object)separator == null)
+      {               
         separator = string.Empty;
       }
 
       System.Text.StringBuilder
           stringBuilder = new System.Text.StringBuilder();
-      foreach (object entry in data)
+      bool isFirstItem = true;
+      long endIdx = Math.Min(startIdx + length, data.Length);
+      for ( long idx = startIdx; idx < endIdx; idx++ )
       {
-        string text = Convert.ToString(entry,
+        if ( !isFirstItem )
+        {  // use separator before further items
+          stringBuilder.Append(separator);
+        }
+        else
+        {
+          isFirstItem = false;
+        }
+
+        string text = Convert.ToString(data[idx],
             System.Globalization.CultureInfo.InvariantCulture);
         if ((object)text != null)
         {
-          if ( stringBuilder.Length > 0 )
-          {  // not first item; use separator
-            stringBuilder.Append(separator);
-          }
           stringBuilder.Append(text);
         }
       }
