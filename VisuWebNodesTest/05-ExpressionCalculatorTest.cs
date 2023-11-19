@@ -2231,6 +2231,189 @@ namespace Recomedia_de.Logic.VisuWeb.Test
     }
 
     [Test]
+    public void SortEmptyArray()
+    {
+      // Set and check the output types
+      node.mTemplateCount.Value = 3;
+      node.mOutputTypes[0].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      node.mOutputTypes[1].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[1].PortType.Name);
+      node.mOutputTypes[2].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[1].PortType.Name);
+
+      // Set a valid template that uses "=" in comment and string literal
+      node.mTemplates[0].Value = "Data.Join( null, Data.Sort(" +
+          "Array.ConvertAll({text:S}.Split(','), int.Parse) ) )";
+      node.mTemplates[1].Value = "Data.Join( null, new int[0] )";
+      node.mTemplates[2].Value = "Data.Join<int>( \",\", null )";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
+
+      // Check the initial error and output state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set an empty input string and re-check
+      node.mStrInputs[0].Value = "";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("Expression 1: Die Eingabezeichenfolge hat das falsche Format.\r\n", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // still has no output value
+      Assert.IsNull(node.mOutputs[0].Value);
+      Assert.IsNotNull(node.mOutputs[1]);
+      Assert.IsTrue(node.mOutputs[1].HasValue);   // now has an output value
+      Assert.AreEqual("", node.mOutputs[1].Value);
+      Assert.IsNotNull(node.mOutputs[2]);
+      Assert.IsTrue(node.mOutputs[2].HasValue);   // now has an output value
+      Assert.AreEqual("", node.mOutputs[2].Value);
+    }
+
+    [Test]
+    public void SortIntArray()
+    {
+      // Use the default template; don't set the number of templates
+
+      // Set and check the output type
+      node.mOutputTypes[0].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+
+      // Set a valid template that uses "=" in comment and string literal
+      node.mTemplates[0].Value = "Data.Join( null, Data.Sort(" +
+          "Array.ConvertAll({text:S}.Split(','), int.Parse) ) )";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
+
+      // Check the initial error and output state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set a comma-separated input string of values and re-check
+      node.mStrInputs[0].Value = "78, 34, 12, 56";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("12345678", node.mOutputs[0].Value);
+    }
+
+    [Test]
+    public void SortDoubleArrayInverse()
+    {
+      // Use the default template; don't set the number of templates
+
+      // Set and check the output type
+      node.mOutputTypes[0].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+
+      // Set a valid template that uses "=" in lambda
+      node.mTemplates[0].Value = "Data.Join( \", \", Data.Sort(" +
+          "Data.ConvertDoubles({text:S}.Split(',')), (a, b) => b.CompareTo(a) ) )";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
+
+      // Check the initial error and output state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set a comma-separated input string of values and re-check
+      node.mStrInputs[0].Value = "78.1,12.2,56.3,34.4";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("78.1, 56.3, 34.4, 12.2", node.mOutputs[0].Value);
+    }
+
+    [Test]
+    public void SortStringArrayInverse()
+    {
+      // Use the default template; don't set the number of templates
+
+      // Set and check the output type
+      node.mOutputTypes[0].Value = PortTypes.String;
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+
+      // Set a valid template that uses "=" in lambda
+      node.mTemplates[0].Value = "Data.Sort( {text:S}.Split(',')," +
+                                            "(a, b) => b.CompareTo(a) )[1]";
+
+      // Expect no validation error
+      var result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      checkInputCounts(0, 0, 0, 1);
+      checkInputNames<BoolValueObject>(new List<string> { }, node.mBinInputs);
+      checkInputNames<IntValueObject>(new List<string> { }, node.mIntInputs);
+      checkInputNames<DoubleValueObject>(new List<string> { }, node.mNumInputs);
+      checkInputNames<StringValueObject>(new List<string> { "text" }, node.mStrInputs);
+
+      // Check the initial error and output state
+      Assert.IsNotNull(node.mError);
+      Assert.IsFalse(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);         // should be string
+      Assert.AreEqual(PortTypes.String, node.mOutputs[0].PortType.Name);
+      Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
+
+      // Set a comma-separated input string of values and re-check
+      node.mStrInputs[0].Value = "hugo,egon,zeta,zeta 2";
+      node.Execute();
+      Assert.IsNotNull(node.mError);
+      Assert.IsTrue(node.mError.HasValue);
+      Assert.AreEqual("", node.mError.Value);
+      Assert.IsNotNull(node.mOutputs[0]);
+      Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
+      Assert.AreEqual("zeta", node.mOutputs[0].Value);
+    }
+
+    [Test]
     public void SeemingAssignments()
     {
       // Use the default template; don't set the number of templates

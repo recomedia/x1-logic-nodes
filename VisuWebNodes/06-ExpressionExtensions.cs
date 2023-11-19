@@ -105,6 +105,56 @@ namespace Recomedia_de.Logic.VisuWeb
     }
   }
 
+  public static class Data
+  {
+    public static double[] ConvertDoubles(string[] input)
+    {
+      return Array.ConvertAll(input, x => double.Parse(x,
+          System.Globalization.CultureInfo.InvariantCulture));
+    }
+  
+    public static T[] Sort<T>(T[] data)
+    {
+      Array.Sort(data);
+      return data;
+    }
+  
+    public static T[] Sort<T>(T[] data, Comparison<T> comparer)
+    {
+      Array.Sort(data, comparer);
+      return data;
+    }
+  
+    public static string Join<T>(string separator, T[] data)
+    {
+      if (data == null || data.Length < 1)
+      {
+        return string.Empty;
+      }
+
+      if ((object) separator == null)  {
+        separator = string.Empty;
+      }
+
+      System.Text.StringBuilder
+          stringBuilder = new System.Text.StringBuilder();
+      foreach (object entry in data)
+      {
+        string text = Convert.ToString(entry,
+            System.Globalization.CultureInfo.InvariantCulture);
+        if ((object)text != null)
+        {
+          if ( stringBuilder.Length > 0 )
+          {  // not first item; use separator
+            stringBuilder.Append(separator);
+          }
+          stringBuilder.Append(text);
+        }
+      }
+      return stringBuilder.ToString();
+    }
+  }
+
   // Angle conversion functions degrees <--> radian
   public static class Angle
   {

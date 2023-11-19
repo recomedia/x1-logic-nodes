@@ -379,7 +379,18 @@ namespace Recomedia_de.Logic.VisuWeb
         return false;
       }
 
-      if (i > 0)
+      if ( i < (maxI - 1) )
+      {
+        switch (text[i + 1])
+        {
+            case '>':
+                return false;
+            default:
+                break;
+        }
+      }
+
+      if ( i > 0 )
       {
         switch (text[i - 1])
         {
