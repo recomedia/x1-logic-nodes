@@ -7,10 +7,11 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
   liegen wie die Quelltextordner)
 * Eine DeveloperId und ein Entwicklerzertifikat (Wie man das bekommt und
   verwendet, steht in der mit dem SDK gelieferten PDF-Dokumentation)
-* [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15)
+* [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15) oder [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/de/vs/community/)
   (die kostenlose Community Edition reicht)
-* [AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)
-  zur Messung der Abdeckung automatisierter Tests
+* Zur Messung der Abdeckung automatisierter Tests
+   * für VS 2017: [AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)
+   * für VS 2022: [Fine Code Coverage](https://marketplace.visualstudio.com/items?itemName=FortuneNgwenya.FineCodeCoverage) 
 * Weitere Abhängigkeiten wie unter [Insights -> Dependency graph
   angegeben](https://github.com/recomedia/x1-logic-nodes/network/dependencies)
 
