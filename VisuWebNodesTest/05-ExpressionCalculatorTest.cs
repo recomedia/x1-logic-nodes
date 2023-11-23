@@ -2365,17 +2365,18 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
 
       // Set a comma-separated input string of values and re-check
-      node.mStrInputs[0].Value = "78, -34, 12, -47, 35, -16, 8, 56";
+      node.mStrInputs[0].Value = "78901, -34567, 12345, -47654," +
+                                 "35432, -16543, 8765, 56789";
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
       Assert.AreEqual("", node.mError.Value);
       Assert.IsNotNull(node.mOutputs[0]);
       Assert.IsTrue(node.mOutputs[0].HasValue);   // now has an output value
-      Assert.AreEqual("8, 12", node.mOutputs[0].Value);
+      Assert.AreEqual("8765, 12345", node.mOutputs[0].Value);
       Assert.IsNotNull(node.mOutputs[1]);
       Assert.IsTrue(node.mOutputs[1].HasValue);   // now has an output value
-      Assert.AreEqual("12, 8", node.mOutputs[1].Value);
+      Assert.AreEqual("12345, 8765", node.mOutputs[1].Value);
     }
 
     [Test]
@@ -2411,7 +2412,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       Assert.IsFalse(node.mOutputs[0].HasValue);  // no output value yet
 
       // Set a comma-separated input string of values and re-check
-      node.mStrInputs[0].Value = "1,078.1; 2069.7;12.2;-56.3;34.4";
+      node.mStrInputs[0].Value = "1,078.1; 34.4; 2069.7; 12.2;-56.3";
       node.Execute();
       Assert.IsNotNull(node.mError);
       Assert.IsTrue(node.mError.HasValue);
