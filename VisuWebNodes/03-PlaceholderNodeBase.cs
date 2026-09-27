@@ -45,12 +45,12 @@ namespace Recomedia_de.Logic.VisuWeb
     /// The group and decimal separator to use when formatting numbers as text can
     /// be customized by derived classes.
     /// </summary>
-    private string mGroupSeparator = "'";
+    private readonly string mGroupSeparator = "'";
     protected virtual string getGroupSeparator()
     {
       return mGroupSeparator;
     }
-    private string mDecimalSeparator = ".";
+    private readonly string mDecimalSeparator = ".";
     protected virtual string getDecimalSeparator()
     {
       return mDecimalSeparator;
@@ -139,10 +139,13 @@ namespace Recomedia_de.Logic.VisuWeb
     [Input(DisplayOrder = 33, InitOrder = 33, IsDefaultShown = true)]
     public IList<StringValueObject> mStrInputs { get; private set; }
 
-    /// <summary>
-    /// The value outputs
-    /// </summary>
-    [Output(DisplayOrder = 1, IsRequired = true)]
+        /// <summary>
+        /// The value outputs are shown first, attempting to show them to the
+        /// right of their defining text. This will break if the user switches
+        /// any of them invisible. They are still optional because GPA 6 errs
+        /// when required outputs are not connected to anything.
+        /// </summary>
+        [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
     public List<IValueObject> mOutputs { get; set; }
 
     protected string mLanguage = "de";
@@ -352,12 +355,12 @@ namespace Recomedia_de.Logic.VisuWeb
     private ValidationResult validateSeparators(string language)
     {
       // Validate separators
-      if (getGroupSeparator().Length > 1)
+      if (getDecimalSeparator().Length < 1)
       {
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "SeparatorGroupTooLong")
+          Message = Localize(language, "SeparatorDecimalTooShort")
         };
       }
       if (getDecimalSeparator().Length > 1)
@@ -368,12 +371,12 @@ namespace Recomedia_de.Logic.VisuWeb
           Message = Localize(language, "SeparatorDecimalTooLong")
         };
       }
-      if (getDecimalSeparator().Length < 1)
+      if (getGroupSeparator().Length > 1)
       {
         return new ValidationResult
         {
           HasError = true,
-          Message = Localize(language, "SeparatorDecimalTooShort")
+          Message = Localize(language, "SeparatorGroupTooLong")
         };
       }
       if (getDecimalSeparator() == getGroupSeparator())

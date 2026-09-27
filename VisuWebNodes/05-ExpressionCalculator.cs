@@ -57,7 +57,7 @@ namespace Recomedia_de.Logic.VisuWeb
     /// <summary>
     /// The error output.
     /// </summary>
-    [Output(DisplayOrder = 9, IsRequired = true)]
+    [Output(DisplayOrder = 9, IsDefaultShown = true, IsRequired = false)]
     public StringValueObject mError { get; private set; }
 
     protected override IValueObject createOutput(int i)
@@ -703,8 +703,7 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       if (value != null)
       {
-        Tuple<FieldSpec, FieldInfo> field;
-        bool found = mFields.TryGetValue(name, out field);
+        bool found = mFields.TryGetValue(name, out Tuple<FieldSpec, FieldInfo> field);
         System.Diagnostics.Trace.Assert(found);
         System.Diagnostics.Trace.Assert(field != null);
         field.Item2.SetValue(mEngine, value);

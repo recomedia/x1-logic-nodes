@@ -98,7 +98,7 @@ namespace Recomedia_de.Logic.Generic
     /// <summary>
     /// The calculated primary function value of all input values.
     /// </summary>
-    [Output(DisplayOrder = 5, IsRequired = true)]
+    [Output(DisplayOrder = 5, IsDefaultShown = true, IsRequired = false)]
     public DoubleValueObject mOutput1 { get; private set; }
 
     /// <summary>
@@ -109,15 +109,17 @@ namespace Recomedia_de.Logic.Generic
     private readonly string[] mAddAllowedValues = { "none", "MinIndex", "MaxIndex" };
 
     /// <summary>
-    /// The calculated secondary function value (if any) of all input values.
+    /// The calculated secondary function value of all input values (if
+    /// the secondary function has been selected other than "none").
     /// </summary>
-    [Output(DisplayOrder = 8, IsRequired = true)]
+    [Output(DisplayOrder = 8, IsDefaultShown = true, IsRequired = false)]
     public DoubleValueObject mOutput2 { get; private set; }
 
     /// <summary>
-    /// The calculated secondary index (if any) of the relevant input value.
+    /// The calculated secondary index of the relevant input value (if
+    /// the secondary function has been selected other than "none").
     /// </summary>
-    [Output(DisplayOrder = 10, IsRequired = true)]
+    [Output(DisplayOrder = 10, IsDefaultShown = true, IsRequired = false)]
     public IntValueObject mOutputIndex { get; private set; }
 
     /// <summary>

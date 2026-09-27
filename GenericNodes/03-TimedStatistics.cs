@@ -60,7 +60,7 @@ namespace Recomedia_de.Logic.Generic
       public double mEndValue;
       public long mEndTime;
     };
-    private LinkedList<TimedValue> mTimedValues;
+    private readonly LinkedList<TimedValue> mTimedValues;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TimedStatistics"/> class.
@@ -174,41 +174,41 @@ namespace Recomedia_de.Logic.Generic
     /// <summary>
     /// The calculated average value of input values (within timespan, if that is given nonzero).
     /// </summary>
-    [Output(DisplayOrder = 1, IsDefaultShown = true)]
+    [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
     public DoubleValueObject mOutputAvg { get; private set; }
 
     /// <summary>
     /// The calculated minimum and maximum values of input values within timespan,
     /// if selected.
     /// </summary>
-    [Output(DisplayOrder = 1, IsDefaultShown = true)]
+    [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
     public DoubleValueObject mOutputMin { get; private set; }
-    [Output(DisplayOrder = 2, IsDefaultShown = true)]
+    [Output(DisplayOrder = 2, IsDefaultShown = true, IsRequired = false)]
     public DoubleValueObject mOutputMax { get; private set; }
 
     /// <summary>
     /// The calculated change of input values (within timespan, if that is given nonzero).
     /// </summary>
-    [Output(DisplayOrder = 3, IsDefaultShown = true)]
+    [Output(DisplayOrder = 3, IsDefaultShown = true, IsRequired = false)]
     public DoubleValueObject mOutputChange { get; private set; }
 
     /// <summary>
     /// The calculated trend value (falling: -1; steady or instable: 0; rising: 1)
     /// of recent input values, if selected.
     /// </summary>
-    [Output(DisplayOrder = 4, IsDefaultShown = true)]
+    [Output(DisplayOrder = 4, IsDefaultShown = true, IsRequired = false)]
     public IntValueObject mOutputTrend { get; private set; }
 
     /// <summary>
     /// The sum of all received values (within timespan, if that is given nonzero).
     /// </summary>
-    [Output(DisplayOrder = 5, IsDefaultShown = false)]
+    [Output(DisplayOrder = 5, IsDefaultShown = false, IsRequired = false)]
     public DoubleValueObject mOutputSum { get; private set; }
 
     /// <summary>
     /// The number of received values (within timespan, if that is given nonzero).
     /// </summary>
-    [Output(DisplayOrder = 6, IsDefaultShown = true)]
+    [Output(DisplayOrder = 6, IsDefaultShown = true, IsRequired = false)]
     public IntValueObject mOutputNumber { get; private set; }
 
     /// <summary>
@@ -342,8 +342,7 @@ namespace Recomedia_de.Logic.Generic
         {
           unschedule();
 
-          long firstTime = 0;
-          long endTime = trimBeginning(out firstTime);
+          long endTime = trimBeginning(out long firstTime);
 
           // Append any given value just once
           appendIfValid(endTime, mInput.Value);
@@ -371,8 +370,7 @@ namespace Recomedia_de.Logic.Generic
 
         unschedule();
 
-        long firstTime = 0;
-        long endTime = trimBeginning(out firstTime);
+        long endTime = trimBeginning(out long firstTime);
 
         if ((endTime - firstTime) >= firstUpdateAfterTimeTicks)
         {

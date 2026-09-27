@@ -157,14 +157,17 @@ namespace Recomedia_de.Logic.VisuWeb
     /// <summary>
     /// The error output.
     /// </summary>
-    [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = true)]
+    [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
     public StringValueObject mError { get; private set; }
     private string mLanguage = "de";
 
     /// <summary>
-    /// A list of output values. 
+    /// A list of output values. Required to prevent hiding, in order to
+    /// show each output to the right of its path. Unused outputs should
+    /// be removed together with their path to prevent validation errors
+    /// in GPA 6 and to reduce resource consumption.
     /// </summary>
-    [Output(DisplayOrder = 2, IsDefaultShown = true, IsRequired = true)]
+    [Output(DisplayOrder = 2, IsRequired = true)]
     public IList<AnyValueObject> mOutput { get; private set; }
 
     /// <summary>
@@ -225,8 +228,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
       for (int i = 0; i < mSelectOperation.Count; i++)
       {
-        string errorMessage;
-        /* dummy = */ checkAndGetScalingFactor(i, out errorMessage);
+        _ = checkAndGetScalingFactor(i, out string errorMessage);
         if (errorMessage.Length > 0)
         {
           return new ValidationResult { HasError = true, Message = errorMessage };
@@ -301,16 +303,17 @@ namespace Recomedia_de.Logic.VisuWeb
       {
         return 1.0;     // no scaling factor given ==> 1.0
       }
-      double result;
+      // Lazy evaluation, first of the TryParse calls that succeeds
+      // determines value of result
       bool success = double.TryParse(param, NumberStyles.Float,
-                                     mCommaCulture, out result) ||
+                                     mCommaCulture, out double result) ||
                      double.TryParse(param, NumberStyles.Float,
                                      mPointCulture, out result);
       if (success)
       {
         return result;  // valid scaling factor given
       }
-      // None of the above ==> error
+      // None of the TryParse calls succeeded ==> error
       errorMessage = Localize(mLanguage, mSelectParam[i].Name) +
                      ": \"" + mSelectParam[i].Value + "\" " +
                      Localize(mLanguage, "InvalidScaling");
@@ -376,8 +379,7 @@ namespace Recomedia_de.Logic.VisuWeb
 
     bool processNodeListNumeric(ref double outVal, int i, string text)
     {
-      double localVal;
-      bool success = tryXmlConvertToDouble(i, text, out localVal);
+      bool success = tryXmlConvertToDouble(i, text, out double localVal);
 
       if (Double.IsNaN(outVal))
       {
@@ -448,8 +450,7 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       if (isNumberOutput(i))
       {
-        string errorMessage;
-        double scalingFactor = checkAndGetScalingFactor(i, out errorMessage);
+        double scalingFactor = checkAndGetScalingFactor(i, out string errorMessage);
         if (errorMessage.Length > 0)
         { // already localized
           mError.Value += errorMessage + Environment.NewLine;
@@ -477,8 +478,7 @@ namespace Recomedia_de.Logic.VisuWeb
       if (key.StartsWith(SEL_OP_PARAM_PREFIX))
       {
         string suffix = key.Substring(SEL_OP_PARAM_PREFIX.Length);
-        int i = -1;
-        if ( int.TryParse(suffix, out i) )
+        if ( int.TryParse(suffix, out int i) && (i > 0) && (i <= mSelectOperation.Count))
         {
           string label = mSelectOperation[i-1].Value + PARAM_POSTFIX;
           return base.Localize(language, label) + " " + suffix;

@@ -32,6 +32,9 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       node = null;
     }
 
+    // This test case is not executed in this template class.
+    // Derived class instantiations will execute it after they
+    // have created the node instance.
     [Test]
     public void InitialState()
     {

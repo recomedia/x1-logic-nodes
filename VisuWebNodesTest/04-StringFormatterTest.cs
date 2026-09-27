@@ -318,8 +318,8 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                                         "The decimal separator cannot be longer than one character.")
                        .SetName("CustSepE-DecimalSepTooLong");
           yield return new TestCaseData("ab", "xy",
-                                        "Das Gruppentrennzeichen darf maximal ein Zeichen haben.",
-                                        "The group separator cannot be longer than one character.")
+                                        "Das Dezimaltrennzeichen darf maximal ein Zeichen haben.",
+                                        "The decimal separator cannot be longer than one character.")
                        .SetName("CustSepE-BothTooLong");
         }
       }

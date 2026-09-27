@@ -84,7 +84,7 @@ namespace Recomedia_de.Logic.Generic
     /// <summary>
     /// A list of output values. 
     /// </summary>
-    [Output(DisplayOrder = 1, IsDefaultShown = true)]
+    [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
     public IList<AnyValueObject> mOutputs { get; private set; }
 
     /// <summary>
@@ -132,7 +132,7 @@ namespace Recomedia_de.Logic.Generic
     /// <summary>
     /// The values of outputs upon last deselection.
     /// </summary>
-    private IList<AnyValueObject> mPrevOutputs;
+    private readonly IList<AnyValueObject> mPrevOutputs;
 
     /// <summary>
     /// This method provides the hook to implement startup logic. It is called after
