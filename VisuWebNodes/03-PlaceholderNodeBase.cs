@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text.RegularExpressions;
 using LogicModule.Nodes.Helpers;
 using LogicModule.ObjectModel;
@@ -9,7 +8,7 @@ using LogicModule.ObjectModel.TypeSystem;
 namespace Recomedia_de.Logic.VisuWeb
 {
   /// <summary>
-  /// Allows derived classes to create aritrary output values based
+  /// Allows derived classes to create arbitrary output values based
   /// on a given template and an arbitrary number of value inputs.
   /// Inputs are created as needed based on placeholders in the
   /// template string.
@@ -21,8 +20,8 @@ namespace Recomedia_de.Logic.VisuWeb
     /// variable fields (placeholders) in the template
     /// string.
     /// </summary>
-    public const char PLACEHOLDER_OPENING = '{';
-    public const char PLACEHOLDER_CLOSING = '}';
+    private const char PLACEHOLDER_OPENING = '{';
+    private const char PLACEHOLDER_CLOSING = '}';
     private static readonly Regex PLACEHOLDER_REGEX =
           new Regex(Char.ToString(PLACEHOLDER_OPENING) +
                     "[^" + Char.ToString(PLACEHOLDER_OPENING) +
@@ -50,6 +49,7 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       return mGroupSeparator;
     }
+
     private readonly string mDecimalSeparator = ".";
     protected virtual string getDecimalSeparator()
     {
@@ -61,6 +61,8 @@ namespace Recomedia_de.Logic.VisuWeb
     /// </summary>
     protected readonly ITypeService mTypeService;
 
+    private TokenMap mPlaceholders = new TokenMap{};
+
     /// <summary>
     /// Initializes a new instance of the <see cref="PlaceholderNodeBase"/> class.
     /// </summary>
@@ -69,6 +71,7 @@ namespace Recomedia_de.Logic.VisuWeb
       : base(context)
     {
       context.ThrowIfNull("context");
+
       mTypeService = context.GetService<ITypeService>();
 
       // Initialize one template parameter, but allow more of them
@@ -198,96 +201,103 @@ namespace Recomedia_de.Logic.VisuWeb
     /// </summary>
     protected void updateTemplate(object sender = null,
                  ValueChangedEventArgs evArgs = null)
-    {
-      // Validate the separators first to prevent throwing exceptions later
-      // in System.Globalization
-      ValidationResult result = validateSeparators("en");
-      if (result.HasError)
-      {
-        return;
-      }
-
-      // Even though only one template has changed we must re-evaluate all
-      // templates, because these depend on each other due to placeholder
-      // re -use.
-      TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
-      ttf.restart();
-
-      int binCount = 0;
-      int intCount = 0;
-      int numCount = 0;
-      int strCount = 0;
-
-      List<TokenBase> allTokens = new List<TokenBase>(100);
-
-      for (int i = 0; i < mTemplates.Count; i++)
-      {
-        result = validateTemplate(mTemplates[i], "en", doFullCheck: false);
-        if (result.HasError)
         {
-          continue;
+            // Validate the separators first to prevent throwing exceptions later
+            // in System.Globalization
+            ValidationResult result = validateSeparators("en");
+            if (result.HasError)
+            {
+                return;
+            }
+
+            // Even though only one template has changed we must re-evaluate all
+            // templates, because these depend on each other due to placeholder
+            // re-use.
+            restart();
+
+            int binCount = 0;
+            int intCount = 0;
+            int numCount = 0;
+            int strCount = 0;
+
+            List<TokenBase> allTokens = new List<TokenBase>(100);
+
+            for (int i = 0; i < mTemplates.Count; i++)
+            {
+                result = validateTemplate(mTemplates[i], "en", doFullCheck: false);
+                if (result.HasError)
+                {
+                    continue;
+                }
+                // Check parameter.
+                // Along the way fill mTemplateTokens and count numbers of inputs
+                List<TokenBase> localTokens = new List<TokenBase>(10);
+                ValidationResult res = validateInternal(mTemplates[i], ref localTokens,
+                            ref binCount, ref intCount, ref numCount, ref strCount,
+                            "en", doFullCheck: false);
+                if (res.HasError)
+                {
+                    return;
+                }
+                mTokensPerTemplate[i] = localTokens;
+                allTokens.AddRange(localTokens);
+            }
+
+            // Update the input counts if successful
+            mBinInputCount.Value = binCount;
+            mIntInputCount.Value = intCount;
+            mNumInputCount.Value = numCount;
+            mStrInputCount.Value = strCount;
+
+            int binIdx = 0;
+            int intIdx = 0;
+            int numIdx = 0;
+            int strIdx = 0;
+
+            foreach (TokenBase token in allTokens)
+            {
+                if (token is VarTokenBase varToken)
+                {
+                    switch (varToken.getType())
+                    {
+                        case TokenType.VarBoolean:
+                            mBinInputs[binIdx].Name = varToken.getName();
+                            varToken.setInput(mBinInputs[binIdx]);
+                            binIdx++;
+                            break;
+                        case TokenType.VarInteger:
+                            mIntInputs[intIdx].Name = varToken.getName();
+                            varToken.setInput(mIntInputs[intIdx]);
+                            intIdx++;
+                            break;
+                        case TokenType.VarNumber:
+                            mNumInputs[numIdx].Name = varToken.getName();
+                            varToken.setInput(mNumInputs[numIdx]);
+                            numIdx++;
+                            break;
+                        case TokenType.VarString:
+                            mStrInputs[strIdx].Name = varToken.getName();
+                            varToken.setInput(mStrInputs[strIdx]);
+                            strIdx++;
+                            break;
+                        default:
+                            // Nothing to do
+                            break;
+                    }
+                }
+            }
+            updateTemplateHelpers();
         }
-        // Check parameter.
-        // Along the way fill mTemplateTokens and count numbers of inputs
-        List<TokenBase> localTokens = new List<TokenBase>(10);
-        ValidationResult res = validateInternal(mTemplates[i], ref localTokens,
-                    ref binCount, ref intCount, ref numCount, ref strCount,
-                    "en", doFullCheck: false);
-        if (res.HasError)
+
+        private void restart()
         {
-          return;
+            TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
+            System.Diagnostics.Trace.Assert(ttf != null);
+            System.Diagnostics.Trace.Assert(mPlaceholders != null);
+            ttf.restart(ref mPlaceholders);
         }
-        mTokensPerTemplate[i] = localTokens;
-        allTokens.AddRange(localTokens);
-      }
 
-      // Update the input counts if successful
-      mBinInputCount.Value = binCount;
-      mIntInputCount.Value = intCount;
-      mNumInputCount.Value = numCount;
-      mStrInputCount.Value = strCount;
-
-      int binIdx = 0;
-      int intIdx = 0;
-      int numIdx = 0;
-      int strIdx = 0;
-
-      foreach (TokenBase token in allTokens)
-      {
-        if (token is VarTokenBase varToken)
-        {
-          switch (varToken.getType())
-          {
-            case TokenType.VarBoolean:
-              mBinInputs[binIdx].Name = varToken.getName();
-              varToken.setInput(mBinInputs[binIdx]);
-              binIdx++;
-              break;
-            case TokenType.VarInteger:
-              mIntInputs[intIdx].Name = varToken.getName();
-              varToken.setInput(mIntInputs[intIdx]);
-              intIdx++;
-              break;
-            case TokenType.VarNumber:
-              mNumInputs[numIdx].Name = varToken.getName();
-              varToken.setInput(mNumInputs[numIdx]);
-              numIdx++;
-              break;
-            case TokenType.VarString:
-              mStrInputs[strIdx].Name = varToken.getName();
-              varToken.setInput(mStrInputs[strIdx]);
-              strIdx++;
-              break;
-            default:
-              // Nothing to do
-              break;
-          }
-        }
-      }
-      updateTemplateHelpers();
-    }
-
-    protected abstract void updateTemplateHelpers();
+        protected abstract void updateTemplateHelpers();
 
     /// <summary>
     /// Called when the logic sheets are checked for correctness, in order to check
@@ -307,8 +317,7 @@ namespace Recomedia_de.Logic.VisuWeb
         return result;
       }
 
-      TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
-      ttf.restart();
+      restart();
 
       foreach (var template in mTemplates)
       {
@@ -431,6 +440,7 @@ namespace Recomedia_de.Logic.VisuWeb
                            ref List<TokenBase> templateTokens)
     {
       TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
+      System.Diagnostics.Trace.Assert(ttf != null);
 
       List<SplitElement> splitElements = SplitNonTokenizedElements(template.Value);
 
@@ -449,22 +459,26 @@ namespace Recomedia_de.Logic.VisuWeb
             if (curMatch.Success && (curMatch.Length >= 2))
             {
               // Constant string before placeholder
-              templateTokens.Add(ttf.createConstStringToken(
-                elem.text.Substring(curPos, curMatch.Index - curPos)));
+              var stringToken =
+                  ttf.createConstStringToken(
+                      elem.text.Substring(curPos, curMatch.Index - curPos) );
+              templateTokens.Add(stringToken);
               // Placeholder string between delimiters
-              templateTokens.Add(
-                ttf.createPlaceholderToken(
-                  elem.text.Substring(curMatch.Index + 1, curMatch.Length - 2),
-                  getGroupSeparator(), getDecimalSeparator()
-                )
-              );
+              var placeholderOrErrorToken =
+                  ttf.createPlaceholderToken(
+                      // Assuming delimiters have 1 char each
+                      elem.text.Substring(curMatch.Index + 1, curMatch.Length - 2),
+                      getGroupSeparator(), getDecimalSeparator(), ref mPlaceholders );
+              templateTokens.Add(placeholderOrErrorToken);
+              // Advance position for next regex match
               curPos = curMatch.Index + curMatch.Length;
             }
             else
             {
-              // Constant string after last placeholder
-              templateTokens.Add(ttf.createConstStringToken(
-                elem.text.Substring(curPos)));
+              // Constant string after last placeholder to end of current token
+              var stringToken = ttf.createConstStringToken(elem.text.Substring(curPos));
+              templateTokens.Add(stringToken);
+              // End the for(curPos) loop
               curPos = elem.text.Length;
             }
           }

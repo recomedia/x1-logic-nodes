@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using LogicModule.ObjectModel;
 using LogicModule.ObjectModel.TypeSystem;
 
 namespace Recomedia_de.Logic.VisuWeb
@@ -75,7 +74,9 @@ namespace Recomedia_de.Logic.VisuWeb
 
     private string    mSource;
     private TokenType mType;
-  }
+    }
+
+  public class TokenMap : Dictionary<string, TokenBase>{}
 
   class ConstStringToken : TokenBase
   {
@@ -296,7 +297,8 @@ namespace Recomedia_de.Logic.VisuWeb
   class VarStringToken : VarTokenBase
   {
     public VarStringToken(string source,
-                          string name, bool isDefaultName, List<TextMapping> textMappings)
+                          string name, bool isDefaultName,
+                          List<TextMapping> textMappings)
       : base(source, TokenType.VarString, name, isDefaultName, null, textMappings)
     {
     }
@@ -307,7 +309,8 @@ namespace Recomedia_de.Logic.VisuWeb
     }
 
     public override string getText(string unusedFormat,
-      List<NumericMapping> unusedNumericMappings, List<TextMapping> textMappings)
+                     List<NumericMapping> unusedNumericMappings,
+                        List<TextMapping> textMappings)
     {
       if (mInput is StringValueObject input)
       {

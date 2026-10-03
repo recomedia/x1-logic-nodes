@@ -2,27 +2,16 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using LogicModule.Nodes.Helpers;
 using LogicModule.ObjectModel;
-using LogicModule.ObjectModel.TypeSystem;
 
 namespace Recomedia_de.Logic.VisuWeb
 {
   public sealed class TemplateTokenFactory
   {
-    // Explicit static constructor to tell C# compiler
-    // not to mark type as beforefieldinit
-    static TemplateTokenFactory()
-    {
-    }
-
-    private TemplateTokenFactory()
-    {
-      mCommaCulture = new CultureInfo("de");
-
-      mPlaceholders = new Dictionary<string, TokenBase>();
-    }
-
-    public static TemplateTokenFactory Instance
+    // Singleton pattern: private constructor prevents instantiation from outside
+    private TemplateTokenFactory() { }
+        public static TemplateTokenFactory Instance
     {
       get
       {
@@ -30,11 +19,13 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    public void restart()
+    public void restart(ref TokenMap placeholders)
     {
+      // Restart autmatically assigne names
       defaultNameIndex =
-      new int[(int)(TokenType.TokenTypeDim)] { 0, 0, 0, 0, 0, 0, 0 };
-      mPlaceholders.Clear();
+          new int[(int)(TokenType.TokenTypeDim)] { 0, 0, 0, 0, 0, 0, 0 };
+      // Forget previously processed placeholders
+      placeholders.Clear();
     }
 
     public TokenBase createConstStringToken(string text)
@@ -43,9 +34,14 @@ namespace Recomedia_de.Logic.VisuWeb
     }
 
     public TokenBase createPlaceholderToken(string placeholderText,
-                    string groupSeparator, string decimalSeparator)
+                    string groupSeparator, string decimalSeparator,
+                    ref TokenMap placeholders)
     {
-      PlaceholderInfo info = parsePlaceholder(placeholderText);
+      placeholders.ThrowIfNull("placeholders");
+
+      PlaceholderInfo info = parsePlaceholder(placeholderText, placeholders);
+      System.Diagnostics.Trace.Assert(info.name != null);
+
       if (info.result.HasError)
       {
         return new ErrorToken(placeholderText, info.result.Message);
@@ -57,23 +53,30 @@ namespace Recomedia_de.Logic.VisuWeb
         switch (info.type)
         {
           case TokenType.VarBoolean:
-            ret = new VarBooleanToken(placeholderText, info.name, info.isDefaultName, info.numericMappings);
+            ret = new VarBooleanToken(placeholderText, info.name, info.isDefaultName,
+                                      info.numericMappings);
             break;
           case TokenType.VarInteger:
-            ret = new VarNumericToken<int>(placeholderText, info.type, info.name, info.isDefaultName,
-                                           info.format, groupSeparator, decimalSeparator, info.numericMappings);
+            ret = new VarNumericToken<int>(placeholderText, info.type,
+                                           info.name, info.isDefaultName, info.format,
+                                           groupSeparator, decimalSeparator,
+                                           info.numericMappings);
             break;
           case TokenType.VarNumber:
-            ret = new VarNumericToken<double>(placeholderText, info.type, info.name, info.isDefaultName,
-                                              info.format, groupSeparator, decimalSeparator, info.numericMappings);
+            ret = new VarNumericToken<double>(placeholderText, info.type,
+                                              info.name, info.isDefaultName, info.format,
+                                              groupSeparator, decimalSeparator,
+                                              info.numericMappings);
             break;
           case TokenType.VarString:
-            ret = new VarStringToken(placeholderText, info.name, info.isDefaultName, info.textMappings);
+            ret = new VarStringToken(placeholderText, info.name, info.isDefaultName,
+                                     info.textMappings);
             break;
           case TokenType.VarReference:
-            if ( info.hasType )
+            if ( info.hasExplicitType )
             {
-              return new VarReferenceToken(placeholderText, info.reference, info.format, info.numericMappings);
+              return new VarReferenceToken(placeholderText, info.reference,
+                                           info.format, info.numericMappings);
             }
             else
             {
@@ -82,15 +85,19 @@ namespace Recomedia_de.Logic.VisuWeb
           default:
             return new ErrorToken(placeholderText, "UnsupportedPlaceholderType");
         }
-        mPlaceholders.Add(info.name, ret);
+        placeholders.Add(info.name, ret);
         return ret;
       }
     }
 
-    private PlaceholderInfo parsePlaceholder(string placeholderText)
+    private PlaceholderInfo parsePlaceholder(string placeholderText,
+                                        in TokenMap placeholders)
     {
-      PlaceholderInfo retInfo = new PlaceholderInfo { type = TokenType.Error };
-      retInfo.name = "";  // start empty
+      PlaceholderInfo retInfo = new PlaceholderInfo {
+          type = TokenType.Error,   // until proven otherwise
+          hasExplicitType = false,  // until proven otherwise
+          name = "",                // start empty
+      };
 
       if ( 0 < placeholderText.Length )
       {
@@ -106,7 +113,7 @@ namespace Recomedia_de.Logic.VisuWeb
             return retInfo;
           }
           TokenBase preToken;
-          bool preFound = mPlaceholders.TryGetValue(retInfo.name, out preToken);
+          bool preFound = placeholders.TryGetValue(retInfo.name, out preToken);
           if ( preFound && (preToken is VarTokenBase preVarToken) )
           { // The name already exists
             retInfo.type = TokenType.VarReference;
@@ -133,7 +140,7 @@ namespace Recomedia_de.Logic.VisuWeb
               {
                 return retInfo;
               }
-              retInfo.hasType = true;
+              retInfo.hasExplicitType = true;
             }
             break;
           default:  // More than one colon is an error
@@ -567,7 +574,7 @@ namespace Recomedia_de.Logic.VisuWeb
       public List<NumericMapping> numericMappings;
       public List<TextMapping>    textMappings;
       public VarTokenBase         reference;
-      public bool                 hasType;
+      public bool                 hasExplicitType;
       public bool                 isDefaultName;
     }
 
@@ -578,7 +585,7 @@ namespace Recomedia_de.Logic.VisuWeb
       public bool   isExcluded;
     }
 
-    private readonly CultureInfo mCommaCulture;
+    private readonly CultureInfo mCommaCulture = new CultureInfo("de");
 
     // Valid names start with a letter and optionally continue with letters,
     // digits, blanks or punctuation (except :, {, and }, because these create
@@ -597,9 +604,7 @@ namespace Recomedia_de.Logic.VisuWeb
     private int[] defaultNameIndex =
       new int[(int)(TokenType.TokenTypeDim)] { 0, 0, 0, 0, 0, 0, 0 };
 
-    private Dictionary<string, TokenBase> mPlaceholders;
-
-    private static TemplateTokenFactory mInstance = new TemplateTokenFactory();
+    private static readonly TemplateTokenFactory mInstance = new TemplateTokenFactory();
   }
 
 }
