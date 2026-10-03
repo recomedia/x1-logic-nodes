@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 
 REM Create output package directory, if not yet present
 if not exist out mkdir out
@@ -9,15 +10,33 @@ if NOT exist LogicNodesSDK\LogicNodeTool.exe (
     exit 1
 )
 
-REM Check if build output for given package is present
-set BUILDOUT=%1Nodes\bin\Debug
-if NOT exist %BUILDOUT% (
-    echo ERROR: Buid output for %1 not present.
+REM Check if Release build output (DLL) for given package is present
+set RELEASEOUT=%1Nodes\bin\Release
+set RELEASEDLL=%RELEASEOUT%\Recomedia_de.Logic.%1.dll
+if NOT exist %RELEASEDLL% (
+    echo ERROR: Build output for %1 not present.
     exit 2
 )
 
+REM Check if Release build output is newer than Debug build output
+set DEBUGOUT=%1Nodes\bin\Debug
+set DEBUGDLL=%DEBUGOUT%\Recomedia_de.Logic.%1.dll
+if exist %DEBUGDLL% ( REM Release DLL has already been checked above
+    REM Both Release and Debug DLLs exists, check which one is newer
+    REM The /L simulation mode of xcopy does not copy anything; we only
+    REM parse its output to detect whether the Debug DLL would have been
+    REM copied, which implies it is newer than the Release DLL.
+    for /F "tokens=1" %%I in ('xcopy /D /Y /L "%DEBUGDLL%" "%RELEASEDLL%"') do (
+        if "%%I" EQU "1" (
+            echo WARNING: Release DLL for %1 is older than Debug DLL.
+            echo WARNING: No shippable package created.
+            exit 0
+        )
+    )
+)
+
 REM Create package from build output
-LogicNodesSDK\LogicNodeTool.exe create %BUILDOUT% out
+LogicNodesSDK\LogicNodeTool.exe create %RELEASEOUT% out
 if %errorlevel% NEQ 0 (
     echo ERROR: Failed to create package.
     exit 3

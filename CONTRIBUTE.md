@@ -10,7 +10,6 @@ Zusätzlich zum hier bereitgestellten Quelltext wird folgendes benötigt:
 * [Microsoft Visual Studio 2017](https://visualstudio.microsoft.com/de/thank-you-downloading-visual-studio/?sku=Community&rel=15) oder [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/de/vs/community/)
   (die kostenlose Community Edition reicht)
 * Zur Messung der Abdeckung automatisierter Tests
-   * für VS 2017: [AxoCover](https://marketplace.visualstudio.com/items?itemName=axodox1.AxoCover)
    * für VS 2022: [Fine Code Coverage](https://marketplace.visualstudio.com/items?itemName=FortuneNgwenya.FineCodeCoverage) 
 * Weitere Abhängigkeiten wie unter [Insights -> Dependency graph
   angegeben](https://github.com/recomedia/x1-logic-nodes/network/dependencies)
