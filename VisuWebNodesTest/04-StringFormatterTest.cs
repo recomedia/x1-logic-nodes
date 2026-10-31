@@ -272,17 +272,18 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       ValidationResult result = node.Validate(locale);
       Assert.IsTrue(result.HasError);         // expect error
 
-      // Check localized error message
+      // Check localized error message: must be different from error code
       Assert.AreNotEqual(result.Message, expectedErrorCode);
+
       if (expectedErrorText.Length > 0)
       { // Checkk detailed error message if given
         Assert.AreEqual(expectedErrorText, result.Message);
       }
       else
-      { // Otherwise expect simple localization, potentialliy preceded by
+      { // Otherwise expect simple localization, potentially preceded by
         // some prefix
-        var messageDe = node.Localize(locale, expectedErrorCode);
-        Assert.IsTrue(result.Message.EndsWith(messageDe));
+        var messageEnding = node.Localize(locale, expectedErrorCode);
+        Assert.IsTrue(result.Message.EndsWith(messageEnding));
         // Some error messages are prefixed by the offending token or an
         // input field name. Those error messages start with a blank. If
         // this is still the case in the final message, the prefix is
@@ -878,8 +879,7 @@ namespace Recomedia_de.Logic.VisuWeb.Test
                            List<int> intInputMods,
                         List<double> numInputMods,
                         List<string> strInputMods,
-                              string expModOutput
-)
+                              string expModOutput)
     {
       // Set the given template
       node.mTemplates[0].Value = template;
@@ -970,5 +970,329 @@ namespace Recomedia_de.Logic.VisuWeb.Test
       }
     }
 
-  }
+    // Similar to one of the error cases above, but here the conflict is
+    // between two templates, not within one template
+    [Test]
+    public void TemplShareTypeError()
+    {
+      node.mTemplateCount.Value = 2;
+      // Set a simple valid template that uses a string placeholder
+      node.mTemplates[0].Value = "{Trend:S|up=auf|do=ab}";
+      // Set another template requiring the same input, giving wrong type
+      node.mTemplates[1].Value = "{Trend:N|>0,0..=pos|..<0=neg}";
+
+      // Expect validation error
+      ValidateAndCheckError("de", "PlaceholderReuseWrongType",
+        "Formatvorlage 2: {Trend:N|>0,0..=pos|..<0=neg} bezieht sich auf" +
+        " einen bereits definierten Eingangsnamen, gibt aber einen anderen" +
+        " Typ an. Eine Referenz kann nur die Formatierung, nicht aber den" +
+        " Typ ihres Eingangs neu festlegen.");
+      ValidateAndCheckError("en", "PlaceholderReuseWrongType",
+        "Format Template 2: {Trend:N|>0,0..=pos|..<0=neg} refers to a" +
+        " previously defined input name, but specifies a different type." +
+        " A reference can only redefine the formatting, but not the type," +
+        " of the used input.");
+    }
+
+    // Github issue #7 <https://github.com/recomedia/x1-logic-nodes/issues/7>
+    // Multiple templates using the same text input, but with different
+    // replacements. Also testing format re-use along the way.
+    [Test]
+    public void TemplShareTextInput()
+    {
+      node.mTemplateCount.Value = 3;
+      // Set a simple valid template that uses a string placeholder
+      node.mTemplates[0].Value = "{Trend:S|up=auf|do=ab}";
+      // Set another template requiring the same input
+      node.mTemplates[1].Value = "{Trend:S|up=steigend|do=fallend}";
+      // Set 3rd template requiring the same input
+      node.mTemplates[2].Value = "{Trend}";
+
+      // Expect no validation errors
+      ValidationResult result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      // All templates use the same placeholder name; we expect only one input
+      Assert.AreEqual(1, node.mStrInputs.Count);
+      checkInputNames<StringValueObject>(
+        new List<string> { "Trend" }, node.mStrInputs);
+
+      // Check the resulting outputs, expecting one output per template
+      Assert.AreEqual(node.mTemplateCount.Value, node.mOutputs.Count);
+      for (int i = 0; i < node.mTemplateCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // outputs should exist ...
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // ... but have no value yet
+      }
+
+      // Set the input value
+      node.mStrInputs[0].Value = "up";
+
+      // Check the expected output values, expecting both to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("auf", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      // issue #7: got "up" before fix; replacement not made
+      Assert.AreEqual("steigend", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("auf", node.mOutputs[2].Value);
+
+      // Set the input value again
+      node.mStrInputs[0].Value = "do";
+
+      // Check the expected output values again, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("ab", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("fallend", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("ab", node.mOutputs[2].Value);
+    }
+
+    // Inspired by github issue #7; covering a related case for  binary (boolean)
+    // input. Multiple templates using the same input with different replacements.
+    // Also testing format re-use along the way.
+    [Test]
+    public void TemplShareBoolInput()
+    {
+      node.mTemplateCount.Value = 3;
+      // Set a simple valid template that uses a binary placeholder
+      node.mTemplates[0].Value = "{Is:B|off|on}";
+      // Set another template requiring the same input
+      node.mTemplates[1].Value = "{Is:B|aus|ein}";
+      // Set 3rd template requiring the same input
+      node.mTemplates[2].Value = "{Is}";
+
+      // Expect no validation errors
+      ValidationResult result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      // All templates use the same placeholder name; we expect only one input
+      Assert.AreEqual(1, node.mBinInputs.Count);
+      checkInputNames<BoolValueObject>(
+        new List<string> { "Is" }, node.mBinInputs);
+
+      // Check the resulting outputs, expecting one output per template
+      Assert.AreEqual(node.mTemplateCount.Value, node.mOutputs.Count);
+      for (int i = 0; i < node.mTemplateCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // outputs should exist ...
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // ... but have no value yet
+      }
+
+      // Set the input value
+      node.mBinInputs[0].Value = true;
+
+      // Check the expected output values, expecting both to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("on", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("ein", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("on", node.mOutputs[2].Value);
+
+      // Set the input value again
+      node.mBinInputs[0].Value = false;
+
+      // Check the expected output values again, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("off", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("aus", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("off", node.mOutputs[2].Value);
+    }
+
+    // Inspired by github issue #7; covering a related case for integer input.
+    // Multiple templates using the same input with different replacements.
+    // Also testing format re-use along the way.
+    [Test]
+    public void TemplShareIntInput()
+    {
+      node.mTemplateCount.Value = 3;
+      // Set a simple valid template that uses an integer placeholder
+      node.mTemplates[0].Value = "{Int:I|Zero|One}";
+      // Set another template requiring the same input
+      node.mTemplates[1].Value = "{Int:I|Null|Eins}";
+      // Set 3rd template requiring the same input
+      node.mTemplates[2].Value = "{Int}";
+
+      // Expect no validation errors
+      ValidationResult result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      // All templates use the same placeholder name; we expect only one input
+      Assert.AreEqual(1, node.mIntInputs.Count);
+      checkInputNames<IntValueObject>(
+        new List<string> { "Int" }, node.mIntInputs);
+
+      // Check the resulting outputs, expecting one output per template
+      Assert.AreEqual(node.mTemplateCount.Value, node.mOutputs.Count);
+      for (int i = 0; i < node.mTemplateCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // outputs should exist ...
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // ... but have no value yet
+      }
+
+      // Set the input value
+      node.mIntInputs[0].Value = 1;
+
+      // Check the expected output values, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("One", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("Eins", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("One", node.mOutputs[2].Value);
+
+      // Set the input value again
+      node.mIntInputs[0].Value = 0;
+
+      // Check the expected output values again, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("Zero", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("Null", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("Zero", node.mOutputs[2].Value);
+    }
+
+    // Inspired by github issue #7; covering a related case for numeric (double
+    // precision floating-point) input. Multiple templates using the same input
+    // with different replacements. Also testing format re-use along the way.
+    [Test]
+    public void TemplShareNumInput()
+    {
+      node.mTemplateCount.Value = 4;
+      // Set a simple valid template that uses a numeric (double) placeholder
+      node.mTemplates[0].Value = "{Num:N|>0,0..=pos|..<0=neg}";
+      // Set another template requiring the same input
+      node.mTemplates[1].Value = "{Num:N|>0,0..=plus|..<0=minus}";
+      // Set 3rd template requiring the same input; re-use definition format
+      node.mTemplates[2].Value = "{Num}";
+      // Set 4th template requiring the same input; use standard format
+      node.mTemplates[3].Value = "{Num:N}";
+
+      // Expect no validation errors
+      ValidationResult result = node.Validate("en");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      // All templates use the same placeholder name; we expect only one input
+      Assert.AreEqual(1, node.mNumInputs.Count);
+      checkInputNames<DoubleValueObject>(
+        new List<string> { "Num" }, node.mNumInputs);
+
+      // Check the resulting outputs, expecting one output per template
+      Assert.AreEqual(node.mTemplateCount.Value, node.mOutputs.Count);
+      for (int i = 0; i < node.mTemplateCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // outputs should exist ...
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // ... but have no value yet
+      }
+
+      // Set the input value
+      node.mNumInputs[0].Value = 1.0;
+
+      // Check the expected output values, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("pos", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("plus", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("pos", node.mOutputs[2].Value);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("1.00", node.mOutputs[3].Value);
+
+      // Set the input value again
+      node.mNumInputs[0].Value = -0.1;
+
+      // Check the expected output values again, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("neg", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("minus", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("neg", node.mOutputs[2].Value);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("-0.10", node.mOutputs[3].Value);
+    }
+
+    // Inspired by github issue #7; covering a related case for percent (double
+    // precision floating-point) input.  Multiple templates using the same input
+    // with different replacements. Also testing format re-use along the way.
+    [Test]
+    public void TemplSharePercentInput()
+    {
+      node.mTemplateCount.Value = 6;
+      // Set a simple valid template that uses a numeric (double) placeholder
+      node.mTemplates[0].Value = "{Prc:P0}";
+      // Set another template requiring the same input; format uses replacements
+      node.mTemplates[1].Value = "{Prc:P|>0,5..=more than half|..0,5=half or less}";
+      // Set 3rd template requiring the same input; different format specifier
+      node.mTemplates[2].Value = "{Prc:P1}";
+      // Set 4th template requiring the same input; use standard format
+      node.mTemplates[3].Value = "{Prc:P}";
+      // Set 5th template requiring the same input; re-use definition format
+      node.mTemplates[4].Value = "{Prc}";
+      // Set 6th template requiring the same input; use standard numeric format
+      node.mTemplates[5].Value = "{Prc:N}";
+
+      // Expect no validation errors
+      ValidationResult result = node.Validate("de");
+      Assert.IsFalse(result.HasError);
+
+      // Check the resulting inputs
+      // All templates use the same placeholder name; we expect only one input
+      Assert.AreEqual(1, node.mNumInputs.Count);
+      checkInputNames<DoubleValueObject>(
+        new List<string> { "Prc" }, node.mNumInputs);
+
+      // Check the resulting outputs, expecting one output per template
+      Assert.AreEqual(node.mTemplateCount.Value, node.mOutputs.Count);
+      for (int i = 0; i < node.mTemplateCount.Value; i++)
+      {
+        Assert.IsNotNull(node.mOutputs[i]);         // outputs should exist ...
+        Assert.IsFalse(node.mOutputs[i].HasValue);  // ... but have no value yet
+      }
+
+      // Set the input value
+      node.mNumInputs[0].Value = 0.7;
+
+      // Check the expected output values, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("70%", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("more than half", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("70.0%", node.mOutputs[2].Value);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("70.00%", node.mOutputs[3].Value);
+      Assert.IsTrue(node.mOutputs[4].HasValue);
+      Assert.AreEqual("70%", node.mOutputs[4].Value);
+      Assert.IsTrue(node.mOutputs[5].HasValue);
+      Assert.AreEqual("0.70", node.mOutputs[5].Value);
+
+      // Set the input value again
+      node.mNumInputs[0].Value = -0.1;
+
+      // Check the expected output values again, expecting all to be replaced
+      Assert.IsTrue(node.mOutputs[0].HasValue);
+      Assert.AreEqual("-10%", node.mOutputs[0].Value);
+      Assert.IsTrue(node.mOutputs[1].HasValue);
+      Assert.AreEqual("half or less", node.mOutputs[1].Value);
+      Assert.IsTrue(node.mOutputs[2].HasValue);
+      Assert.AreEqual("-10.0%", node.mOutputs[2].Value);
+      Assert.IsTrue(node.mOutputs[3].HasValue);
+      Assert.AreEqual("-10.00%", node.mOutputs[3].Value);
+      Assert.IsTrue(node.mOutputs[4].HasValue);
+      Assert.AreEqual("-10%", node.mOutputs[4].Value);
+      Assert.IsTrue(node.mOutputs[5].HasValue);
+      Assert.AreEqual("-0.10", node.mOutputs[5].Value);
+    }
+
+  } // end class StringFormatterTest
 }

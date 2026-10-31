@@ -41,8 +41,8 @@ namespace Recomedia_de.Logic.VisuWeb
     private const int MAX_INPUTS = 50;
 
     /// <summary>
-    /// The group and decimal separator to use when formatting numbers as text can
-    /// be customized by derived classes.
+    /// The group and decimal separator to use when formatting numbers as text
+    /// can be customized by derived classes.
     /// </summary>
     private readonly string mGroupSeparator = "'";
     protected virtual string getGroupSeparator()
@@ -75,7 +75,8 @@ namespace Recomedia_de.Logic.VisuWeb
       mTypeService = context.GetService<ITypeService>();
 
       // Initialize one template parameter, but allow more of them
-      mTemplateCount = mTypeService.CreateInt(PortTypes.Integer, TEMPLATE_PREFIX + "Count", 1);
+      mTemplateCount =
+          mTypeService.CreateInt(PortTypes.Integer, TEMPLATE_PREFIX + "Count", 1);
       mTemplateCount.MinValue =  1;
       mTemplateCount.MaxValue = 50;
       mTemplates = new List<StringValueObject>();
@@ -90,10 +91,14 @@ namespace Recomedia_de.Logic.VisuWeb
       mTemplateCount.ValueSet += updateTemplateCount;
 
       // Initialize the input counts
-      mBinInputCount = mTypeService.CreateInt(PortTypes.Integer, INPUT_BIN_PREFIX+"Count", 0);
-      mIntInputCount = mTypeService.CreateInt(PortTypes.Integer, INPUT_INT_PREFIX+"Count", 0);
-      mNumInputCount = mTypeService.CreateInt(PortTypes.Integer, INPUT_NUM_PREFIX+"Count", 0);
-      mStrInputCount = mTypeService.CreateInt(PortTypes.Integer, INPUT_STR_PREFIX+"Count", 0);
+      mBinInputCount =
+          mTypeService.CreateInt(PortTypes.Integer, INPUT_BIN_PREFIX+"Count", 0);
+      mIntInputCount =
+          mTypeService.CreateInt(PortTypes.Integer, INPUT_INT_PREFIX+"Count", 0);
+      mNumInputCount =
+          mTypeService.CreateInt(PortTypes.Integer, INPUT_NUM_PREFIX+"Count", 0);
+      mStrInputCount =
+          mTypeService.CreateInt(PortTypes.Integer, INPUT_STR_PREFIX+"Count", 0);
 
       // Initialize inputs using helper functions that grow/shrink the list of
       // inputs whenever the input count is changed
@@ -142,13 +147,13 @@ namespace Recomedia_de.Logic.VisuWeb
     [Input(DisplayOrder = 33, InitOrder = 33, IsDefaultShown = true)]
     public IList<StringValueObject> mStrInputs { get; private set; }
 
-        /// <summary>
-        /// The value outputs are shown first, attempting to show them to the
-        /// right of their defining text. This will break if the user switches
-        /// any of them invisible. They are still optional because GPA 6 errs
-        /// when required outputs are not connected to anything.
-        /// </summary>
-        [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
+    /// <summary>
+    /// The value outputs are shown first, attempting to show them to the
+    /// right of their defining text. This will break if the user switches
+    /// any of them invisible. They are still optional because GPA 6 errs
+    /// when required outputs are not connected to anything.
+    /// </summary>
+    [Output(DisplayOrder = 1, IsDefaultShown = true, IsRequired = false)]
     public List<IValueObject> mOutputs { get; set; }
 
     protected string mLanguage = "de";
@@ -201,103 +206,103 @@ namespace Recomedia_de.Logic.VisuWeb
     /// </summary>
     protected void updateTemplate(object sender = null,
                  ValueChangedEventArgs evArgs = null)
+    {
+      // Validate the separators first to prevent throwing exceptions later
+      // in System.Globalization
+      ValidationResult result = validateSeparators("en");
+      if (result.HasError)
+      {
+        return;
+      }
+
+      // Even though only one template has changed we must re-evaluate all
+      // templates, because these depend on each other due to placeholder
+      // re-use.
+      restart();
+
+      int binCount = 0;
+      int intCount = 0;
+      int numCount = 0;
+      int strCount = 0;
+
+      List<TokenBase> allTokens = new List<TokenBase>(100);
+
+      for (int i = 0; i < mTemplates.Count; i++)
+      {
+        result = validateTemplate(mTemplates[i], "en", doFullCheck: false);
+        if (result.HasError)
         {
-            // Validate the separators first to prevent throwing exceptions later
-            // in System.Globalization
-            ValidationResult result = validateSeparators("en");
-            if (result.HasError)
-            {
-                return;
-            }
-
-            // Even though only one template has changed we must re-evaluate all
-            // templates, because these depend on each other due to placeholder
-            // re-use.
-            restart();
-
-            int binCount = 0;
-            int intCount = 0;
-            int numCount = 0;
-            int strCount = 0;
-
-            List<TokenBase> allTokens = new List<TokenBase>(100);
-
-            for (int i = 0; i < mTemplates.Count; i++)
-            {
-                result = validateTemplate(mTemplates[i], "en", doFullCheck: false);
-                if (result.HasError)
-                {
-                    continue;
-                }
-                // Check parameter.
-                // Along the way fill mTemplateTokens and count numbers of inputs
-                List<TokenBase> localTokens = new List<TokenBase>(10);
-                ValidationResult res = validateInternal(mTemplates[i], ref localTokens,
-                            ref binCount, ref intCount, ref numCount, ref strCount,
-                            "en", doFullCheck: false);
-                if (res.HasError)
-                {
-                    return;
-                }
-                mTokensPerTemplate[i] = localTokens;
-                allTokens.AddRange(localTokens);
-            }
-
-            // Update the input counts if successful
-            mBinInputCount.Value = binCount;
-            mIntInputCount.Value = intCount;
-            mNumInputCount.Value = numCount;
-            mStrInputCount.Value = strCount;
-
-            int binIdx = 0;
-            int intIdx = 0;
-            int numIdx = 0;
-            int strIdx = 0;
-
-            foreach (TokenBase token in allTokens)
-            {
-                if (token is VarTokenBase varToken)
-                {
-                    switch (varToken.getType())
-                    {
-                        case TokenType.VarBoolean:
-                            mBinInputs[binIdx].Name = varToken.getName();
-                            varToken.setInput(mBinInputs[binIdx]);
-                            binIdx++;
-                            break;
-                        case TokenType.VarInteger:
-                            mIntInputs[intIdx].Name = varToken.getName();
-                            varToken.setInput(mIntInputs[intIdx]);
-                            intIdx++;
-                            break;
-                        case TokenType.VarNumber:
-                            mNumInputs[numIdx].Name = varToken.getName();
-                            varToken.setInput(mNumInputs[numIdx]);
-                            numIdx++;
-                            break;
-                        case TokenType.VarString:
-                            mStrInputs[strIdx].Name = varToken.getName();
-                            varToken.setInput(mStrInputs[strIdx]);
-                            strIdx++;
-                            break;
-                        default:
-                            // Nothing to do
-                            break;
-                    }
-                }
-            }
-            updateTemplateHelpers();
+          continue;
         }
-
-        private void restart()
+        // Check parameter.
+        // Along the way fill mTemplateTokens and count numbers of inputs
+        List<TokenBase> localTokens = new List<TokenBase>(10);
+        ValidationResult res = validateInternal(mTemplates[i], ref localTokens,
+                    ref binCount, ref intCount, ref numCount, ref strCount,
+                    "en", doFullCheck: false);
+        if (res.HasError)
         {
-            TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
-            System.Diagnostics.Trace.Assert(ttf != null);
-            System.Diagnostics.Trace.Assert(mPlaceholders != null);
-            ttf.restart(ref mPlaceholders);
+          return;
         }
+        mTokensPerTemplate[i] = localTokens;
+        allTokens.AddRange(localTokens);
+      }
 
-        protected abstract void updateTemplateHelpers();
+      // Update the input counts only if successful
+      mBinInputCount.Value = binCount;
+      mIntInputCount.Value = intCount;
+      mNumInputCount.Value = numCount;
+      mStrInputCount.Value = strCount;
+
+      int binIdx = 0;
+      int intIdx = 0;
+      int numIdx = 0;
+      int strIdx = 0;
+
+      foreach (TokenBase token in allTokens)
+      {
+        if (token is VarTokenBase varToken)
+        {
+          switch (varToken.getType())
+          {
+            case TokenType.VarBoolean:
+              mBinInputs[binIdx].Name = varToken.getName();
+              varToken.setInput(mBinInputs[binIdx]);
+              binIdx++;
+              break;
+            case TokenType.VarInteger:
+              mIntInputs[intIdx].Name = varToken.getName();
+              varToken.setInput(mIntInputs[intIdx]);
+              intIdx++;
+              break;
+            case TokenType.VarNumber:
+              mNumInputs[numIdx].Name = varToken.getName();
+              varToken.setInput(mNumInputs[numIdx]);
+              numIdx++;
+              break;
+            case TokenType.VarString:
+              mStrInputs[strIdx].Name = varToken.getName();
+              varToken.setInput(mStrInputs[strIdx]);
+              strIdx++;
+              break;
+            default:
+              // Nothing to do
+              break;
+          }
+        }
+      }
+      updateTemplateHelpers();
+    }
+
+    private void restart()
+    {
+      TemplateTokenFactory ttf = TemplateTokenFactory.Instance;
+      System.Diagnostics.Trace.Assert(ttf != null);
+      System.Diagnostics.Trace.Assert(mPlaceholders != null);
+      ttf.restart(ref mPlaceholders);
+    }
+
+    protected abstract void updateTemplateHelpers();
 
     /// <summary>
     /// Called when the logic sheets are checked for correctness, in order to check

@@ -55,7 +55,12 @@
       <p>
         Solange keine gültige(n) <a href="#parameter">Formatvorlage</a>(n) festgelegt
         wurde(n), hat der Baustein keine Eingänge.
-        <b><i>Eingänge werden nur durch gültige Platzhalter in den Formatvorlagen angelegt.</i></b>
+        <b>
+          <i>
+            Eingänge werden nur durch gültige <a href="#platzhalter">Platzhalter</a>
+            in den Formatvorlagen angelegt.
+          </i>
+        </b>
         Ihre Reihenfolge ergibt sich &ndash; für jeden Porttyp getrennt &ndash; aus
         der Reihenfolge der entsprechenden Platzhalter in den Formatvorlagen. In der
         Tabelle sind die automatisch vergebenen Eingangsnamen genannt. Diese werden
@@ -354,49 +359,61 @@
       <ul>
         <li>
           <b>Definition</b> &ndash; definiert erstmals einen Eingang
-          mit Namen und Typ und hat die folgende Form:<br />
+          mit Name, Datentyp und gewünschter Ausgabeformatierung in
+          folgender Form:<br />
           &nbsp;&nbsp;&nbsp;&nbsp;<code>{</code>[<i>Eingangsname</i>]<code>:</code><i>T</i>[<i>Format</i>]<code>}</code>
         </li>
         <li>
           <b>Referenz</b> &ndash; bezieht sich auf einen vorher definierten
-          Eingang, dessen Typ bereits festgelegt ist:<br />
+          Eingangsnamen, dessen Datentyp bereits festgelegt ist:<br />
           &nbsp;&nbsp;&nbsp;&nbsp;<code>{</code><i>Eingangsname</i>[<code>:</code><i>T</i>[<i>Format</i>]]<code>}</code>
         </li>
       </ul>
       <p>
-        Syntaxelemente in  [...] können auch weg gelassen werden.
+        <i>Eingangsname</i> wird als Bezeichnung des Baustein-Eingangs
+        verwendet. Wird bei einer Definition kein Name angegeben, so
+        wird automatisch einer erzeugt (siehe <a href="#eingaenge">
+        Tabelle "Eingänge" oben</a>).
       </p>
       <p>
-        <i>Eingangsname</i> wird als Bezeichnung des Baustein-Eingangs
-        verwendet. Definitionen legen Eingänge an und formatieren deren
-        Werte als Teil des Ausgabetexts. Referenzen verwenden den Wert
-        eines vorher definierten Eingangs erneut. Sie dürfen sich auch
-        auf Namen beziehen, die in einer anderen Formatvorlage mit einer
-        niedrigeren Nummer definiert worden sind. Dabei können abweichende
-        Formatierungsparameter, aber kein abweichender Datentyp
-        festgelegt werden. Wird bei einer Definition kein Name
-        angegeben, so wird automatisch einer erzeugt (siehe
-        <a href="#eingaenge">Tabelle "Eingänge" oben</a>).
+        <i>T</i> ist ein Buchstabe, der den <b>Datentyp</b> des Eingangs
+        und die grundlegende Art der Darstellung im  Ausgabetext festlegt.
+        Nach diesem kann <i>Format</i> je nach  Datentyp noch weitere
+        Anweisungen für die Darstellung bestimmter  Werte oder
+        Wertebereiche geben. Details dazu finden sich
+        <a href="#datentyp_format">in den folgenden Abschnitten</a>.
+      </p>
+      <p>
+        Syntaxelemente in [...] können auch weg gelassen werden. Wird das
+        <i>Format</i> weg gelassen, so wird die beim jeweiligen <i>T</i>
+        angegebene Standardformatierung benutzt. Werden wowohl <i>T</i>
+        als auch <i>Format</i> in einer Referenz weg gelassen (also nur
+        der <i>Eingangsname</i> angegeben), so wird das <i>Format</i> der
+        Definition benutzt.
+      </p>
+      <p>
+        Der <i>Eingangsname</i> einer Referenz muss seine Definition in
+        der gleichen Formatvorlage oder einer mit einer niedrigeren Nummer
+        finden. Der Datentyp einer Referenz muss dem in der Definition
+        entsprechen. Das <i>Format</i> (und bei gleichem Datentyp auch der
+        Buchstabe <i>T</i>) darf verändert werden.
       </p>
       <p>
         <i>Eingangsname</i> muss mit einem Buchstaben beginnen. Weiter kann
         er auch Ziffern, Leer- und Interpunktionszeichen enthalten, mit
-        Ausnahme von geschweiften Klammern (<code>{</code> und <code>}</code>) und
-        Doppelpunkt (<code>:</code>). Leerzeichen am Anfang oder am Ende
+        Ausnahme von geschweiften Klammern (<code>{</code> und <code>}</code>)
+        und Doppelpunkt (<code>:</code>). Leerzeichen am Anfang oder am Ende
         werden nicht in den Namen übernommen.
       </p>
-      <h3>Datentyp und Formatierung</h3>
+      <h3 id="datentyp_format">Datentyp und Formatierung</h3>
       <p>
-        <i>T</i> ist ein Buchstabe, der den <b>Datentyp</b> des Eingangs und
-        die grundlegende Art der Darstellung im Ausgabetext festlegt.<br />
-        Danach kann <i>Format</i> je nach Datentyp noch weitere Anweisungen
-        für die Darstellung bestimmter Werte oder Wertebereiche geben.<br />
-        Folgende Buchstaben &ndash; Groß- und Kleinbuchstaben haben gleiche
-        Bedeutung &ndash; und <i>Format</i>parameter sind möglich:
+        Folgende Datentypen, Typ-/Format-Buchstaben (Groß- und
+        Kleinbuchstaben haben gleiche Bedeutung) und
+        <i>Format</i>parameter sind möglich:
       </p>
       <ul>
         <li>
-          <code>B</code> &ndash; Wahrheitswert (Bool)
+          Wahrheitswert (Bool) &ndash; <b><code>B</code></b>
           <ul>
             <li>
               Ohne <i>Format</i>parameter wird <code>false</code>
@@ -425,84 +442,81 @@
           </ul>
         </li>
         <li>
-          <code>I</code> &ndash; Ganzzahl (Integer). Zu möglichen
-          <i>Format</i>parametern siehe im Abschnitt
-          <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
+          Ganzzahl (Integer) &ndash; <b><code>I</code></b><br />
+          Zu möglichen <i>Format</i>parametern siehe unten im Abschnitt
+          <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>.
+        </li>
+        <li>
+          Fließkommazahl (Number)
+          <ul>
+            <li>
+              <b><code>F</code></b> &ndash; Formatierung
+              <em>ohne</em>
+              Gruppentrennzeichen (Tausendertrennzeichen)
+              <ul>
+                <li>
+                  Ohne <i>Format</i>parameter wird die Zahl gerundet
+                  auf zwei Nachkommastellen dargestellt.
+                </li>
+                <li>
+                  Mit einer Ziffer als <i>Format</i>parameter (z. B.
+                  F1) wird die Zahl gerundet auf die angegebene Zahl
+                  von Nachkommastellen dargestellt (im Beispiel mit
+                  einer Nachkommastelle).
+                </li>
+              </ul>
+            </li>
+            <li>
+              <b><code>N</code></b> &ndash; Formatierung <em>mit</em> dem
+              <a href="#parameter">parametrierten</a> Gruppentrennzeichen
+              (Tausendertrennzeichen), ansonsten wie <code>F</code>.
+            </li>
+            <li>
+              <b><code>G</code></b> &ndash; Formatierung ähnlich wie
+              <code>F</code>, jedoch mit zwei Abweichungen:
+              <ul>
+                <li>
+                  Die <i>Format</i>-Ziffer gibt nicht die Zahl der
+                  Nachkommastellen, sondern die Zahl der geltenden
+                  Ziffern an.
+                </li>
+                <li>
+                  Exponentialschreibweise (wissenschaftliche Notation)
+                  wird benutzt, wenn dies zu einer kompakteren
+                  Darstellung führt.
+                </li>
+              </ul>
+              Beispiel: Die Zahl 12 345 678.9 wird mit G4 als 1.235E+07
+              dargestellt.
+            </li>
+            <li>
+              <b><code>P</code></b> &ndash; Formatierung als Prozentwert:
+              1.0 wird z. B. als "100.00%" dargestellt.
+              <ul>
+                <li>
+                  Ohne <i>Format</i>-Ziffer wird der Prozentwert gerundet
+                  auf zwei Nachkommastellen dargestellt.
+                </li>
+                <li>
+                  Mit einer <i>Format</i>-Ziffer wird der Prozentwert gerundet
+                  auf die angegebene Zahl von Nachkommastellen dargestellt.
+                </li>
+              </ul>
+            </li>
+          </ul>
+          Zu möglichen weiteren <i>Format</i>parametern siehe unten im Abschnitt
+          <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>.
           weiter unten.
         </li>
         <li>
-          <code>F</code> &ndash; Fließkommazahl (Number), <em>ohne</em>
-          Gruppentrennzeichen (Tausendertrennzeichen) formatiert
-          <ul>
-            <li>
-              Ohne <i>Format</i>parameter wird die Zahl gerundet
-              auf zwei Nachkommastellen dargestellt.
-            </li>
-            <li>
-              Mit einer Ziffer als <i>Format</i>parameter (z. B.
-              F1) wird die Zahl gerundet auf die angegebene Zahl
-              von Nachkommastellen dargestellt (im Beispiel mit
-              einer Nachkommastelle).
-            </li>
-            <li>
-              Zu möglichen weiteren <i>Format</i>parametern siehe den Abschnitt
-              <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
-              weiter unten.
-            </li>
-          </ul>
-        </li>
-        <li>
-          <code>N</code> &ndash; Fließkommazahl (Number), <em>mit</em> dem
-          <a href="#parameter">parametrierten</a> Gruppentrennzeichen
-          (Tausendertrennzeichen) formatiert. Ansonsten wie <code>F</code>.
-        </li>
-        <li>
-          <code>G</code> &ndash; Fließkommazahl, formatiert ähnlich wie
-          <code>F</code>, jedoch mit zwei Abweichungen:
-          <ul>
-            <li>
-              Die <i>Format</i>-Ziffer gibt nicht die Zahl der
-              Nachkommastellen, sondern die Zahl der geltenden
-              Ziffern an.
-            </li>
-            <li>
-              Exponentialschreibweise (wissenschaftliche Notation)
-              wird benutzt, wenn dies zu einer kompakteren
-              Darstellung führt.
-            </li>
-          </ul>
-          Beispiel: Die Zahl 12 345 678.9 wird mit G4 als 1.235E+07
-          dargestellt.
-        </li>
-        <li>
-          <code>P</code> &ndash; Fließkommazahl, als Prozentwert formatiert:
-          1.0 wird z. B. als "100.00%" dargestellt.
-          <ul>
-            <li>
-              Ohne <i>Format</i>-Ziffer wird der Prozentwert gerundet
-              auf zwei Nachkommastellen dargestellt.
-            </li>
-            <li>
-              Mit einer <i>Format</i>-Ziffer wird der Prozentwert gerundet
-              auf die angegebene Zahl von Nachkommastellen dargestellt.
-            </li>
-            <li>
-              Zu möglichen weiteren <i>Format</i>parametern siehe den Abschnitt
-              <a href="#textzuweisungen">Textdarstellungen numerischer Werte</a>
-              weiter unten.
-            </li>
-          </ul>
-        </li>
-        <li>
-          <code>S</code> - Variabler Text. Zu möglichen <i>Format</i>parametern
-          siehe den Abschnitt
-          <a href="#textersetzungen">Textersetzungen in Text-Platzhaltern</a>
-          weiter unten.
+          Variabler Text &ndash; <b><code>S</code></b><br />
+          Zu möglichen <i>Format</i>parametern siehe unten im Abschnitt
+          <a href="#textersetzungen">Textersetzungen in Text-Platzhaltern</a>.
         </li>
       </ul>
       <h3 id="textzuweisungen">Textdarstellungen numerischer Werte</h3>
       <p>
-        Das <i>Format</i> für numerische Werte kann zusätzlich
+        Das <i>Format</i> für Ganz- und Fließkommazahlen kann zusätzlich
         eine oder mehrere &ndash; durch <b>|</b> getrennte &ndash;
         <b>Textzuweisungen</b> enthalten. Diese bilden Zahlenwerte
         am Eingang auf Unicode-Textbausteine im Ausgabetext ab.
@@ -570,7 +584,8 @@
           <div class="box-scroll-x"> <code>{Windgeschwindigkeit(m/s):F|..&lt;0,3=0|0,3..&lt;1,54=1|1,54..&lt;3,3=2|3,3..&lt;5,47=3|5,47..&lt;8=4|8..&lt;10,8=5|10,8..&lt;13,86=6|13,86..&lt;17,17=7|17,17..&lt;20,72=8|20,72..&lt;24,48=9|24,48..&lt;28,44=10|28,44..&lt;32,6=11|32,6..=12} </code></div>
         </li>
         <li>
-          <a href="https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2">OpenWeather-Wettercode</a> als Unicode-Piktogramm ausgeben:<br />
+          <a href="https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2">OpenWeather-Wettercode</a>
+          als Unicode-Piktogramm ausgeben:<br />
           <div class="box-scroll-x"> <code>{Wettercode:I|210..211=🌩|200..299=⛈|500..504=🌦|300..599=🌧|600..699=🌨|771..781=🌪|700..799=🌫|800=☼|801=🌤|802=⛅|803=🌥|804=☁} </code></div>
           Die Bereichsüberschneidungen sind beabsichtigt: Kleinere Bereiche
           für spezielle Piktogramme stehen vor größeren Bereichen mit

@@ -11,7 +11,7 @@ namespace Recomedia_de.Logic.VisuWeb
   {
     // Singleton pattern: private constructor prevents instantiation from outside
     private TemplateTokenFactory() { }
-        public static TemplateTokenFactory Instance
+    public static TemplateTokenFactory Instance
     {
       get
       {
@@ -28,14 +28,15 @@ namespace Recomedia_de.Logic.VisuWeb
       placeholders.Clear();
     }
 
-    public TokenBase createConstStringToken(string text)
+    public TokenBase createConstStringToken(in string text)
     {
       return new ConstStringToken(text);
     }
 
-    public TokenBase createPlaceholderToken(string placeholderText,
-                    string groupSeparator, string decimalSeparator,
-                    ref TokenMap placeholders)
+    public TokenBase createPlaceholderToken(in string placeholderText,
+                                            in string groupSeparator,
+                                            in string decimalSeparator,
+                                            ref TokenMap placeholders)
     {
       placeholders.ThrowIfNull("placeholders");
 
@@ -53,30 +54,28 @@ namespace Recomedia_de.Logic.VisuWeb
         switch (info.type)
         {
           case TokenType.VarBoolean:
-            ret = new VarBooleanToken(placeholderText, info.name, info.isDefaultName,
-                                      info.numericMappings);
+            ret = new VarBooleanToken(placeholderText,
+                          info.name, info.isDefaultName, info.numericMappings);
             break;
           case TokenType.VarInteger:
             ret = new VarNumericToken<int>(placeholderText, info.type,
-                                           info.name, info.isDefaultName, info.format,
-                                           groupSeparator, decimalSeparator,
-                                           info.numericMappings);
+                          info.name, info.isDefaultName, info.format,
+                          groupSeparator, decimalSeparator, info.numericMappings);
             break;
           case TokenType.VarNumber:
             ret = new VarNumericToken<double>(placeholderText, info.type,
-                                              info.name, info.isDefaultName, info.format,
-                                              groupSeparator, decimalSeparator,
-                                              info.numericMappings);
+                          info.name, info.isDefaultName, info.format,
+                          groupSeparator, decimalSeparator, info.numericMappings);
             break;
           case TokenType.VarString:
-            ret = new VarStringToken(placeholderText, info.name, info.isDefaultName,
-                                     info.textMappings);
+            ret = new VarStringToken(placeholderText,
+                          info.name, info.isDefaultName, info.textMappings);
             break;
           case TokenType.VarReference:
             if ( info.hasExplicitType )
             {
               return new VarReferenceToken(placeholderText, info.reference,
-                                           info.format, info.numericMappings);
+                             info.format, info.numericMappings, info.textMappings);
             }
             else
             {
@@ -90,8 +89,8 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private PlaceholderInfo parsePlaceholder(string placeholderText,
-                                        in TokenMap placeholders)
+    private PlaceholderInfo parsePlaceholder(in string placeholderText,
+                                             in TokenMap placeholders)
     {
       PlaceholderInfo retInfo = new PlaceholderInfo {
           type = TokenType.Error,   // until proven otherwise
@@ -132,15 +131,18 @@ namespace Recomedia_de.Logic.VisuWeb
             }
             return retInfo;
           case 2:   // Name (potentially empty) and format given
-            placeholderText = s1[1];  // Format to parse follows after ':' 
-            if ( 0 < placeholderText.Length )
-            { // Parse the format text to determine type, number format, and mappings
-              parseFormatAndMappings(placeholderText, ref retInfo);
-              if (retInfo.result.HasError)
-              {
-                return retInfo;
+            { // Format to parse is the split part after ':'
+              string formatText = s1[1];
+              if (0 < formatText.Length)
+              { // Parse the format text to determine type, number format,
+                // and mappings
+                parseFormatAndMappings(formatText, ref retInfo);
+                if (retInfo.result.HasError)
+                {
+                  return retInfo;
+                }
+                retInfo.hasExplicitType = true;
               }
-              retInfo.hasExplicitType = true;
             }
             break;
           default:  // More than one colon is an error
@@ -171,8 +173,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return PREFIX[(int)type] + " " + defaultNameIndex[(int)type].ToString();
     }
 
-    private void parseFormatAndMappings(string formatText,
-                                ref PlaceholderInfo outInfo)
+    private void parseFormatAndMappings(in string formatText,
+                              ref PlaceholderInfo outInfo)
     {
       string[] formatTokens = formatText.Split('|');
       formatTokens[0] = formatTokens[0].ToUpper().Trim();
@@ -211,7 +213,7 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private TokenType getType(string typeToken)
+    private TokenType getType(in string typeToken)
     {
       if (typeToken.Length > 0)
       {
@@ -235,7 +237,7 @@ namespace Recomedia_de.Logic.VisuWeb
       return TokenType.Error;
     }
 
-    private void parseBooleanPlaceholder(string[] formatTokens,
+    private void parseBooleanPlaceholder(in string[] formatTokens,
                    ref PlaceholderInfo outInfo)
     {
       var m0 = new NumericMapping { minValue = 0, maxValue = 0 };
@@ -274,7 +276,8 @@ namespace Recomedia_de.Logic.VisuWeb
         outInfo.numericMappings.Add(m0);
         outInfo.numericMappings.Add(m1);
 
-        if (!isBinTextValid(m0.representation) || !isBinTextValid(m1.representation))
+        if (!isBinTextValid(m0.representation) ||
+            !isBinTextValid(m1.representation))
         {
           outInfo.result.HasError = true;
           outInfo.result.Message = "PlaceholderBinInvalidAssign";
@@ -288,7 +291,7 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private bool isBinTextValid(string s)
+    private bool isBinTextValid(in string s)
     {
       if ( s.Contains("=") )
       {
@@ -297,8 +300,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return true;
     }
 
-    private void parseIntegerPlaceholder(string[] formatTokens,
-                   ref PlaceholderInfo outInfo)
+    private void parseIntegerPlaceholder(in string[] formatTokens,
+                                 ref PlaceholderInfo outInfo)
     {
       System.Diagnostics.Trace.Assert(formatTokens.Length > 0);
       if (formatTokens[0].Length != 1)
@@ -308,11 +311,12 @@ namespace Recomedia_de.Logic.VisuWeb
         return;
       }
       outInfo.format = "G";   // shortest possible number format for integers
-      parseNumericMappings(/* allowImplicitValues = */ true, formatTokens, ref outInfo);
+      parseNumericMappings(/* allowImplicitValues = */ true, formatTokens,
+                           ref outInfo);
     }
 
-    private void parseNumberPlaceholder(string[] formatTokens,
-                  ref PlaceholderInfo outInfo)
+    private void parseNumberPlaceholder(in string[] formatTokens,
+                                ref PlaceholderInfo outInfo)
     {
       System.Diagnostics.Trace.Assert(formatTokens.Length > 0);
       if ( (formatTokens[0].Length == 1) ||
@@ -326,12 +330,13 @@ namespace Recomedia_de.Logic.VisuWeb
         outInfo.result.Message = "PlaceholderNumFormatInvalid";
         return;
       }
-      parseNumericMappings(/* allowImplicitValues = */ false, formatTokens, ref outInfo);
+      parseNumericMappings(/* allowImplicitValues = */ false, formatTokens,
+                           ref outInfo);
     }
 
     private void parseNumericMappings(bool allowImplicitValues,
-                           string[] formatTokens,
-                ref PlaceholderInfo outInfo)
+                               in string[] formatTokens,
+                       ref PlaceholderInfo outInfo)
     {
       outInfo.numericMappings = null;
       if (formatTokens.Length > 1)
@@ -398,8 +403,8 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private void parseExplicitNumericMapping(string[] valueRepresentation,
-                           ref PlaceholderInfo outInfo)
+    private void parseExplicitNumericMapping(in string[] valueRepresentation,
+                                     ref PlaceholderInfo outInfo)
     {
       System.Diagnostics.Trace.Assert(valueRepresentation.Length == 2);
 
@@ -462,7 +467,7 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private DoubleVal parseRangeValue(string s0, bool isMin)
+    private DoubleVal parseRangeValue(in string s0, bool isMin)
     {
       DoubleVal val = new DoubleVal { // empty translates to numeric range boundary
         value   = isMin ? Double.MinValue : Double.MaxValue,
@@ -489,7 +494,7 @@ namespace Recomedia_de.Logic.VisuWeb
       return val;
     }
 
-    private DoubleVal parseValue(string s0)
+    private DoubleVal parseValue(in string s0)
     {
       string s1 = s0.Trim();
       DoubleVal val = new DoubleVal { value = 0.0, isValid = false };
@@ -498,8 +503,8 @@ namespace Recomedia_de.Logic.VisuWeb
       return val;
     }
 
-    private void parseStringPlaceholder(string[] formatTokens,
-                  ref PlaceholderInfo outInfo)
+    private void parseStringPlaceholder(in string[] formatTokens,
+                                ref PlaceholderInfo outInfo)
     {
       if ( ( formatTokens.Length > 0 ) &&
            ( (formatTokens[0].Length < 0) || (formatTokens[0].Length > 1) ) )
@@ -511,8 +516,8 @@ namespace Recomedia_de.Logic.VisuWeb
       parseStringMappings(formatTokens, ref outInfo);
     }
 
-    private void parseStringMappings(string[] formatTokens,
-                          ref PlaceholderInfo outInfo)
+    private void parseStringMappings(in string[] formatTokens,
+                             ref PlaceholderInfo outInfo)
     {
       // Ignore entry at index 0 (type processed by caller)
       outInfo.textMappings = null;
@@ -544,8 +549,8 @@ namespace Recomedia_de.Logic.VisuWeb
       }
     }
 
-    private void parseExplicitTextMapping(string[] valueRepresentation,
-                               ref PlaceholderInfo outInfo)
+    private void parseExplicitTextMapping(in string[] valueRepresentation,
+                                  ref PlaceholderInfo outInfo)
     {
       System.Diagnostics.Trace.Assert(valueRepresentation.Length == 2);
 

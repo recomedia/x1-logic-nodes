@@ -143,8 +143,10 @@ namespace Recomedia_de.Logic.VisuWeb
     {
       string format = getFormat();
       bool hasFormat = ((null != format) && (format.Length > 1));
-      bool hasNumericMappings = ((null != mNumericMappings) && (mNumericMappings.Count > 0));
-      bool hasTextMappings = ((null != mTextMappings) && (mTextMappings.Count > 0));
+      bool hasNumericMappings =
+          ((null != mNumericMappings) && (mNumericMappings.Count > 0));
+      bool hasTextMappings =
+          ((null != mTextMappings) && (mTextMappings.Count > 0));
       return hasFormat || hasNumericMappings || hasTextMappings;
     }
 
@@ -174,7 +176,8 @@ namespace Recomedia_de.Logic.VisuWeb
     public VarBooleanToken(string source,
                            string name, bool isDefaultName,
                            List<NumericMapping> numericMappings)
-      : base(source, TokenType.VarBoolean, name, isDefaultName, numericMappings, null)
+      : base(source, TokenType.VarBoolean, name, isDefaultName,
+             numericMappings, null)
     {
     }
 
@@ -226,8 +229,8 @@ namespace Recomedia_de.Logic.VisuWeb
     where T : struct, IComparable, IFormattable
   {
     public VarNumericToken(string source, TokenType type,
-                           string name, bool isDefaultName,
-                           string format, string groupSeparator, string decimalSeparator,
+                           string name, bool isDefaultName, string format,
+                           string groupSeparator, string decimalSeparator,
                            List<NumericMapping> numericMappings)
       : base(source, type, name, isDefaultName, numericMappings, null)
     {
@@ -235,7 +238,8 @@ namespace Recomedia_de.Logic.VisuWeb
       mFormat = format;
 
       // Formatting is based on the current culture, with some customizations
-      mNumberInfo = CultureInfo.CurrentCulture.NumberFormat.Clone() as NumberFormatInfo;
+      mNumberInfo =
+          CultureInfo.CurrentCulture.NumberFormat.Clone() as NumberFormatInfo;
       // Customize group and decimal separators
       mNumberInfo.NumberGroupSeparator = groupSeparator;
       mNumberInfo.NumberDecimalSeparator = decimalSeparator;
@@ -343,11 +347,11 @@ namespace Recomedia_de.Logic.VisuWeb
       mFormat = baseToken.getFormat();
     }
 
-    public VarReferenceToken(string source, VarTokenBase baseToken,
-                             string format, List<NumericMapping> numericMappings)
+    public VarReferenceToken(string source, VarTokenBase baseToken, string format,
+             List<NumericMapping> numericMappings, List<TextMapping> textMappings)
     : base(source, TokenType.VarReference,
            baseToken.getName(), baseToken.hasDefaultName(),
-           numericMappings, null)
+           numericMappings, textMappings)
     {
       mBaseToken = baseToken;
       mFormat = format;
